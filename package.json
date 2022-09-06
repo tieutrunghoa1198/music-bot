@@ -1,0 +1,30 @@
+{
+  "name": "music-bot",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "NODE_ENV=production node dist/index.js",
+    "build": "rm -rf dist && tsc",
+    "dev": "nodemon"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@discordjs/builders": "^1.2.0",
+    "@discordjs/opus": "^0.8.0",
+    "@discordjs/rest": "^1.1.0",
+    "@discordjs/voice": "^0.11.0",
+    "discord-api-types": "^0.37.7",
+    "discord.js": "^13",
+    "dotenv": "^16.0.2"
+  },
+  "devDependencies": {
+    "@types/module-alias": "^2.0.1",
+    "@types/node": "^18.7.15",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.0",
+    "typescript": "^4.8.2"
+  },
+  "_moduleAliases": {
+    "@": "dist"
+  }
+}
