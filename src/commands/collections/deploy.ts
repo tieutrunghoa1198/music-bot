@@ -1,11 +1,22 @@
+import pingCommand from "./ping.command";
 require('dotenv').config()
-import {Client, Collection} from 'discord.js';
+import {Client, Interaction} from 'discord.js';
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import fs from "node:fs";
 import path from "node:path";
+import pongCommand from "./pong.command";
+import connectCommand from "./connect.command";
 
-export const registerGlobalCommand = async (client: Client) => {
+export const bootstrap = async (client: Client) => {
+    await registerGlobalCommand()
+        .catch(err => console.log(err));
+
+    await interactionCreate(client)
+        .catch(err => console.log(err))
+};
+
+const registerGlobalCommand = async () => {
     const token: any = process.env.TOKEN;
     const clientId: any = process.env.clientId;
     const commands = getAllCommands();
@@ -31,3 +42,26 @@ const getAllCommands = (): any[] => {
     return commands;
 }
 
+const interactionCreate = async (client: Client) => {
+    client.on('interactionCreate', async (interaction: Interaction) => {
+        if (!interaction.isCommand()) {
+            return;
+        }
+
+        try {
+            switch (interaction.commandName) {
+                case pingCommand.data.name:
+                    await pingCommand.execute(interaction);
+                    break;
+                case pongCommand.data.name:
+                    await pongCommand.execute(interaction);
+                    break;
+                case connectCommand.data.name:
+                    await connectCommand.execute(interaction);
+                    break;
+            }
+        } catch (e: any) {
+            await interaction.reply(e.toString());
+        }
+    })
+}

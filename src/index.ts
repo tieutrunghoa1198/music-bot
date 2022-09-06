@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 import { Client, Intents } from "discord.js";
-import {bootstrap} from "./commands";
+import {bootstrap} from "./commands/collections/deploy";
 
 const client = new Client({
     intents: [
