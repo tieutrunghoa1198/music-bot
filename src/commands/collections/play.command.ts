@@ -9,11 +9,11 @@ export default {
     data: new SlashCommandBuilder()
         .setName('play')
         .setDescription('Phát nhạc bằng link')
-        .addStringOption(option => option.setName('link')),
+        .addStringOption(option => option.setName('link').setDescription('Link to be played')),
     async execute(interaction: any) {
         await interaction.deferReply();
 
-        let input = interaction.options.getString('tukhoa');
+        let input = interaction.options.getString('link');
         if (input === null) {
             await interaction.followUp(messages.error);
             return;

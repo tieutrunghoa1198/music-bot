@@ -55,8 +55,10 @@ const interactionCreate = async (client: Client) => {
                     break;
                 case statusCommand.data.name:
                     await statusCommand.execute(interaction);
+                    break;
                 case leaveCommand.data.name:
                     await leaveCommand.execute(interaction);
+                    break;
             }
         } catch (e: any) {
             await interaction.reply(e.toString());
