@@ -3,12 +3,13 @@ import {Player, players} from "../../models/player";
 import {GuildMember} from "discord.js";
 import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import messages from "../../constants/messages";
+import {SoundCloudService} from "../../services/soundcloud";
 
 export default {
     data: new SlashCommandBuilder()
         .setName('play')
-        .setDescription('Phát nhạc bằng link hoặc từ khóa.')
-        .addStringOption(option => option.setName('tukhoa').setDescription('Từ khóa hoặc link đều được')),
+        .setDescription('Phát nhạc bằng link')
+        .addStringOption(option => option.setName('link')),
     async execute(interaction: any) {
         await interaction.deferReply();
 
@@ -59,6 +60,7 @@ export default {
 
         // Logic here
         try {
+            await SoundCloudService.getTrackDetail(input);
             await interaction.followUp(messages.alreadyPlaying);
         } catch (e) {
             console.log(e, ' Connect Commands');

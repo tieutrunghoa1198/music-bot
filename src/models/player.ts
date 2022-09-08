@@ -78,6 +78,20 @@ export class Player {
         players.delete(this.guildId);
     }
 
+    public async play() {
+        try {
+            if (this.queue.length > 0) {
+
+            } else {
+                this.playing = undefined;
+                this.audioPlayer.stop();
+            }
+        } catch (e) {
+            // If there is any problem with player, then play the next song in queue
+            console.log(e);
+            await this.play();
+        }
+    }
 
 }
 

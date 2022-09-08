@@ -4,9 +4,10 @@ import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import fs from "node:fs";
 import path from "node:path";
-import playCommand from "./connect.command";
+import playCommand from "./play.command";
 import statusCommand from "./status.command";
 import leaveCommand from "./leave.command";
+
 export const bootstrap = async (client: Client) => {
     await registerGlobalCommand()
         .catch(err => console.log(err));
