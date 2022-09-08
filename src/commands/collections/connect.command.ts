@@ -1,22 +1,33 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {Player, players} from "../../models/player";
 import {GuildMember} from "discord.js";
-import {joinVoiceChannel} from "@discordjs/voice";
+import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import messages from "../../constants/messages";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName('connect')
-        .setDescription('conect to a voice channel'),
+        .setName('play')
+        .setDescription('Phát nhạc bằng link hoặc từ khóa.')
+        .addStringOption(option => option.setName('tukhoa').setDescription('Từ khóa hoặc link đều được')),
     async execute(interaction: any) {
-        // await interaction.deferReply();
+        await interaction.deferReply();
+
+        let input = interaction.options.getString('tukhoa');
+        if (input === null) {
+            await interaction.followUp(messages.error);
+            return;
+        }
+
         let player = players.get(interaction.guildId as string);
-        // console.log(player + '========== line 1 =========')
         if (!player) {
             if (
                 interaction.member instanceof GuildMember &&
                 interaction.member.voice.channel
             ) {
+                /*
+                * if there are a person in a voice channel -> create a voiceConnection
+                * (and is a member)
+                * */
                 const channel = interaction.member.voice.channel;
                 player = new Player(
                     joinVoiceChannel({
@@ -26,13 +37,32 @@ export default {
                     }),
                     interaction.guildId as string
                 );
-
                 players.set(interaction.guildId as string, player);
             }
-        } else {
-            await interaction.reply(messages.joinVoiceChannel);
-            console.log('error at line 35')
         }
 
+        if (!player) {
+            await interaction.followUp(messages.joinVoiceChannel);
+        }
+
+        // Make sure the connection is ready before processing the user's request
+        try {
+            await entersState(
+                <VoiceConnection>player?.voiceConnection,
+                VoiceConnectionStatus.Ready,
+                10e3,
+            );
+        } catch (error) {
+            await interaction.followUp(messages.failToJoinVoiceChannel);
+            return;
+        }
+
+        // Logic here
+        try {
+            await interaction.followUp(messages.alreadyPlaying);
+        } catch (e) {
+            console.log(e, ' Connect Commands');
+            await interaction.followUp(messages.failToPlay);
+        }
     }
 }

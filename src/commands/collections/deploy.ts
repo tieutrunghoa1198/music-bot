@@ -1,13 +1,12 @@
-import pingCommand from "./ping.command";
 require('dotenv').config()
 import {Client, Interaction} from 'discord.js';
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import fs from "node:fs";
 import path from "node:path";
-import pongCommand from "./pong.command";
-import connectCommand from "./connect.command";
-
+import playCommand from "./connect.command";
+import statusCommand from "./status.command";
+import leaveCommand from "./leave.command";
 export const bootstrap = async (client: Client) => {
     await registerGlobalCommand()
         .catch(err => console.log(err));
@@ -50,15 +49,13 @@ const interactionCreate = async (client: Client) => {
 
         try {
             switch (interaction.commandName) {
-                case pingCommand.data.name:
-                    await pingCommand.execute(interaction);
+                case playCommand.data.name:
+                    await playCommand.execute(interaction);
                     break;
-                case pongCommand.data.name:
-                    await pongCommand.execute(interaction);
-                    break;
-                case connectCommand.data.name:
-                    await connectCommand.execute(interaction);
-                    break;
+                case statusCommand.data.name:
+                    await statusCommand.execute(interaction);
+                case leaveCommand.data.name:
+                    await leaveCommand.execute(interaction);
             }
         } catch (e: any) {
             await interaction.reply(e.toString());
