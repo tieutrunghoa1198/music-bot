@@ -7,7 +7,8 @@ import path from "node:path";
 import playCommand from "./play.command";
 import statusCommand from "./status.command";
 import leaveCommand from "./leave.command";
-
+import queueCommand from "./queue.command";
+import testCommand from "./test.command";
 export const bootstrap = async (client: Client) => {
     await registerGlobalCommand()
         .catch(err => console.log(err));
@@ -58,6 +59,12 @@ const interactionCreate = async (client: Client) => {
                     break;
                 case leaveCommand.data.name:
                     await leaveCommand.execute(interaction);
+                    break;
+                case queueCommand.data.name:
+                    await queueCommand.execute(interaction);
+                    break;
+                case testCommand.data.name:
+                    await testCommand.execute(interaction);
                     break;
             }
         } catch (e: any) {

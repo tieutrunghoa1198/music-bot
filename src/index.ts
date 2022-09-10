@@ -7,6 +7,7 @@ if (process.env.NODE_ENV === "production") {
 
 import { Client, Intents } from "discord.js";
 import {bootstrap} from "./commands/collections/deploy";
+import {SoundCloud} from "scdl-core";
 
 const client = new Client({
     intents: [
@@ -21,6 +22,7 @@ client.on("ready", () => {
     console.log(`> Bot is on ready`);
 });
 
-client.login(process.env.TOKEN).then(() => {
-    bootstrap(client);
+client.login(process.env.TOKEN).then(async () => {
+    await SoundCloud.connect();
+    await bootstrap(client);
 });

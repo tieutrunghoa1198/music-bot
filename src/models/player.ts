@@ -1,7 +1,9 @@
-import {Song} from "../types/song";
+import {Platform, Song} from "../types/song";
 import {
     AudioPlayer,
-    createAudioPlayer,
+    AudioPlayerState,
+    AudioPlayerStatus,
+    createAudioPlayer, createAudioResource,
     entersState,
     VoiceConnection,
     VoiceConnectionDisconnectReason,
@@ -9,6 +11,7 @@ import {
     VoiceConnectionStatus
 } from "@discordjs/voice";
 import {Snowflake} from "discord-api-types/globals";
+import {SoundCloudService} from "../services/soundcloud";
 
 export interface QueueItem {
     song: Song;
@@ -50,17 +53,58 @@ export class Player {
                     } catch (e) {
                         this.leave();
                     }
+
+                } else if (this.voiceConnection.rejoinAttempts < 5) {
+                    this.voiceConnection.rejoin();
+                } else {
+                    this.leave();
                 }
 
 
+            } else if (newState.status === VoiceConnectionStatus.Destroyed) {
+                this.leave();
+            } else if (
+                !this.isReady &&
+                (newState.status === VoiceConnectionStatus.Connecting ||
+                newState.status === VoiceConnectionStatus.Signalling)
+            ) {
+                this.isReady = true;
+                try {
+                    await entersState(
+                        this.voiceConnection,
+                        VoiceConnectionStatus.Ready,
+                        20_000
+                    );
+                } catch {
+                    if (
+                        this.voiceConnection.state.status !==
+                        VoiceConnectionStatus.Destroyed
+                    )
+                        this.voiceConnection.destroy();
+                } finally {
+                    this.isReady = false;
+                }
+            }
+
+
+        })
+
+        this.audioPlayer.on('stateChange', async (oldState: AudioPlayerState, newState: AudioPlayerState) => {
+            if (
+                newState.status === AudioPlayerStatus.Idle &&
+                oldState.status !== AudioPlayerStatus.Idle
+            ) {
+                await this.play();
             }
         })
+
+        voiceConnection.subscribe(this.audioPlayer);
     }
 
     public async addSong(queueItems: QueueItem[]) {
         this.queue = this.queue.concat(queueItems);
         if (!this.playing) {
-            // run play() here
+            await this.play();
         }
     }
 
@@ -78,10 +122,18 @@ export class Player {
         players.delete(this.guildId);
     }
 
-    public async play() {
+    public async play(): Promise<void> {
         try {
+            console.log(this.queue, 'queue');
             if (this.queue.length > 0) {
+                this.playing = this.queue.shift() as QueueItem;
+                let stream: any;
+                const highWaterMark = 1024 * 1024 * 10;
+                console.log(this.playing);
+                stream = await SoundCloudService.download(this.playing.song.url, highWaterMark);
 
+                const audioResource = createAudioResource(stream);
+                this.audioPlayer.play(audioResource);
             } else {
                 this.playing = undefined;
                 this.audioPlayer.stop();
