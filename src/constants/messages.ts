@@ -5,10 +5,10 @@ export default {
     failToJoinVoiceChannel: '❌ Failed to join voice channel!',
     failToPlay: '❌ Failed to play!',
     addedToQueue: 'Added to queue by',
-    author: 'Author',
-    length: 'Length',
+    author: 'Trình bày',
+    length: 'Độ dài',
     type: 'Type',
-    platform: 'Platform',
+    platform: 'Nền tảng',
     noSongsInQueue: '👀 No songs in queue!',
     skippedSong: '⏩ Skipped song!',
     notPlaying: '🔇 Not playing!',
@@ -24,4 +24,5 @@ export default {
     removed: '🗑 Removed',
     help: '💡 Help',
     ping: '📶 Ping',
+    requestedBy: 'Phát bởi'
 };
