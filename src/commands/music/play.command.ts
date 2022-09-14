@@ -1,28 +1,31 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import {SlashCommandBuilder} from "@discordjs/builders";
 import {Player, players, QueueItem} from "../../models/player";
 import {GuildMember} from "discord.js";
-import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
+import {
+    entersState,
+    joinVoiceChannel,
+    VoiceConnection,
+    VoiceConnectionStatus
+} from "@discordjs/voice";
 import messages from "../../constants/messages";
 import {SoundCloudService} from "../../services/soundcloud";
-import {Platform, Song} from "../../types/song";
-import {createPlayeMessage} from "../messages/play.message";
-import {formatSeconds} from "../../utils/formatTime";
+import {Song} from "../../types/song";
+import {NotificationService} from "../../services/notification";
 
 export default {
     data: new SlashCommandBuilder()
         .setName('hplay')
         .setDescription('Phát nhạc bằng link')
-        .addStringOption(option => option.setName('input').setDescription('Link to be played')),
+        .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
     async execute(interaction: any) {
         await interaction.deferReply();
-
         let input = interaction.options.getString('input');
         if (input === null) {
             await interaction.followUp(messages.error);
             return;
         }
 
-        let player = players.get(interaction.guildId as string);
+        let player = players.get(interaction.guildId as string) as Player;
         if (!player) {
             if (
                 interaction.member instanceof GuildMember &&
@@ -70,19 +73,7 @@ export default {
                         requester: interaction.member?.user.username as string
                     }
                     await player?.addSong([queueItem]);
-                    const guildName = interaction.member.guild.name;
-                    const icon = interaction.member.guild.iconURL();
-                    const payload = {
-                        title: song.title,
-                        author: song.author,
-                        thumbnail: song.thumbnail,
-                        length: formatSeconds(song.length),
-                        platform: Platform.SOUND_CLOUD,
-                        guildName,
-                        requester: queueItem.requester,
-                        icon
-                    }
-                    interaction.followUp({ embeds: [createPlayeMessage(payload)]});
+                    await NotificationService.showNowPlaying(player, interaction, queueItem);
                 });
         } catch (e) {
             console.log(e, ' Connect Commands');

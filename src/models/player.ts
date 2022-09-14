@@ -122,9 +122,31 @@ export class Player {
         players.delete(this.guildId);
     }
 
+    public skip(): void {
+        console.log(this.queue.length, ' Queue');
+        this.play();
+    }
+
+    public pause(): void {
+        this.audioPlayer.pause();
+    }
+
+    public resume() {
+        this.audioPlayer.unpause();
+    }
+
+    public async jump(position: number): Promise<QueueItem> {
+        const target = this.queue[position - 1];
+        this.queue = this.queue
+            .splice(0, position - 1)
+            .concat(this.queue.splice(position, this.queue.length - 1));
+        this.queue.unshift(target);
+        await this.play();
+        return target;
+    }
+
     public async play(): Promise<void> {
         try {
-            console.log(this.queue, 'queue');
             if (this.queue.length > 0) {
                 this.playing = this.queue.shift() as QueueItem;
                 let stream: any;

@@ -6,7 +6,7 @@ if (process.env.NODE_ENV === "production") {
 }
 
 import { Client, Intents } from "discord.js";
-import {bootstrap} from "./commands/collections/deploy";
+import {bootstrap} from "./commands/deploy";
 import {SoundCloud} from "scdl-core";
 
 const client = new Client({

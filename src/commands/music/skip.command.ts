@@ -8,14 +8,16 @@ export default {
         .setDescription('List all songs in current queue.'),
     async execute(interaction: any) {
         await interaction.deferReply();
-        let player = players.get(interaction.guildId as string);
-        // if (!player) {
-        //     await interaction.followUp(messages.error)
-        //     return;
-        // } else {
-        //     await interaction.followUp('Song in queue: ' + player.queue.toString());
-        //     console.log(player.queue);
-        //     return;
-        // }
+        try {
+            let player = players.get(interaction.guildId as string);
+            if (player?.queue.length === 0) {
+                await interaction.followUp('the queue is empty');
+            } else {
+                player?.skip();
+            }
+        } catch (e) {
+            console.log(e);
+            await interaction.followUp('erro')
+        }
     }
 }
