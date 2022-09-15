@@ -16,6 +16,10 @@
     "discord-api-types": "^0.37.7",
     "discord.js": "^13",
     "dotenv": "^16.0.2",
+    "ffmpeg-static": "^5.1.0",
+    "libsodium-wrappers": "^0.7.10",
+    "moment": "^2.29.4",
+    "mongoose": "^6.6.0",
     "scdl-core": "^1.1.0"
   },
   "devDependencies": {

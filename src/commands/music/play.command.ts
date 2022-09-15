@@ -1,25 +1,31 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import {Player, players} from "../../models/player";
+import {SlashCommandBuilder} from "@discordjs/builders";
+import {Player, players, QueueItem} from "../../models/player";
 import {GuildMember} from "discord.js";
-import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
+import {
+    entersState,
+    joinVoiceChannel,
+    VoiceConnection,
+    VoiceConnectionStatus
+} from "@discordjs/voice";
 import messages from "../../constants/messages";
 import {SoundCloudService} from "../../services/soundcloud";
+import {Song} from "../../types/song";
+import {NotificationService} from "../../services/notification";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName('play')
-        .setDescription('Phát nhạc bằng link')
-        .addStringOption(option => option.setName('link').setDescription('Link to be played')),
+        .setName('phatnhac')
+        .setDescription('Phát nhạc bằng link.')
+        .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
     async execute(interaction: any) {
         await interaction.deferReply();
-
-        let input = interaction.options.getString('link');
+        let input = interaction.options.getString('input');
         if (input === null) {
             await interaction.followUp(messages.error);
             return;
         }
 
-        let player = players.get(interaction.guildId as string);
+        let player = players.get(interaction.guildId as string) as Player;
         if (!player) {
             if (
                 interaction.member instanceof GuildMember &&
@@ -60,8 +66,15 @@ export default {
 
         // Logic here
         try {
-            await SoundCloudService.getTrackDetail(input);
-            await interaction.followUp(messages.alreadyPlaying);
+            await SoundCloudService.getTrackDetail(input)
+                .then(async (song: Song) => {
+                    const queueItem: QueueItem = {
+                        song,
+                        requester: interaction.member?.user.username as string
+                    }
+                    await player?.addSong([queueItem]);
+                    await NotificationService.showNowPlaying(player, interaction, queueItem);
+                });
         } catch (e) {
             console.log(e, ' Connect Commands');
             await interaction.followUp(messages.failToPlay);

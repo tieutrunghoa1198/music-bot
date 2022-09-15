@@ -1,16 +1,20 @@
 export default {
     error: '❌ Error!',
     cantFindAnyThing: "❌ Can't find anything!",
-    joinVoiceChannel: '🔊 Join a voice channel and try again!',
+    joinVoiceChannel: '🔊 Let bot join voice channel then try again!',
     failToJoinVoiceChannel: '❌ Failed to join voice channel!',
     failToPlay: '❌ Failed to play!',
-    addedToQueue: 'Added to queue by',
-    author: 'Author',
-    length: 'Length',
+    addedToQueue: (payload: any) => {
+        return `:notes: Đã thêm \*\*${payload.title}(\`${payload.length}\`)\*\* vào danh sách chờ.`;
+    },
+    author: 'Trình bày',
+    length: 'Độ dài',
     type: 'Type',
-    platform: 'Platform',
+    platform: 'Nền tảng',
     noSongsInQueue: '👀 No songs in queue!',
-    skippedSong: '⏩ Skipped song!',
+    skippedSong: (payload: any) => {
+        return `:notes: Bỏ qua bài \*\*${payload.title}\*\* - ${payload.requester}`;
+    },
     notPlaying: '🔇 Not playing!',
     alreadyPaused: '⏸ Already paused!',
     paused: '⏸ Paused!',
@@ -24,4 +28,7 @@ export default {
     removed: '🗑 Removed',
     help: '💡 Help',
     ping: '📶 Ping',
+    requestedBy: 'Phát bởi',
+    emptyQueue: 'Queue is empty'
 };
+
