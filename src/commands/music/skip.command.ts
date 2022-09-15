@@ -1,11 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {players} from "../../models/player";
 import messages from "../../constants/messages";
+import {Command} from "../../constants/command";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName('hskip')
-        .setDescription('List all songs in current queue.'),
+        .setName(Command.skip.name)
+        .setDescription(Command.skip.description),
     async execute(interaction: any) {
         await interaction.deferReply();
         try {

@@ -13,12 +13,17 @@ import queueCommand from "./music/queue.command";
 import testCommand from "./music/test.command";
 import pauseCommand from "./music/pause.command";
 import resumeCommand from "./music/resume.command";
+import nextButton from "./buttons/musicQueue/next.button";
+import previousButton from "./buttons/musicQueue/previous.button";
 export const bootstrap = async (client: Client) => {
     await registerGlobalCommand()
         .catch(err => console.log(err));
 
     await interactionCreate(client)
         .catch(err => console.log(err));
+
+    await interactionButton(client)
+        .catch((err) => console.log(err));
 };
 
 const registerGlobalCommand = async () => {
@@ -45,6 +50,25 @@ const getAllCommands = (): any[] => {
     }
     console.log(commands)
     return commands;
+}
+
+const interactionButton = async (client: Client) => {
+    client.on('interactionCreate', async (interaction: Interaction) => {
+        if (!interaction.isButton()) return;
+
+        try {
+            switch (interaction.customId) {
+                case nextButton.customId:
+                    await nextButton.execute(interaction);
+                    break;
+                case previousButton.customId:
+                    await previousButton.execute(interaction)
+                    break;
+            }
+        } catch (e) {
+            console.log(e, 'interaction Button error');
+        }
+    })
 }
 
 const interactionCreate = async (client: Client) => {
@@ -82,7 +106,7 @@ const interactionCreate = async (client: Client) => {
             }
         } catch (e: any) {
             console.log(e.toString(), 'deploy.js - command error');
-            await interaction.editReply(e.toString());
+            await interaction.followUp(e.toString());
         }
     })
 }

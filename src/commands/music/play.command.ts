@@ -14,8 +14,8 @@ import {NotificationService} from "../../services/notification";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName('hplay')
-        .setDescription('Phát nhạc bằng link')
+        .setName('phatnhac')
+        .setDescription('Phát nhạc bằng link.')
         .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
     async execute(interaction: any) {
         await interaction.deferReply();
