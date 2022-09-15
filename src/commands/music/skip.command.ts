@@ -15,10 +15,11 @@ export default {
                 await interaction.followUp('the queue is empty');
             } else {
                 player?.skip();
+                await interaction.followUp(`Đang phát bài mới!`);
             }
         } catch (e) {
             console.log(e);
-            await interaction.followUp('erro')
+            await interaction.followUp('erro');
         }
     }
 }
