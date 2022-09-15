@@ -7,6 +7,9 @@ import messages from "../constants/messages";
 
 export class NotificationService {
     public static async showNowPlaying(player: Player, interaction: any, queueItem: QueueItem) {
+        if (interaction.messages === undefined || null) {
+            return;
+        }
         const guildName = interaction.member.guild.name;
         const icon = interaction.member.guild.iconURL();
         const song = queueItem.song;
