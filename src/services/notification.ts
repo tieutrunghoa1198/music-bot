@@ -7,7 +7,8 @@ import messages from "../constants/messages";
 
 export class NotificationService {
     public static async showNowPlaying(player: Player, interaction: any, queueItem: QueueItem) {
-        if (interaction.messages === undefined || null) {
+        if (interaction === undefined || null) {
+            console.log('wrong here =========')
             return;
         }
         const guildName = interaction.member.guild.name;
@@ -22,6 +23,15 @@ export class NotificationService {
             guildName,
             requester: queueItem.requester,
             icon,
+        }
+
+
+        const message = await interaction.fetchReply();
+
+        console.log(message, 'message');
+        if (!message) {
+            await interaction.deferUpdate();
+            return;
         }
 
         if (player?.audioPlayer.state.status === AudioPlayerStatus.Playing) {

@@ -36,3 +36,8 @@ app.listen(process.env.PORT || 3000, () => {
     console.log(`> Bot is on listening`);
     // herokuAwake(process.env.APP_URL || 'http://localhost:3000');
 });
+
+process.on('uncaughtException', function (err) {
+    console.error(err);
+    console.log("Node NOT Exiting...");
+});
