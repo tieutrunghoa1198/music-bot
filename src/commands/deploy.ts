@@ -41,8 +41,15 @@ const registerGlobalCommand = async () => {
 const getAllCommands = (): any[] => {
     const commands: any = [];
     const commandsPath = path.join(__dirname + '/music');
+    let fileExt: string;
+    if (process.env.NODE_ENV === 'production') {
+        fileExt = '.command.js';
+    } else {
+        fileExt = '.command.ts';
+    }
+
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file
-        .endsWith('.command.ts'));
+        .endsWith(fileExt));
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
         const command = require(filePath);
