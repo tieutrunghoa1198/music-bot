@@ -6,6 +6,10 @@ import { Client, Intents } from "discord.js";
 import {bootstrap} from "./commands/deploy";
 import {SoundCloud} from "scdl-core";
 import express, { Request, Response } from "express";
+import WebSocket from "ws";
+import { createServer } from "http";
+import path from "path";
+
 const client = new Client({
     intents: [
         Intents.FLAGS.GUILDS,
@@ -40,4 +44,22 @@ app.listen(process.env.PORT || 3000, () => {
 process.on('uncaughtException', function (err) {
     console.error(err);
     console.log("Node NOT Exiting...");
+});
+
+const server = createServer(app);
+const wss = new WebSocket.Server({ server });
+wss.on('connection', function (ws) {
+    const id = setInterval(function () {
+        ws.send(JSON.stringify(process.memoryUsage()), function () {
+            //
+            // Ignore errors.
+            //
+        });
+    }, 100);
+    console.log('started client interval');
+
+    ws.on('close', function () {
+        console.log('stopping client interval');
+        clearInterval(id);
+    });
 });
