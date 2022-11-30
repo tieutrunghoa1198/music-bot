@@ -28,7 +28,6 @@ export class NotificationService {
 
         const message = await interaction.fetchReply();
 
-        console.log(message, 'message');
         if (!message) {
             await interaction.deferUpdate();
             return;
