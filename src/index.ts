@@ -37,8 +37,7 @@ app.get('/', (_req: Request, res: Response) => {
 });
 
 app.listen(process.env.PORT || 3000, () => {
-    console.log(`> Bot is on listening`);
-    // herokuAwake(process.env.APP_URL || 'http://localhost:3000');
+    console.log(`> Bot is on listening ${process.env.PORT}`);
 });
 
 process.on('uncaughtException', function (err) {
