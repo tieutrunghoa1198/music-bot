@@ -12,7 +12,8 @@ import {
 } from "@discordjs/voice";
 import {Snowflake} from "discord-api-types/globals";
 import {SoundCloudService} from "../services/soundcloud";
-
+import play from 'play-dl'; // Everything
+import ytdl from 'ytdl-core';
 export interface QueueItem {
     song: Song;
     requester: string;
@@ -151,11 +152,24 @@ export class Player {
                 this.playing = this.queue.shift() as QueueItem;
                 let stream: any;
                 const highWaterMark = 1024 * 1024 * 10;
-                console.log(this.playing);
                 stream = await SoundCloudService.download(this.playing.song.url, highWaterMark);
+                const ytmpl = require('yt-mix-playlist');
+                const videoId = 'CbHZ_kA1ba8';
+                const mixPlaylist = await ytmpl(videoId);
 
-                const audioResource = createAudioResource(stream);
-                this.audioPlayer.play(audioResource);
+                const result = ytdl('https://www.youtube.com/watch?v=r17tdNVJRUk&list=RDCbHZ_kA1ba8&index=2', {filter: "audioonly"});
+
+                console.log(result);
+                try {
+                    const source = await play.stream('CbHZ_kA1ba8')
+                    const audioResource = createAudioResource(result);
+                    console.log(audioResource)
+                    this.audioPlayer.play(audioResource);
+                } catch (err) {
+                    console.log(err)
+                }
+
+
             } else {
                 this.playing = undefined;
                 this.audioPlayer.stop();

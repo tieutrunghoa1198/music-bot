@@ -55,7 +55,6 @@ const getAllCommands = (): any[] => {
         const command = require(filePath);
         commands.push(command.default.data.toJSON());
     }
-    console.log(commands)
     return commands;
 }
 
