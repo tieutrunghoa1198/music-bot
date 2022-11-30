@@ -61,6 +61,7 @@ export default {
             );
         } catch (error) {
             await interaction.followUp(messages.failToJoinVoiceChannel);
+            console.log(error)
             return;
         }
 
