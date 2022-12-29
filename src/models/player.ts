@@ -38,7 +38,8 @@ export class Player {
             if (newState.status === VoiceConnectionStatus.Disconnected) {
                 /*
                   Nếu websocket đã bị đóng với mã 4014 có 2 khả năng:
-                  - Nếu nó có khả năng tự kết nối lại (có khả năng do chuyển kênh thoại), cho 5s để reconnect.
+                  - Nếu nó có khả năng tự kết nối lại (có khả năng do chuyển kênh thoại),
+                    cho 5s để reconnect.
                   - Nếu bot bị kick khỏi kênh thoại, ta sẽ phá huỷ kết nối.
 				*/
                 if (
@@ -150,20 +151,13 @@ export class Player {
         try {
             if (this.queue.length > 0) {
                 this.playing = this.queue.shift() as QueueItem;
-                let stream: any;
-                const highWaterMark = 1024 * 1024 * 10;
-                stream = await SoundCloudService.download(this.playing.song.url, highWaterMark);
-                const ytmpl = require('yt-mix-playlist');
-                const videoId = 'CbHZ_kA1ba8';
-                const mixPlaylist = await ytmpl(videoId);
+                const songUrl = this.playing.song.url;
 
-                const result = ytdl('https://www.youtube.com/watch?v=r17tdNVJRUk&list=RDCbHZ_kA1ba8&index=2', {filter: "audioonly"});
-
-                console.log(result);
                 try {
-                    const source = await play.stream('CbHZ_kA1ba8')
-                    const audioResource = createAudioResource(result);
-                    console.log(audioResource)
+                    const source = await play.stream(songUrl);
+                    const audioResource = createAudioResource(source.stream, {
+                        inputType: source.type
+                    });
                     this.audioPlayer.play(audioResource);
                 } catch (err) {
                     console.log(err)
@@ -176,7 +170,7 @@ export class Player {
             }
         } catch (e) {
             // If there is any problem with player, then play the next song in queue
-            console.log(e);
+            console.log(e, 'Error: player.ts');
             await this.play();
         }
     }
