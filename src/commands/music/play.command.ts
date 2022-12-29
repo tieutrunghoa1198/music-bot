@@ -11,11 +11,13 @@ import messages from "../../constants/messages";
 import {SoundCloudService} from "../../services/soundcloud";
 import {Song} from "../../types/song";
 import {NotificationService} from "../../services/notification";
-
+import {Command} from '../../constants/command';
+import {YoutubeService} from "../../services/youtube";
+import play from "play-dl";
 export default {
     data: new SlashCommandBuilder()
-        .setName('phatnhac')
-        .setDescription('Phát nhạc bằng link.')
+        .setName(Command.play.name)
+        .setDescription(Command.play.description)
         .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
     async execute(interaction: any) {
         await interaction.deferReply();
@@ -67,15 +69,25 @@ export default {
 
         // Logic here
         try {
-            await SoundCloudService.getTrackDetail(input)
+            // await SoundCloudService.getTrackDetail(input)
+            //     .then(async (song: Song) => {
+            //         const queueItem: QueueItem = {
+            //             song,
+            //             requester: interaction.member?.user.username as string
+            //         }
+            //         await player?.addSong([queueItem]);
+            //         await NotificationService.showNowPlaying(player, interaction, queueItem);
+            //     });
+
+            await YoutubeService.getVideoDetail(input)
                 .then(async (song: Song) => {
                     const queueItem: QueueItem = {
                         song,
                         requester: interaction.member?.user.username as string
                     }
-                    await player?.addSong([queueItem]);
-                    await NotificationService.showNowPlaying(player, interaction, queueItem);
-                });
+                    await player?.addSong([queueItem])
+                    await NotificationService.showNowPlaying(player, interaction, queueItem)
+                })
         } catch (e) {
             console.log(e, ' Connect Commands');
             await interaction.followUp(messages.failToPlay);

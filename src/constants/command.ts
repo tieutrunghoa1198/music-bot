@@ -23,4 +23,9 @@ export class Command {
         name: 'thoat',
         description: 'Thoát khỏi kênh chat.'
     }
+
+    public static readonly play = {
+        name: 'phatnhac',
+        description: 'Phát nhạc bằng link.'
+    }
 }
