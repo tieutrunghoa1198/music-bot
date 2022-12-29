@@ -30,7 +30,6 @@ const registerGlobalCommand = async () => {
     const token: any = process.env.TOKEN;
     const clientId: any = process.env.clientId;
     const commands = getAllCommands();
-
     const rest =  new REST({ version: '9' }).setToken(token);
     await rest.put(
         Routes.applicationCommands(clientId),
