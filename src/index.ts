@@ -1,10 +1,9 @@
 import { config } from "dotenv";
-
 config();
-
 import { Client, Intents } from "discord.js";
 import {bootstrap} from "./commands/deploy";
 import {SoundCloud} from "scdl-core";
+import {MessageHandler} from "./messages";
 
 const client = new Client({
     intents: [
@@ -14,7 +13,6 @@ const client = new Client({
         Intents.FLAGS.GUILD_INTEGRATIONS,
     ],
 });
-
 client.on("ready", () => {
     console.log(`> Bot is on ready`);
 });
@@ -22,6 +20,7 @@ client.on("ready", () => {
 client.login(process.env.TOKEN).then(async () => {
     await SoundCloud.connect();
     await bootstrap(client);
+    await MessageHandler.handle(client);
 });
 
 process.on('uncaughtException', function (err) {

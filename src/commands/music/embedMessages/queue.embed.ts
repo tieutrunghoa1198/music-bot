@@ -1,7 +1,7 @@
 import {EmbedFieldData, MessageActionRow, MessageButton, MessageEmbed} from "discord.js";
-import {Player} from "../../models/player";
-import {boldText, codeBlockText, formatSeconds} from "../../utils/formatTime";
-import {PlayerQueue} from "../../constants/playerQueue";
+import {Player} from "../../../models/player";
+import {boldText, codeBlockText, formatSeconds} from "../../../utils/formatTime";
+import {PlayerQueue} from "../../../constants/playerQueue";
 
 export const generateButton = (): MessageActionRow => {
     const row = new MessageActionRow()

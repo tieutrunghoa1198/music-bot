@@ -1,7 +1,7 @@
 import { MessageEmbed } from 'discord.js';
-import {formatSeconds} from "../../utils/formatTime";
-import {QueueItem} from "../../models/player";
-import messages from "../../constants/messages";
+import {formatSeconds} from "../../../utils/formatTime";
+import {QueueItem} from "../../../models/player";
+import messages from "../../../constants/messages";
 
 const MAX_SONGS_PER_PAGE = 10;
 
