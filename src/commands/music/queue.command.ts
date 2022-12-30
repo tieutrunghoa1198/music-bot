@@ -1,10 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {Player, players} from "../../models/player";
 import messages from "../../constants/messages";
-import {createQueueMessages} from "../messages/queueMessage";
-import {TextChannel} from "discord.js";
 import {Command} from "../../constants/command";
-import {generateButton, paginationMsg} from "../messages/queue.message";
+import {generateButton, paginationMsg} from "./embedMessages/queue.embed";
 
 export default {
     data: new SlashCommandBuilder()

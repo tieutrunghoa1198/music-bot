@@ -26,7 +26,15 @@ export class Player {
     public readonly voiceConnection: VoiceConnection;
     public readonly audioPlayer: AudioPlayer;
     private isReady = false;
+    private _musicArea: string = '';
 
+    get musicArea(): string {
+        return this._musicArea;
+    }
+
+    set musicArea(channelId: string) {
+        this._musicArea = channelId;
+    }
     constructor(voiceConnection: VoiceConnection, guildId: string) {
         this.voiceConnection = voiceConnection;
         this.guildId = guildId;

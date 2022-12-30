@@ -1,7 +1,7 @@
 import {EmbedFieldData, Interaction, MessageEmbed} from "discord.js";
-import {Player, players} from "../../../models/player";
-import messages from "../../../constants/messages";
-import {generateButton, paginationMsg} from "../../messages/queue.message";
+import {Player, players} from "../../../../models/player";
+import messages from "../../../../constants/messages";
+import {generateButton, paginationMsg} from "../../embedMessages/queue.embed";
 
 export default {
     customId: 'next',

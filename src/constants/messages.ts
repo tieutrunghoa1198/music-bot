@@ -29,6 +29,10 @@ export default {
     help: '💡 Help',
     ping: '📶 Ping',
     requestedBy: 'Phát bởi',
-    emptyQueue: 'Queue is empty'
+    emptyQueue: 'Queue is empty',
+    setUpPaP: 'Dùng câu lệnh music-area để set up PaP',
+    settingUpPaP: (id: string) => {
+        return `Setting up music area for PaP (channel ID: ${id})`
+    }
 };
 

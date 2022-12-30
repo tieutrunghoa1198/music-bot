@@ -8,7 +8,7 @@ export class YoutubeService {
             title: vid_info.title as string,
             length: vid_info.durationInSec,
             author: vid_info.channel?.name as string,
-            thumbnail: 'string',
+            thumbnail: vid_info.thumbnails[0].url,
             url: vid_info.url,
             platform: Platform.YOUTUBE,
         }

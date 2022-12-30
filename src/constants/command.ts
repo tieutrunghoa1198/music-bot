@@ -28,4 +28,9 @@ export class Command {
         name: 'phatnhac',
         description: 'Phát nhạc bằng link.'
     }
+
+    public static readonly setMusicArea = {
+        name: 'music-area',
+        description: 'Cài đặt kênh cho PaP'
+    }
 }

@@ -1,7 +1,7 @@
 import skipCommand from "./music/skip.command";
 
 require('dotenv').config()
-import {Client, Interaction} from 'discord.js';
+import {Client, Interaction, Message} from 'discord.js';
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import fs from "node:fs";
@@ -13,8 +13,9 @@ import queueCommand from "./music/queue.command";
 import testCommand from "./music/test.command";
 import pauseCommand from "./music/pause.command";
 import resumeCommand from "./music/resume.command";
-import nextButton from "./buttons/musicQueue/next.button";
-import previousButton from "./buttons/musicQueue/previous.button";
+import nextButton from "./music/buttons/musicQueue/next.button";
+import previousButton from "./music/buttons/musicQueue/previous.button";
+import setMusicAreaCommand from "./music/setMusicArea.command";
 export const bootstrap = async (client: Client) => {
     await registerGlobalCommand()
         .catch(err => console.log(err));
@@ -107,6 +108,9 @@ const interactionCreate = async (client: Client) => {
                     break;
                 case resumeCommand.data.name:
                     await resumeCommand.execute(interaction);
+                    break;
+                case setMusicAreaCommand.data.name:
+                    await setMusicAreaCommand.execute(interaction);
                     break;
             }
         } catch (e: any) {

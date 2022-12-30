@@ -1,6 +1,6 @@
-import {Platform} from "../../types/song";
+import {Platform} from "../../../types/song";
 import {EmbedFieldData, MessageEmbed} from "discord.js";
-import messages from "../../constants/messages";
+import messages from "../../../constants/messages";
 
 export const createPlayMessage = (payload: {
     requester: string;
