@@ -96,6 +96,10 @@ export default {
         let player = players.get(interaction.guildId as string) as Player;
         await promtUserToJoin(player, interaction)
             .then(async returnPlayer => {
+                if (returnPlayer == null || returnPlayer == undefined) {
+                    return;
+                }
+
                 // Make sure the connection is ready before processing the user's request
                 // @ts-ignore
                 await enterReadyState(returnPlayer, interaction);

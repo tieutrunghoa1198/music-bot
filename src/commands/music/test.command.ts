@@ -9,6 +9,6 @@ export default {
         .setName('test')
         .setDescription('checking player status'),
     async execute(interaction: any) {
-
+        console.log(interaction);
     }
 }

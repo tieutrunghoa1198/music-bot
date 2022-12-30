@@ -4,6 +4,10 @@ import { Client, Intents } from "discord.js";
 import {bootstrap} from "./commands/deploy";
 import {SoundCloud} from "scdl-core";
 import {MessageHandler} from "./messages";
+import mongoose from 'mongoose';
+import MongoDB from './utils/mongodb';
+
+MongoDB.dbConnect(mongoose);
 
 const client = new Client({
     intents: [

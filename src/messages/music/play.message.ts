@@ -6,7 +6,9 @@ import {Song} from "../../types/song";
 import {yt_validate} from 'play-dl'
 import {NotificationService} from "../../services/notification";
 import messages from "../../constants/messages";
+import {MusicAreas} from '../../mongodb/music-area.model'
 const promtUserToJoin = async (player: Player, msg: any) => {
+    console.log(player, 'khong co undefine')
     if (!player) {
         if (
             msg.member.voice.channelId !== null
@@ -34,6 +36,13 @@ const promtUserToJoin = async (player: Player, msg: any) => {
 const enterReadyState = async (player: Player, msg: any) => {
     if (!player) {
         return;
+    } else {
+        const voiceChannel = msg.member.voice;
+        await joinVoiceChannel({
+            channelId: voiceChannel.channelId,
+            guildId: voiceChannel.guild.id,
+            adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+        })
     }
     try {
         //  bot van vao nhung chua co player
@@ -67,47 +76,48 @@ const processInput = async (input: string, msg: any, player: Player) => {
 }
 
 const handleYoutubeLink = async (msg: Message) => {
-
-    if (msg.content.startsWith('https') && yt_validate(msg.content) === 'video') {
-        let input = msg.content;
-
-        if (input === null || input === undefined || input === '') {
-            console.log('nothing goe hehe')
-        }
-
-        let player = players.get(msg.guildId as string) as Player;
-
-        if (player?.musicArea === undefined ||player?.musicArea === '') {
-            await msg.channel.send(messages.setUpPaP);
-            return;
-        }
-
-        if (player.musicArea !== msg.channel.id) {
-            return;
-        }
-
-        if (player) {
-            await enterReadyState(player, msg);
-            await processInput(input, msg, player);
-            return;
-        }
-
-        await promtUserToJoin(player, msg)
-            .then(async result => {
-                if (result == null || result == undefined) {
-                    console.log('cannot create player')
+    await MusicAreas
+        .findOne(
+            {textChannelId: msg.channel.id},
+            async (err: any, musicAreaChannel: any) => {
+                if (musicAreaChannel === null || musicAreaChannel === undefined) {
+                    console.log('not found')
                     return;
                 }
-                // @ts-ignore
-                await enterReadyState(result, msg);
-                // @ts-ignore
-                await processInput(input, msg, result);
-            })
-            .catch(e => {
-                console.log('Error at play by message!')
-                console.log(e)
-            })
-    }
+
+                if (msg.content.startsWith('https') && yt_validate(msg.content) === 'video') {
+                    let input = msg.content;
+
+                    if (input === null || input === undefined || input === '') {
+                        console.log('nothing goe hehe')
+                    }
+
+                    let player = players.get(msg.guildId as string) as Player;
+
+                    if (player) {
+                        await enterReadyState(player, msg);
+                        await processInput(input, msg, player);
+                        return;
+                    }
+
+                    await promtUserToJoin(player, msg)
+                        .then(async result => {
+                            if (result == null || result == undefined) {
+                                console.log('cannot create player')
+                                return;
+                            }
+                            // @ts-ignore
+                            await enterReadyState(result, msg);
+                            // @ts-ignore
+                            await processInput(input, msg, result);
+                        })
+                        .catch(e => {
+                            console.log('Error at play by message!')
+                            console.log(e)
+                        })
+                }
+    }).clone()
+
 }
 
 export default {
