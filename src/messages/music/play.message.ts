@@ -7,8 +7,8 @@ import {yt_validate} from 'play-dl'
 import {NotificationService} from "../../services/notification";
 import messages from "../../constants/messages";
 import {MusicAreas} from '../../mongodb/music-area.model'
-const promtUserToJoin = async (player: Player, msg: any) => {
-    console.log(player, 'khong co undefine')
+const promtUserToJoin = async (msg: any) => {
+    let player = players.get(msg.guildId as string) as Player;
     if (!player) {
         if (
             msg.member.voice.channelId !== null
@@ -30,7 +30,9 @@ const promtUserToJoin = async (player: Player, msg: any) => {
     if (!player) {
         await msg.channel.send(messages.joinVoiceChannel);
         console.log('chua set up dc player');
+        return null;
     }
+    await processInput(msg, player);
 }
 
 const enterReadyState = async (player: Player, msg: any) => {
@@ -58,7 +60,8 @@ const enterReadyState = async (player: Player, msg: any) => {
     }
 }
 
-const processInput = async (input: string, msg: any, player: Player) => {
+const processInput = async (msg: any, player: Player) => {
+    let input = msg.content;
     try {
         await YoutubeService.getVideoDetail(input)
             .then(async (song: Song) => {
@@ -66,6 +69,7 @@ const processInput = async (input: string, msg: any, player: Player) => {
                     song,
                     requester: msg.member?.user.username as string
                 }
+                console.log(`[INFO]: ${song.url}, requester: ${msg.member?.user.username}`)
                 await player?.addSong([queueItem])
                 await NotificationService.showNowPlayingMsg(player, msg, queueItem);
             })
@@ -85,31 +89,23 @@ const handleYoutubeLink = async (msg: Message) => {
                     return;
                 }
 
-                if (msg.content.startsWith('https') && yt_validate(msg.content) === 'video') {
-                    let input = msg.content;
-
-                    if (input === null || input === undefined || input === '') {
-                        console.log('nothing goe hehe')
-                    }
-
-                    let player = players.get(msg.guildId as string) as Player;
-
-                    if (player) {
-                        await enterReadyState(player, msg);
-                        await processInput(input, msg, player);
-                        return;
-                    }
-
-                    await promtUserToJoin(player, msg)
-                        .then(async result => {
-                            if (result == null || result == undefined) {
-                                console.log('cannot create player')
+                if (
+                    (msg.content.startsWith('https') &&
+                        yt_validate(msg.content) === 'video') ||
+                    (msg.content.startsWith('https') &&
+                        msg.content.includes('&list=RD'))
+                )
+                {
+                    await promtUserToJoin(msg)
+                        .then(async player => {
+                            if (player == null || player == undefined) {
+                                console.log('Already got a player!')
                                 return;
                             }
                             // @ts-ignore
-                            await enterReadyState(result, msg);
+                            await enterReadyState(player, msg);
                             // @ts-ignore
-                            await processInput(input, msg, result);
+                            await processInput(msg, player);
                         })
                         .catch(e => {
                             console.log('Error at play by message!')

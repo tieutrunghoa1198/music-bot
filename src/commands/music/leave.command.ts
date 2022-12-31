@@ -11,7 +11,7 @@ export default {
         await interaction.deferReply();
         let player = players.get(interaction.guildId as string);
         if (!player) {
-            await interaction.followUp(messages.error)
+            await interaction.followUp(messages.playerNotCreated)
             return;
         } else {
             player.leave();

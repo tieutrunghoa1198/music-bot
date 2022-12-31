@@ -1,9 +1,12 @@
 export default {
-    error: '❌ Error!',
-    cantFindAnyThing: "❌ Can't find anything!",
-    joinVoiceChannel: '🔊 Let bot join voice channel then try again!',
-    failToJoinVoiceChannel: '❌ Failed to join voice channel!',
-    failToPlay: '❌ Failed to play!',
+    error: '❌ Lỗi mẹ ùi!',
+    notYoutubeLink: '🔊 Tìm một link youtube rồi thử lại!',
+    playerNotCreated: '🔊 Bot chưa vào kênh!',
+    cantFindAnyThing: "❌ Chịu, không tìm thấy gì cả!",
+    joinVoiceChannel: '🔊 Để bot vào voice channel rồi thử lại!',
+    failToJoinVoiceChannel: '❌ Không vào nổi kênh nói!',
+    playerNotFound: '❌ Player Không tìm thấy/chưa được tạo.',
+    failToPlay: '❌ Fail to hát!',
     addedToQueue: (payload: any) => {
         return `:notes: Đã thêm \*\*${payload.title}(\`${payload.length}\`)\*\* vào danh sách chờ.`;
     },
@@ -11,28 +14,28 @@ export default {
     length: 'Độ dài',
     type: 'Type',
     platform: 'Nền tảng',
-    noSongsInQueue: '👀 No songs in queue!',
+    noSongsInQueue: '👀 Không có bài nào trong list cả!',
     skippedSong: (payload: any) => {
         return `:notes: Bỏ qua bài \*\*${payload.title}\*\* - ${payload.requester}`;
     },
-    notPlaying: '🔇 Not playing!',
-    alreadyPaused: '⏸ Already paused!',
-    paused: '⏸ Paused!',
-    resumed: '▶ Resumed!',
-    alreadyPlaying: '▶ Already playing!',
+    notPlaying: '🔇 Không hát!',
+    alreadyPaused: '⏸ Already tạm dừng!',
+    paused: '⏸ Tạm dừng!',
+    resumed: '▶ Tiếp tục!',
+    alreadyPlaying: '▶ Already hát!',
     leaved: '👋 Bye bye',
-    nothing: '🤷‍♂️ Nothing',
-    yourQueue: '🎶 Your queue',
+    nothing: '🤷‍♂️ Không có j`',
+    yourQueue: '🎶 Danh sách của bạn',
     invalidPosition: '❌ Invalid position!',
-    jumpedTo: '⏩ Jumped to',
+    jumpedTo: '⏩ Di chuyển tới',
     removed: '🗑 Removed',
     help: '💡 Help',
     ping: '📶 Ping',
     requestedBy: 'Phát bởi',
-    emptyQueue: 'Queue is empty',
+    emptyQueue: 'Danh sách trống!',
     setUpPaP: 'Dùng câu lệnh music-area để set up PaP',
     settingUpPaP: (id: string) => {
-        return `Setting up music area for PaP (channel ID: ${id})`
+        return `Cài đặt Music Area cho tính năng PaP (channel ID: ${id})`
     }
 };
 
