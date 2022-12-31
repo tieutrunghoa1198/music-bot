@@ -12,8 +12,10 @@ import {Song} from "../../types/song";
 import {NotificationService} from "../../services/notification";
 import {Command} from '../../constants/command';
 import {YoutubeService} from "../../services/youtube";
+import {yt_validate} from "play-dl";
 
-const promtUserToJoin = async (player: Player, interaction: any) => {
+const promtUserToJoin = async (interaction: any) => {
+    let player = players.get(interaction.guildId as string) as Player;
     if (!player) {
         if (
             interaction.member instanceof GuildMember &&
@@ -39,10 +41,12 @@ const promtUserToJoin = async (player: Player, interaction: any) => {
 
     if (!player) {
         await interaction.followUp(messages.joinVoiceChannel);
+        return;
     }
+    await processInput(interaction, player);
 }
 
-const enterReadyState = async (player: Player, interaction: any) => {
+const enterReadyState = async (interaction: any, player: Player) => {
     try {
         await entersState(
             <VoiceConnection>player?.voiceConnection,
@@ -56,14 +60,8 @@ const enterReadyState = async (player: Player, interaction: any) => {
     }
 }
 
-const processInput = async (input: string, interaction: any, player: Player) => {
-    /**
-     * phân loa input:
-     * + input là từ khóa (asd, lơ g, some thi...)
-     * + link youtube
-     * + link soundcloud
-     * .....
-     */
+const processInput = async (interaction: any, player: Player) => {
+    let input = interaction.options.getString('input');
     try {
         await YoutubeService.getVideoDetail(input)
             .then(async (song: Song) => {
@@ -71,6 +69,7 @@ const processInput = async (input: string, interaction: any, player: Player) => 
                     song,
                     requester: interaction.member?.user.username as string
                 }
+                console.log(`[INFO]: ${song.url}, requester: ${interaction.member?.user.username}`)
                 await player?.addSong([queueItem])
                 await NotificationService.showNowPlaying(player, interaction, queueItem)
             })
@@ -93,20 +92,25 @@ export default {
             return;
         }
 
-        let player = players.get(interaction.guildId as string) as Player;
-        await promtUserToJoin(player, interaction)
-            .then(async returnPlayer => {
-                if (returnPlayer == null || returnPlayer == undefined) {
+        if (input.startsWith('https') === false && yt_validate(input) !== 'video') {
+            await interaction.followUp(messages.notYoutubeLink)
+            return;
+        }
+
+
+        await promtUserToJoin( interaction)
+            .then(async player => {
+                if (player == null || player == undefined) {
                     return;
                 }
 
                 // Make sure the connection is ready before processing the user's request
                 // @ts-ignore
-                await enterReadyState(returnPlayer, interaction);
+                await enterReadyState(interaction, player);
 
                 // Logic here
                 // @ts-ignore
-                await processInput(input, interaction, returnPlayer);
+                await processInput(interaction, player);
             });
     }
 }

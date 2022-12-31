@@ -11,6 +11,13 @@ export default {
         await interaction.deferReply();
         try {
             let player = players.get(interaction.guildId as string);
+
+            if (!player) {
+                await interaction.followUp(messages.playerNotFound);
+                await interaction.followUp(messages.joinVoiceChannel);
+                return;
+            }
+
             if (player?.queue.length === 0) {
                 await interaction.followUp('the queue is empty');
             } else {
