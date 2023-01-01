@@ -1,21 +1,11 @@
-import skipCommand from "./music/skip.command";
-
 require('dotenv').config()
 import {Client, Interaction, Message} from 'discord.js';
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import fs from "node:fs";
 import path from "node:path";
-import playCommand from "./music/play.command";
-import statusCommand from "./music/status.command";
-import leaveCommand from "./music/leave.command";
-import queueCommand from "./music/queue.command";
-import testCommand from "./music/test.command";
-import pauseCommand from "./music/pause.command";
-import resumeCommand from "./music/resume.command";
 import nextButton from "./music/buttons/musicQueue/next.button";
 import previousButton from "./music/buttons/musicQueue/previous.button";
-import setMusicAreaCommand from "./music/setMusicArea.command";
 export const bootstrap = async (client: Client) => {
     await registerGlobalCommand()
         .catch(err => console.log(err));
@@ -40,21 +30,34 @@ const registerGlobalCommand = async () => {
 
 const getAllCommands = (): any[] => {
     const commands: any = [];
-    const commandsPath = path.join(__dirname + '/music');
+    const commandsFolder = path.join(__dirname);
+    const cmdExt: string = '.command';
     let fileExt: string;
     if (process.env.NODE_ENV === 'production') {
-        fileExt = '.command.js';
+        fileExt = '.js'
+        fileExt = cmdExt + '.js';
     } else {
-        fileExt = '.command.ts';
+        fileExt = cmdExt + '.ts';
+        fileExt = '.ts'
     }
+    fs.readdirSync(commandsFolder).forEach((folder: string) => {
+        if (folder.includes(fileExt)) {
+            //ignore deploy.ts/js
+            return;
+        }
 
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file
-        .endsWith(fileExt));
-    for (const file of commandFiles) {
-        const filePath = path.join(commandsPath, file);
-        const command = require(filePath);
-        commands.push(command.default.data.toJSON());
-    }
+        const currentPath = path.join(__dirname + '/' + folder);
+        const folderFiles = fs.readdirSync(currentPath)
+        folderFiles.filter(e => {
+            if (!e.includes(fileExt)) {
+                return;
+            }
+            const filePath = path.join(currentPath + '/' + e);
+            const command = require(filePath);
+            commands.push(command.default.data.toJSON())
+        });
+    })
+    console.log(commands)
     return commands;
 }
 
@@ -82,36 +85,39 @@ const interactionCreate = async (client: Client) => {
         if (!interaction.isCommand()) {
             return;
         }
-
+        const cmdExt: string = '.command';
+        let fileExt: string;
+        if (process.env.NODE_ENV === 'production') {
+            fileExt = '.js'
+            fileExt = cmdExt + '.js';
+        } else {
+            fileExt = cmdExt + '.ts';
+            fileExt = '.ts'
+        }
         try {
-            switch (interaction.commandName) {
-                case playCommand.data.name:
-                    await playCommand.execute(interaction);
-                    break;
-                case statusCommand.data.name:
-                    await statusCommand.execute(interaction);
-                    break;
-                case leaveCommand.data.name:
-                    await leaveCommand.execute(interaction);
-                    break;
-                case queueCommand.data.name:
-                    await queueCommand.execute(interaction);
-                    break;
-                case skipCommand.data.name:
-                    await skipCommand.execute(interaction);
-                    break;
-                case testCommand.data.name:
-                    await testCommand.execute(interaction);
-                    break;
-                case pauseCommand.data.name:
-                    await pauseCommand.execute(interaction);
-                    break;
-                case resumeCommand.data.name:
-                    await resumeCommand.execute(interaction);
-                    break;
-                case setMusicAreaCommand.data.name:
-                    await setMusicAreaCommand.execute(interaction);
-                    break;
+            const allFeatures = fs.readdirSync(__dirname);
+            let myCommand: any[] = [];
+            allFeatures.forEach((folder: string) => {
+                if (folder.includes(fileExt)) {
+                    //ignore deploy.ts/js
+                    return;
+                }
+                const folderFiles = fs.readdirSync(__dirname + '/' + folder)
+                const currentPath = path.join(__dirname + '/' + folder);
+
+                folderFiles.filter(e => {
+                    if (!e.includes(fileExt)) {
+                        return;
+                    }
+                    myCommand.push(require(path.join(currentPath + '/' + e)).default)
+                    return require(path.join(currentPath + '/' + e));
+                });
+            })
+            for (const command of myCommand) {
+                if (command.data.name === interaction.commandName) {
+                    await command.execute(interaction);
+                    return;
+                }
             }
         } catch (e: any) {
             console.log(e.toString(), 'deploy.js - command error');

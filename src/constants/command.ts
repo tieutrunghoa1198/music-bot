@@ -33,4 +33,14 @@ export class Command {
         name: 'music-area',
         description: 'Cài đặt kênh cho PaP'
     }
+
+    public static readonly clear = {
+        name: 'xoahet',
+        description: 'Xóa danh sách hiện tại'
+    }
+
+    public static readonly restrict = {
+        name: 'restrict',
+        description: 'Xóa danh sách hiện tại'
+    }
 }
