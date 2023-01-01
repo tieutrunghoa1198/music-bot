@@ -56,3 +56,23 @@ const restrict = async (msg: Message, client: Client) => {
 export default {
     restrict
 }
+
+/**
+ * test DB
+ * "guildId": "325650252386271238",
+ *   "guildName": "AKG",
+ *   "restrictChannels": [
+ *     {
+ *       "channelId": "325650252386271238",
+ *       "channelName": "xam-loz",
+ *       "roleId": "1010780985245311028",
+ *       "roleName": "Kenh Chat"
+ *     },
+ *     {
+ *       "channelId": "878130330068996097",
+ *       "channelName": "mu-sic-que",
+ *       "roleId": "682233159215349773",
+ *       "roleName": "Bot"
+ *     }
+ *   ]
+ */
