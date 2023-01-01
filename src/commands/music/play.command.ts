@@ -112,7 +112,7 @@ const processInput = async (interaction: any, player: Player) => {
 
 const handleYoutubeInput = async (interaction: any, player: Player) => {
     const input = interaction.options.getString('input');
-    if (input.includes('&list=')) {
+    if (input.includes('&list=RD')) {
         await handleYTRandomList(interaction, player);
         return;
     }
@@ -129,7 +129,6 @@ const handleYTRandomList = async (interaction: any, player: Player) => {
             requester: interaction.member?.user.username as string
         })
     });
-
     await player?.addSong(queueItems);
     await NotificationService.showNowPlaying(player, interaction, queueItems[0])
 }

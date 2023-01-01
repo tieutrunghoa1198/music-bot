@@ -21,7 +21,7 @@ const client = new Client({
 });
 client.on("ready", () => {
     console.log(`> Bot is on ready`);
-    client?.user?.setActivity(`with ${Command.play.name}`, { type: ActivityTypes.PLAYING })
+    client?.user?.setActivity(`with /${Command.play.name}`, { type: ActivityTypes.PLAYING })
 });
 
 client.login(process.env.TOKEN).then(async () => {

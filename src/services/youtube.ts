@@ -19,7 +19,7 @@ export class YoutubeService {
 
     public static async getRandomList(url: string) {
         const extractWatchUrl = url.split('watch?v=')[1];
-        const videoId = extractWatchUrl.split('&list=')[0];
+        const videoId = extractWatchUrl.split('&list=RD')[0];
         const result = await this.mixPlaylist(videoId);
         const songs: Song[] = [];
         if (!result) if (!url) throw new Error();
