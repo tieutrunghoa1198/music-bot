@@ -29,35 +29,10 @@ const registerGlobalCommand = async () => {
 }
 
 const getAllCommands = (): any[] => {
-    const commands: any = [];
-    const commandsFolder = path.join(__dirname);
-    const cmdExt: string = '.command';
-    let cmdFileExt: string;
-    let fileExt: string;
-    if (process.env.NODE_ENV === 'production') {
-        fileExt = '.js'
-        cmdFileExt = cmdExt + fileExt;
-    } else {
-        fileExt = '.ts'
-        cmdFileExt = cmdExt + fileExt;
-    }
-    fs.readdirSync(commandsFolder).forEach((folder: string) => {
-        console.log(fileExt)
-        if (folder.includes(fileExt)) {
-            //ignore deploy.ts/js
-            return;
-        }
-
-        const currentPath = path.join(__dirname + '/' + folder);
-        const folderFiles = fs.readdirSync(currentPath)
-        folderFiles.filter(e => {
-            if (!e.includes(cmdFileExt)) {
-                return;
-            }
-            const filePath = path.join(currentPath + '/' + e);
-            const command = require(filePath);
-            commands.push(command.default.data.toJSON())
-        });
+    let commands: any = [];
+    const myCmd = extractCommands();
+    myCmd.forEach(command => {
+        commands.push(command.data.toJSON())
     })
     return commands;
 }
@@ -65,7 +40,6 @@ const getAllCommands = (): any[] => {
 const interactionButton = async (client: Client) => {
     client.on('interactionCreate', async (interaction: Interaction) => {
         if (!interaction.isButton()) return;
-
         try {
             switch (interaction.customId) {
                 case nextButton.customId:
@@ -86,35 +60,8 @@ const interactionCreate = async (client: Client) => {
         if (!interaction.isCommand()) {
             return;
         }
-        const cmdExt: string = '.command';
-        let cmdFileExt: string;
-        let fileExt: string;
-        if (process.env.NODE_ENV === 'production') {
-            fileExt = '.js'
-            cmdFileExt = cmdExt + fileExt;
-        } else {
-            fileExt = '.ts'
-            cmdFileExt = cmdExt + fileExt;
-        }
         try {
-            const allFeatures = fs.readdirSync(__dirname);
-            let myCommand: any[] = [];
-            allFeatures.forEach((folder: string) => {
-                if (folder.includes(fileExt)) {
-                    //ignore deploy.ts/js
-                    return;
-                }
-                const folderFiles = fs.readdirSync(__dirname + '/' + folder)
-                const currentPath = path.join(__dirname + '/' + folder);
-
-                folderFiles.filter(e => {
-                    if (!e.includes(cmdFileExt)) {
-                        return;
-                    }
-                    myCommand.push(require(path.join(currentPath + '/' + e)).default)
-                    return require(path.join(currentPath + '/' + e));
-                });
-            })
+            const myCommand: any[] = extractCommands();
             for (const command of myCommand) {
                 if (command.data.name === interaction.commandName) {
                     await command.execute(interaction);
@@ -126,4 +73,43 @@ const interactionCreate = async (client: Client) => {
             await interaction.followUp(e.toString());
         }
     })
+}
+
+const extractCommands = (): any[] => {
+    const allFeatures = fs.readdirSync(__dirname);
+    let myCommand: any[] = [];
+    const {fileExt, cmdFileExt} = getFileExt();
+    allFeatures.forEach((folder: string) => {
+        if (folder.includes(fileExt)) {
+            //ignore deploy.ts/js
+            return;
+        }
+        const folderFiles = fs.readdirSync(__dirname + '/' + folder)
+        const currentPath = path.join(__dirname + '/' + folder);
+
+        folderFiles.filter(e => {
+            if (!e.includes(cmdFileExt)) {
+                return;
+            }
+            myCommand.push(require(path.join(currentPath + '/' + e)).default)
+        });
+    })
+    return myCommand;
+}
+
+const getFileExt = () => {
+    const cmdExt: string = '.command';
+    let cmdFileExt: string;
+    let fileExt: string;
+    if (process.env.NODE_ENV === 'production') {
+        fileExt = '.js'
+        cmdFileExt = cmdExt + fileExt;
+    } else {
+        fileExt = '.ts'
+        cmdFileExt = cmdExt + fileExt;
+    }
+    return {
+        fileExt,
+        cmdFileExt
+    }
 }
