@@ -1,6 +1,7 @@
 export default {
     error: '❌ Lỗi mẹ ùi!',
     notYoutubeLink: '🔊 Tìm một link youtube rồi thử lại!',
+    notALink: '🔊 Tìm kiếm bằng từ khóa chưa hỗ trợ!',
     playerNotCreated: '🔊 Bot chưa vào kênh!',
     cantFindAnyThing: "❌ Chịu, không tìm thấy gì cả!",
     joinVoiceChannel: '🔊 Để bot vào voice channel rồi thử lại!',
