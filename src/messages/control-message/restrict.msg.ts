@@ -38,8 +38,8 @@ const restrict = async (msg: Message, client: Client) => {
                 console.log(msg.deletable, 'msg');
                 // @ts-ignore
                 console.log(selectedChannel?.roleId)
-
-                if (msg.deletable && !role) {
+                //@ts-ignore
+                if (msg.deletable && !role && selectedChannel?.channelId) {
                     await msg.delete().catch(error => {
                         // Only log the error if it is not an Unknown Message error
                         if (error) {
