@@ -2,7 +2,6 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import {Player, players} from "../../models/player";
 import messages from "../../constants/messages";
 import {Command} from "../../constants/command";
-import mongoose from "mongoose";
 import {MusicAreas} from "../../mongodb/music-area.model";
 export default {
     data: new SlashCommandBuilder()
