@@ -32,15 +32,17 @@ const getAllCommands = (): any[] => {
     const commands: any = [];
     const commandsFolder = path.join(__dirname);
     const cmdExt: string = '.command';
+    let cmdFileExt: string;
     let fileExt: string;
     if (process.env.NODE_ENV === 'production') {
         fileExt = '.js'
-        fileExt = cmdExt + '.js';
+        cmdFileExt = cmdExt + fileExt;
     } else {
-        fileExt = cmdExt + '.ts';
         fileExt = '.ts'
+        cmdFileExt = cmdExt + fileExt;
     }
     fs.readdirSync(commandsFolder).forEach((folder: string) => {
+        console.log(fileExt)
         if (folder.includes(fileExt)) {
             //ignore deploy.ts/js
             return;
@@ -49,7 +51,7 @@ const getAllCommands = (): any[] => {
         const currentPath = path.join(__dirname + '/' + folder);
         const folderFiles = fs.readdirSync(currentPath)
         folderFiles.filter(e => {
-            if (!e.includes(fileExt)) {
+            if (!e.includes(cmdFileExt)) {
                 return;
             }
             const filePath = path.join(currentPath + '/' + e);
@@ -57,7 +59,6 @@ const getAllCommands = (): any[] => {
             commands.push(command.default.data.toJSON())
         });
     })
-    console.log(commands)
     return commands;
 }
 
@@ -86,13 +87,14 @@ const interactionCreate = async (client: Client) => {
             return;
         }
         const cmdExt: string = '.command';
+        let cmdFileExt: string;
         let fileExt: string;
         if (process.env.NODE_ENV === 'production') {
             fileExt = '.js'
-            fileExt = cmdExt + '.js';
+            cmdFileExt = cmdExt + fileExt;
         } else {
-            fileExt = cmdExt + '.ts';
             fileExt = '.ts'
+            cmdFileExt = cmdExt + fileExt;
         }
         try {
             const allFeatures = fs.readdirSync(__dirname);
@@ -106,7 +108,7 @@ const interactionCreate = async (client: Client) => {
                 const currentPath = path.join(__dirname + '/' + folder);
 
                 folderFiles.filter(e => {
-                    if (!e.includes(fileExt)) {
+                    if (!e.includes(cmdFileExt)) {
                         return;
                     }
                     myCommand.push(require(path.join(currentPath + '/' + e)).default)
