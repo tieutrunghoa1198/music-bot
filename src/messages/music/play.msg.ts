@@ -84,6 +84,12 @@ const handleYoutubeLink = async (msg: Message) => {
         .findOne(
             {textChannelId: msg.channel.id},
             async (err: any, musicAreaChannel: any) => {
+                if (msg === null || msg === undefined) {
+                    //@ts-ignore
+                    await msg.channel.send('Message Deleted');
+                    return;
+                }
+
                 if (musicAreaChannel === null || musicAreaChannel === undefined) {
                     console.log('not found')
                     return;
