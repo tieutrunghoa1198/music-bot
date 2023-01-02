@@ -64,6 +64,7 @@ export class PlayFeature {
             case url.match(soundCloudTrackRegex)?.length > 0:
                 if (SoundCloudService.isPlaylist(url)) urlType = Link.SoundCloudPlaylist
                 else urlType = Link.SoundCloudTrack;
+                break;
             case url.startsWith('https://open.spotify.com/'):
                 urlType = Link.Spotify;
                 break;
