@@ -1,83 +1,13 @@
 import {Player, players, QueueItem} from "../../models/player";
 import {Message} from "discord.js";
-import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import {YoutubeService} from "../../services/youtube";
 import {Song} from "../../types/song";
-import {yt_validate} from 'play-dl'
 import {NotificationService} from "../../services/notification";
-import messages from "../../constants/messages";
 import {MusicAreas} from '../../mongodb/music-area.model'
-const promtUserToJoin = async (msg: any) => {
-    let player = players.get(msg.guildId as string) as Player;
-    if (!player) {
-        if (
-            msg.member.voice.channelId !== null
-        ) {
-            const voiceChannel = msg.member.voice;
-            player = new Player(
-                await joinVoiceChannel({
-                    channelId: voiceChannel.channelId,
-                    guildId: voiceChannel.guild.id,
-                    adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-                }),
-                voiceChannel.guild.id as string
-            );
-            await players.set(voiceChannel.guild.id as string, player);
-            return player;
-        }
-    }
-
-    if (!player) {
-        await msg.channel.send(messages.joinVoiceChannel);
-        console.log('chua set up dc player');
-        return null;
-    }
-    await processInput(msg, player);
-}
-
-const enterReadyState = async (player: Player, msg: any) => {
-    if (!player) {
-        return;
-    } else {
-        const voiceChannel = msg.member.voice;
-        await joinVoiceChannel({
-            channelId: voiceChannel.channelId,
-            guildId: voiceChannel.guild.id,
-            adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-        })
-    }
-    try {
-        //  bot van vao nhung chua co player
-        await entersState(
-            <VoiceConnection>player?.voiceConnection,
-            VoiceConnectionStatus.Ready,
-            10e3,
-        );
-    } catch (error) {
-        await msg.channel.send(messages.failToJoinVoiceChannel);
-        console.log(error)
-        return;
-    }
-}
-
-const processInput = async (msg: any, player: Player) => {
-    let input = msg.content;
-    try {
-        await YoutubeService.getVideoDetail(input)
-            .then(async (song: Song) => {
-                const queueItem: QueueItem = {
-                    song,
-                    requester: msg.member?.user.username as string
-                }
-                console.log(`[INFO]: ${song.url}, requester: ${msg.member?.user.username}`)
-                await player?.addSong([queueItem])
-                await NotificationService.showNowPlayingMsg(player, msg, queueItem);
-            })
-    } catch (e) {
-        console.log(e, ' Connect Commands');
-        await msg.channel.send(messages.failToPlay);
-    }
-}
+import {Link, PlayFeature} from "../../features/play";
+import {SoundCloudService} from "../../services/soundcloud";
+import {SpotifyService} from "../../services/spotify";
+import messages from "../../constants/messages";
 
 const handleYoutubeLink = async (msg: Message) => {
     await MusicAreas
@@ -90,33 +20,71 @@ const handleYoutubeLink = async (msg: Message) => {
                     return;
                 }
 
+                if (!msg.content.startsWith('http')) {
+                    return;
+                }
+
                 if (musicAreaChannel === null || musicAreaChannel === undefined) {
                     console.log('not found')
                     return;
                 }
 
-                if (
-                    (msg.content.startsWith('https') &&
-                        yt_validate(msg.content) === 'video') ||
-                    (msg.content.startsWith('https') &&
-                        msg.content.includes('&list=RD'))
-                )
-                {
-                    await promtUserToJoin(msg)
-                        .then(async player => {
-                            if (player == null || player == undefined) {
-                                console.log('Already got a player!')
-                                return;
-                            }
-                            // @ts-ignore
-                            await enterReadyState(player, msg);
-                            // @ts-ignore
-                            await processInput(msg, player);
-                        })
-                        .catch(e => {
-                            console.log('Error at play by message!')
-                            console.log(e)
-                        })
+                let player = players.get(msg.guildId as string) as Player;
+
+                if (!player) {
+                    player = await PlayFeature.createPlayer(msg);
+                }
+                const username = msg.member?.user.username || '';
+                const linkType = await PlayFeature.classify(msg.content);
+
+                try {
+                    await PlayFeature.enterReadyState(player);
+                }catch (e) {
+                    await msg.channel.send(messages.joinVoiceChannel);
+                    console.log('cannot enter ready state')
+                    return;
+                }
+
+                switch (linkType) {
+                    case Link.YoutubeTrack:
+                        await YoutubeService.getVideoDetail(msg.content)
+                            .then(async (track: Song) => {
+                                const queueItem: QueueItem = await PlayFeature.handleTrack(track, player, username);
+                                await NotificationService.showNowPlayingMsg(player, msg, queueItem)
+                            });
+                        break;
+                    case Link.YoutubeRandomList:
+                        await YoutubeService.getRandomList(msg.content)
+                            .then(async data => {
+                                await PlayFeature.handlePlaylist(data.songs, player, username).then(async (queueItems: QueueItem[]) => {
+                                    await NotificationService.showNowPlayingMsg(player, msg, queueItems[0]);
+                                });
+                            })
+                        break;
+                    case Link.SoundCloudTrack:
+                        await SoundCloudService.getTrackDetail(msg.content)
+                            .then(async (track: Song) => {
+                                const queueItem: QueueItem = await PlayFeature.handleTrack(track, player, username);
+                                await NotificationService.showNowPlayingMsg(player, msg, queueItem)
+                            })
+                        break;
+                    case Link.SoundCloudPlaylist:
+                        await SoundCloudService.getPlaylist(msg.content)
+                            .then(async data => {
+                                await PlayFeature.handlePlaylist(data.songs, player, username).then(async (queueItems: QueueItem[]) => {
+                                    await NotificationService.showNowPlayingMsg(player, msg, queueItems[0]);
+                                });
+                            })
+                        break;
+                    case Link.Spotify:
+                        await SpotifyService.getUrlInfo(msg.content)
+                            .then(async songs => {
+                                songs = songs as Song[]
+                                await PlayFeature.handlePlaylist(songs, player, username).then(async (queueItems: QueueItem[]) => {
+                                    await NotificationService.showNowPlayingMsg(player, msg, queueItems[0]);
+                                });
+                            });
+                        break;
                 }
     }).clone()
 

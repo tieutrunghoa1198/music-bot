@@ -1,4 +1,4 @@
-import {Platform, Song} from "../types/song";
+import {Song} from "../types/song";
 import {
     AudioPlayer,
     AudioPlayerState,
@@ -11,9 +11,7 @@ import {
     VoiceConnectionStatus
 } from "@discordjs/voice";
 import {Snowflake} from "discord-api-types/globals";
-import {SoundCloudService} from "../services/soundcloud";
 import play from 'play-dl'; // Everything
-import ytdl from 'ytdl-core';
 export interface QueueItem {
     song: Song;
     requester: string;

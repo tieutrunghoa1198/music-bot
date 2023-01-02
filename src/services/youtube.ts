@@ -1,6 +1,5 @@
 import {Platform, Song} from "../types/song";
-import play, {extractID} from 'play-dl'
-// import MixPlaylist from 'yt-mix-playlist';
+import play from 'play-dl';
 
 export class YoutubeService {
     private static mixPlaylist = require('yt-mix-playlist');
@@ -14,12 +13,11 @@ export class YoutubeService {
             thumbnail: vid_info.thumbnails[0].url,
             url: vid_info.url,
             platform: Platform.YOUTUBE,
-        }
+        } as Song
     }
 
     public static async getRandomList(url: string) {
-        const extractWatchUrl = url.split('watch?v=')[1];
-        const videoId = extractWatchUrl.split('&list=RD')[0];
+        const videoId = this.extractId(url);
         const result = await this.mixPlaylist(videoId);
         const songs: Song[] = [];
         if (!result) if (!url) throw new Error();
@@ -40,5 +38,11 @@ export class YoutubeService {
             author: `${result._context.collapsedList.author}`,
             songs,
         };
+    }
+
+    private static extractId(url: string) {
+        const extractWatchUrl = url.split('watch?v=')[1];
+        const videoId = extractWatchUrl.split('&list=RD')[0];
+        return videoId;
     }
 }
