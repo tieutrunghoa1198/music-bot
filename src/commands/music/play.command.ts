@@ -37,7 +37,7 @@ export default {
             console.log('cannot enter ready state')
             return;
         }
-
+        console.log(linkType)
         switch (linkType) {
             case Link.YoutubeTrack:
                 await YoutubeService.getVideoDetail(input)
