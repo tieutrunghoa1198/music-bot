@@ -43,6 +43,7 @@ export class NotificationService {
     }
 
     public static async showNowPlayingMsg(player: Player, msg: Message, queueItem: QueueItem) {
+        console.log(queueItem)
         const song = queueItem.song;
         const guildName = msg.member?.guild.name as string;
         const icon = msg.member?.guild.iconURL() as string;

@@ -1,5 +1,5 @@
 require('dotenv').config()
-import {Client, Interaction, Message} from 'discord.js';
+import {Client, Interaction} from 'discord.js';
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
 import fs from "node:fs";
@@ -9,10 +9,8 @@ import previousButton from "./music/buttons/musicQueue/previous.button";
 export const bootstrap = async (client: Client) => {
     await registerGlobalCommand()
         .catch(err => console.log(err));
-
     await interactionCreate(client)
         .catch(err => console.log(err));
-
     await interactionButton(client)
         .catch((err) => console.log(err));
 };
@@ -31,6 +29,9 @@ const registerGlobalCommand = async () => {
 const getAllCommands = (): any[] => {
     let commands: any = [];
     const myCmd = extractCommands();
+    if (!myCmd.length) {
+        console.log('command array is empty -> cannot read')
+    }
     myCmd.forEach(command => {
         commands.push(command.data.toJSON())
     })
@@ -62,6 +63,7 @@ const interactionCreate = async (client: Client) => {
         }
         try {
             const myCommand: any[] = extractCommands();
+            if (!myCommand.length) throw new Error();
             for (const command of myCommand) {
                 if (command.data.name === interaction.commandName) {
                     await command.execute(interaction);
@@ -84,14 +86,15 @@ const extractCommands = (): any[] => {
             //ignore deploy.ts/js
             return;
         }
-        const folderFiles = fs.readdirSync(__dirname + '/' + folder)
-        const currentPath = path.join(__dirname + '/' + folder);
-
+        const currentFolderPath = path.join(__dirname + '/' + folder);
+        const folderFiles = fs.readdirSync(currentFolderPath);
         folderFiles.filter(e => {
             if (!e.includes(cmdFileExt)) {
                 return;
             }
-            myCommand.push(require(path.join(currentPath + '/' + e)).default)
+            const filePath = path.join(currentFolderPath + '/' + e);
+            const module = require(filePath);
+            myCommand.push(module.default);
         });
     })
     return myCommand;

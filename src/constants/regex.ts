@@ -17,3 +17,7 @@ export const soundCloudTrackRegex = new RegExp(
 export const soundCloudPlaylistRegex = new RegExp(
     /^https?:\/\/(soundcloud\.com|snd\.sc)\/([^?])*\/sets\/(.*)$/,
 );
+
+export const spotifyRegex = new RegExp(
+    /^(https:\/\/open.spotify.com\/user\/spotify\/playlist\/|spotify:user:spotify:playlist:)([a-zA-Z0-9]+)(.*)$/
+)
