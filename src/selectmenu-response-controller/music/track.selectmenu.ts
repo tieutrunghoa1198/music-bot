@@ -2,8 +2,9 @@ import {Player, players, QueueItem} from "../../models/player";
 import {NotificationService} from "../../services/notification";
 import messages from "../../constants/messages";
 import {CommonConstants} from "../../constants/common";
+import {Client} from "discord.js";
 
-async function interaction(interaction: any) {
+async function interaction(interaction: any, client: Client) {
     const player = players.get(interaction.guildId) as Player;
     if (!player) {
         await interaction.followUp(messages.joinVoiceChannel);

@@ -1,4 +1,4 @@
-import {EmbedFieldData, Interaction, MessageEmbed} from "discord.js";
+import {Client, EmbedFieldData, Interaction, MessageEmbed} from "discord.js";
 import {Player, players} from "../../../../models/player";
 import messages from "../../../../constants/messages";
 import {generateButton, paginationMsg} from "../../embedMessages/queue.embed";
@@ -6,7 +6,7 @@ import {createSelectedTracks} from "../../../../builders/selectMenu";
 
 export default {
     customId: 'next',
-    execute: async (interaction: any) => {
+    execute: async (interaction: any, client: Client) => {
         await interaction.deferUpdate();
         const player = players.get(interaction.guildId as string) as Player;
         if (!player) {

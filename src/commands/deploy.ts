@@ -44,10 +44,10 @@ const interactionButton = async (client: Client) => {
         try {
             switch (interaction.customId) {
                 case nextButton.customId:
-                    await nextButton.execute(interaction);
+                    await nextButton.execute(interaction, client);
                     break;
                 case previousButton.customId:
-                    await previousButton.execute(interaction)
+                    await previousButton.execute(interaction, client);
                     break;
             }
         } catch (e) {
@@ -66,7 +66,7 @@ const interactionCreate = async (client: Client) => {
             if (!myCommand.length) throw new Error();
             for (const command of myCommand) {
                 if (command.data.name === interaction.commandName) {
-                    await command.execute(interaction);
+                    await command.execute(interaction, client);
                     return;
                 }
             }
