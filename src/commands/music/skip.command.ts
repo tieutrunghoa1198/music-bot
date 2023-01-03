@@ -2,12 +2,13 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import {players} from "../../models/player";
 import messages from "../../constants/messages";
 import {Command} from "../../constants/command";
+import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
         .setName(Command.skip.name)
         .setDescription(Command.skip.description),
-    async execute(interaction: any) {
+    async execute(interaction: any, client: Client) {
         await interaction.deferReply();
         try {
             let player = players.get(interaction.guildId as string);

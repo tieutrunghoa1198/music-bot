@@ -12,7 +12,8 @@ import {
 } from "@discordjs/voice";
 import {Snowflake} from "discord-api-types/globals";
 import play from 'play-dl';
-import {exactMatch} from "../utils/common"; // Everything
+import {Client} from "discord.js";
+import * as process from "process";
 export interface QueueItem {
     song: Song;
     requester: string;
@@ -25,14 +26,14 @@ export class Player {
     public readonly voiceConnection: VoiceConnection;
     public readonly audioPlayer: AudioPlayer;
     private isReady = false;
-
-    constructor(voiceConnection: VoiceConnection, guildId: string) {
+    private client: Client;
+    constructor(voiceConnection: VoiceConnection, guildId: string, client: Client) {
         this.voiceConnection = voiceConnection;
         this.guildId = guildId;
         this.queue = [];
         this.playing = undefined;
         this.audioPlayer = createAudioPlayer();
-
+        this.client = client;
         this.voiceConnection.on('stateChange', async (_: VoiceConnectionState, newState: VoiceConnectionState) => {
             if (newState.status === VoiceConnectionStatus.Disconnected) {
                 /*
@@ -96,6 +97,10 @@ export class Player {
                 oldState.status !== AudioPlayerStatus.Idle
             ) {
                 await this.play();
+                client.emit('nextSong', {
+                    nextSong: this.playing as QueueItem,
+                    guildId: this.guildId
+                })
             }
         })
 

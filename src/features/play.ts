@@ -1,6 +1,6 @@
 // @ts-nocheck
 import {Player, players, QueueItem} from "../models/player";
-import {GuildMember} from "discord.js";
+import {Client, GuildMember} from "discord.js";
 import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import {soundCloudTrackRegex, youtubeVideoRegex} from "../constants/regex";
 import {Song} from "../types/song";
@@ -31,7 +31,7 @@ export class PlayFeature {
         return queueItems;
     }
 
-    public static async createPlayer(interactObj: any) {
+    public static async createPlayer(interactObj: any, client: Client) {
         let player = players.get(interactObj.guildId as string) as Player;
         if (!player) {
             if (
@@ -45,7 +45,8 @@ export class PlayFeature {
                         guildId: channel.guild.id,
                         adapterCreator: channel.guild.voiceAdapterCreator,
                     }),
-                    interactObj.guildId as string
+                    interactObj.guildId as string,
+                    client
                 );
                 players.set(interactObj.guildId as string, player);
                 return player;

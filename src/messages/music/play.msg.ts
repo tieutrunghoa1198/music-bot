@@ -1,5 +1,5 @@
 import {Player, players, QueueItem} from "../../models/player";
-import {Message} from "discord.js";
+import {Client, Message} from "discord.js";
 import {YoutubeService} from "../../services/youtube";
 import {Song} from "../../types/song";
 import {NotificationService} from "../../services/notification";
@@ -9,7 +9,7 @@ import {SoundCloudService} from "../../services/soundcloud";
 import {SpotifyService} from "../../services/spotify";
 import messages from "../../constants/messages";
 
-const handleYoutubeLink = async (msg: Message) => {
+const handleYoutubeLink = async (msg: Message, client: Client) => {
     await MusicAreas
         .findOne(
             {textChannelId: msg.channel.id},
@@ -34,7 +34,7 @@ const handleYoutubeLink = async (msg: Message) => {
                 let player = players.get(msg.guildId as string) as Player;
 
                 if (!player) {
-                    player = await PlayFeature.createPlayer(msg);
+                    player = await PlayFeature.createPlayer(msg, client);
                 }
                 const username = msg.member?.user.username || '';
                 const linkType = await PlayFeature.classify(msg.content);

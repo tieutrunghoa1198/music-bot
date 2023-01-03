@@ -3,11 +3,12 @@ import {Player, players} from "../../models/player";
 import messages from "../../constants/messages";
 import {Command} from "../../constants/command";
 import {MusicAreas} from "../../mongodb/music-area.model";
+import {Client} from "discord.js";
 export default {
     data: new SlashCommandBuilder()
         .setName(Command.setMusicArea.name)
         .setDescription(Command.setMusicArea.description),
-    async execute(interaction: any) {
+    async execute(interaction: any, client: Client) {
         await interaction.deferReply();
 
         const player = players.get(interaction.guildId as string) as Player;

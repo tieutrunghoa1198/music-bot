@@ -1,4 +1,4 @@
-import {Client, Message} from "discord.js";
+import {Client} from "discord.js";
 import {TrackSelectMenu} from "./music/track.selectmenu";
 import messages from "../constants/messages";
 export class SelectMenuController {
@@ -7,7 +7,7 @@ export class SelectMenuController {
             if (!interaction.isSelectMenu()) return;
             await interaction.deferReply();
             try {
-                await TrackSelectMenu.interaction(interaction);
+                await TrackSelectMenu.interaction(interaction, client);
             } catch (e) {
                 console.log(e);
                 await interaction.followUp(messages.error + ': Select menu track!');

@@ -8,13 +8,14 @@ import {YoutubeService} from "../../services/youtube";
 import {SoundCloudService} from "../../services/soundcloud";
 import {Link, PlayFeature} from "../../features/play";
 import {SpotifyService} from "../../services/spotify";
+import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
         .setName(Command.play.name)
         .setDescription(Command.play.description)
         .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
-    async execute(interaction: any) {
+    async execute(interaction: any, client: Client) {
         await interaction.deferReply();
         let input = interaction.options.getString('input');
         if (input === null) {
@@ -25,7 +26,7 @@ export default {
         let player = players.get(interaction.guildId as string) as Player;
 
         if (!player) {
-            player = await PlayFeature.createPlayer(interaction);
+            player = await PlayFeature.createPlayer(interaction, client);
         }
         const username = interaction.member?.user.username || '';
         const linkType = await PlayFeature.classify(input);
