@@ -22,7 +22,7 @@ export default {
                 await interaction.followUp('the queue is empty');
             } else {
                 player?.skip();
-                await interaction.followUp(`Đang phát bài mới!`);
+                await interaction.followUp(messages.skippedSong({title: player.playing?.song.title, requester: player.playing?.requester}));
             }
         } catch (e) {
             console.log(e);

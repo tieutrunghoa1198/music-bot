@@ -25,9 +25,11 @@ const handleYoutubeLink = async (msg: Message) => {
                 }
 
                 if (musicAreaChannel === null || musicAreaChannel === undefined) {
-                    console.log('not found')
+                    console.log('not found music area in this guild')
                     return;
                 }
+
+                await msg.channel.send('-> Đã nhận link, bot đang xử lý .....');
 
                 let player = players.get(msg.guildId as string) as Player;
 
@@ -57,7 +59,7 @@ const handleYoutubeLink = async (msg: Message) => {
                         await YoutubeService.getRandomList(msg.content)
                             .then(async data => {
                                 await PlayFeature.handlePlaylist(data.songs, player, username).then(async (queueItems: QueueItem[]) => {
-                                    await NotificationService.showNowPlayingMsg(player, msg, queueItems[0]);
+                                    await NotificationService.messageShowQueue(msg, player);
                                 });
                             })
                         break;
@@ -72,16 +74,16 @@ const handleYoutubeLink = async (msg: Message) => {
                         await SoundCloudService.getPlaylist(msg.content)
                             .then(async data => {
                                 await PlayFeature.handlePlaylist(data.songs, player, username).then(async (queueItems: QueueItem[]) => {
-                                    await NotificationService.showNowPlayingMsg(player, msg, queueItems[0]);
+                                    await NotificationService.messageShowQueue(msg, player);
                                 });
                             })
                         break;
-                    case Link.Spotify:
+                    case Link.SpotifyPlaylist:
                         await SpotifyService.getUrlInfo(msg.content)
                             .then(async songs => {
                                 songs = songs as Song[]
                                 await PlayFeature.handlePlaylist(songs, player, username).then(async (queueItems: QueueItem[]) => {
-                                    await NotificationService.showNowPlayingMsg(player, msg, queueItems[0]);
+                                    await NotificationService.messageShowQueue(msg, player);
                                 });
                             });
                         break;

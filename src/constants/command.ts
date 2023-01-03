@@ -43,4 +43,12 @@ export class Command {
         name: 'restrict',
         description: 'Xóa danh sách hiện tại'
     }
+
+    public static readonly nowPlaying = {
+        name: 'dangphat',
+        description: 'Bài hát đang phát!'
+    }
+}
+export class BuilderID {
+    public static readonly trackSelectMenu = 'track_select_menu';
 }

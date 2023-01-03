@@ -34,10 +34,7 @@ const restrict = async (msg: Message, client: Client) => {
                 })
                 // @ts-ignore
                 const role = await msg.member?.roles.cache.get(selectedChannel?.roleId);
-                console.log(selectedChannel);
-                console.log(msg.deletable, 'msg');
-                // @ts-ignore
-                console.log(selectedChannel?.roleId)
+                console.log(selectedChannel, 'handle delete message');
                 //@ts-ignore
                 if (msg.deletable && !role && selectedChannel?.channelId) {
                     await msg.delete().catch(error => {

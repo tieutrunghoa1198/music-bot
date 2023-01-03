@@ -17,8 +17,9 @@ export default {
     platform: 'Nền tảng',
     noSongsInQueue: '👀 Không có bài nào trong list cả!',
     skippedSong: (payload: any) => {
-        return `:notes: Bỏ qua bài \*\*${payload.title}\*\* - ${payload.requester}`;
+        return `:notes: Đang phát bài \*\*${payload.title}\*\* - ${payload.requester}`;
     },
+    selectSongToPlay: 'Chọn một bài để phát',
     notPlaying: '🔇 Không hát!',
     alreadyPaused: '⏸ Already tạm dừng!',
     paused: '⏸ Tạm dừng!',

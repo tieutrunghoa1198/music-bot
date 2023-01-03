@@ -2,7 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import {Player, players} from "../../models/player";
 import messages from "../../constants/messages";
 import {Command} from "../../constants/command";
-import {generateButton, paginationMsg} from "./embedMessages/queue.embed";
+import {NotificationService} from "../../services/notification";
 
 export default {
     data: new SlashCommandBuilder()
@@ -21,13 +21,7 @@ export default {
             await interaction.followUp(messages.emptyQueue);
             return;
         }
-
-        const msg = await paginationMsg(player, 1);
-        const row = generateButton();
-        await interaction.followUp({
-            embeds: [msg],
-            components: [row]
-        })
+        await NotificationService.interactionShowQueue(interaction, player);
         return;
     }
 }

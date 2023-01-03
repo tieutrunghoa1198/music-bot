@@ -3,6 +3,7 @@ import {Player, players} from "../../../../models/player";
 import messages from "../../../../constants/messages";
 import {boldText, codeBlockText, formatSeconds} from "../../../../utils/formatTime";
 import {generateButton, paginationMsg} from "../../embedMessages/queue.embed";
+import {createSelectedTracks} from "../../../../builders/selectMenu";
 
 export default {
     customId: 'prev',
@@ -34,10 +35,10 @@ export default {
 
             const btn = await generateButton();
             interaction.channel.messages.fetch(interaction.message.id)
-                .then((msgRes: any) => {
+                .then(async (msgRes: any) => {
                     msgRes.edit({
                         embeds: [msg],
-                        components: [btn]
+                        components: [await createSelectedTracks(player.queue), btn]
                     })
                 })
             // await interaction.followUp()

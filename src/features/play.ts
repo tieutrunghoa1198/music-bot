@@ -2,9 +2,10 @@
 import {Player, players, QueueItem} from "../models/player";
 import {GuildMember} from "discord.js";
 import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
-import {soundCloudTrackRegex, spotifyRegex, youtubeVideoRegex} from "../constants/regex";
+import {soundCloudTrackRegex, youtubeVideoRegex} from "../constants/regex";
 import {Song} from "../types/song";
 import {SoundCloudService} from "../services/soundcloud";
+import play from "play-dl";
 
 export class PlayFeature {
 
@@ -27,7 +28,6 @@ export class PlayFeature {
             })
         });
         await player?.addSong(queueItems);
-        console.log(queueItems[0])
         return queueItems;
     }
 
@@ -66,7 +66,17 @@ export class PlayFeature {
                 else urlType = Link.SoundCloudTrack;
                 break;
             case url.startsWith('https://open.spotify.com/'):
-                urlType = Link.Spotify;
+                let track = await play.spotify(url);
+                switch (track.type) {
+                    case "playlist":
+                        urlType = Link.SpotifyPlaylist;
+                        break;
+                    case "album":
+                        urlType = Link.SpotifyAlbum;
+                        break;
+                    case "track":
+                        urlType = Link.SpotifyTrack;
+                }
                 break;
         }
         return urlType;
@@ -87,5 +97,7 @@ export enum Link {
     YoutubeRandomList = 'yt_random',
     SoundCloudTrack = 'sc_track',
     SoundCloudPlaylist = 'sc_playlist',
-    Spotify = 'spotify'
+    SpotifyPlaylist = 'sp_playlist',
+    SpotifyTrack = 'sp_track',
+    SpotifyAlbum = 'sp_album'
 }
