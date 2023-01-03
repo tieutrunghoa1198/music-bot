@@ -50,7 +50,7 @@ export default {
                 await YoutubeService.getRandomList(input)
                     .then(async data => {
                         await PlayFeature.handlePlaylist(data.songs, player, username).then(async (queueItems: QueueItem[]) => {
-                            await NotificationService.showNowPlaying(player, interaction, queueItems[0]);
+                            await NotificationService.interactionShowQueue(interaction, player);
                         });
                     })
                 break;
@@ -65,18 +65,27 @@ export default {
                 await SoundCloudService.getPlaylist(input)
                     .then(async data => {
                         await PlayFeature.handlePlaylist(data.songs, player, username).then(async (queueItems: QueueItem[]) => {
-                            await NotificationService.showNowPlaying(player, interaction, queueItems[0]);
+                            await NotificationService.interactionShowQueue(interaction, player);
                         });
                     })
                 break;
-            case Link.Spotify:
+            case Link.SpotifyPlaylist:
                 await SpotifyService.getUrlInfo(input)
                     .then(async songs => {
                         songs = songs as Song[]
                         await PlayFeature.handlePlaylist(songs, player, username).then(async (queueItems: QueueItem[]) => {
-                            await NotificationService.showNowPlaying(player, interaction, queueItems[0]);
+                            await NotificationService.interactionShowQueue(interaction, player);
                         });
                     });
+                break;
+            case Link.SpotifyTrack:
+                await SpotifyService.getTrack(input)
+                    .then(async song => {
+                        const queueItem: QueueItem = await PlayFeature.handleTrack(song, player, username);
+                        await NotificationService.showNowPlaying(player, interaction, queueItem)
+                    });
+                break;
+            case Link.SpotifyAlbum:
                 break;
             default:
                 await interaction.followUp(messages.notALink);

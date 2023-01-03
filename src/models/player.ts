@@ -11,7 +11,8 @@ import {
     VoiceConnectionStatus
 } from "@discordjs/voice";
 import {Snowflake} from "discord-api-types/globals";
-import play from 'play-dl'; // Everything
+import play from 'play-dl';
+import {exactMatch} from "../utils/common"; // Everything
 export interface QueueItem {
     song: Song;
     requester: string;
@@ -125,6 +126,24 @@ export class Player {
     public skip(): void {
         console.log(this.queue.length, ' Queue');
         this.play();
+    }
+
+    public async skipByTitle(title: string) {
+        try {
+            const selectedSong = this.queue.filter(e => e.song.title.includes(title));
+            console.log(this.queue, selectedSong);
+            this.playing = selectedSong[0];
+            const songUrl = this.playing.song.url;
+            const source = await play.stream(songUrl);
+            const audioResource = createAudioResource(source.stream, {
+                inputType: source.type
+            });
+            this.audioPlayer.play(audioResource);
+            return this.playing;
+        } catch (err) {
+            console.log(err)
+            return null;
+        }
     }
 
     public pause(): void {

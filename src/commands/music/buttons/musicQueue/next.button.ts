@@ -2,6 +2,7 @@ import {EmbedFieldData, Interaction, MessageEmbed} from "discord.js";
 import {Player, players} from "../../../../models/player";
 import messages from "../../../../constants/messages";
 import {generateButton, paginationMsg} from "../../embedMessages/queue.embed";
+import {createSelectedTracks} from "../../../../builders/selectMenu";
 
 export default {
     customId: 'next',
@@ -31,7 +32,7 @@ export default {
             const message = await interaction.channel.messages.fetch(interaction.message.id);
             await message.edit({
                 embeds: [msg],
-                components: [btn]
+                components: [await createSelectedTracks(player.queue), btn]
             });
         } catch (e) {
             console.log(e, 'next btn error');

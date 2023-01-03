@@ -2,7 +2,7 @@ import {config} from "dotenv";
 import {Client, Intents} from "discord.js";
 import {bootstrap} from "./commands/deploy";
 import {SoundCloud} from "scdl-core";
-import {MessageHandler} from "./messages";
+import {MessageController} from "./messages";
 import mongoose from 'mongoose';
 import MongoDB from './utils/mongodb';
 import {ActivityTypes} from "discord.js/typings/enums";
@@ -11,6 +11,7 @@ import play from "play-dl";
 import fs from "node:fs";
 import {request} from "express";
 import path from "node:path";
+import {SelectMenuController} from "./selectmenu-response-controller";
 
 config();
 MongoDB.dbConnect(mongoose);
@@ -31,7 +32,8 @@ client.on("ready", () => {
 client.login(process.env.TOKEN).then(async () => {
     await SoundCloud.connect();
     await bootstrap(client);
-    await MessageHandler.handle(client);
+    await MessageController.handle(client);
+    await SelectMenuController.handle(client);
 });
 
 process.on('uncaughtException', function (err) {
@@ -50,5 +52,6 @@ process.on('uncaughtException', function (err) {
     })
     console.error(err);
     console.log("Node NOT Exiting...");
+    return;
 });
 
