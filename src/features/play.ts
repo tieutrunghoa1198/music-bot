@@ -1,5 +1,5 @@
 // @ts-nocheck
-import {Player, players, QueueItem} from "../models/player";
+import {Player, players, QueueItem} from "../object/player";
 import {Client, GuildMember} from "discord.js";
 import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import {soundCloudTrackRegex, youtubeVideoRegex} from "../constants/regex";

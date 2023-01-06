@@ -1,8 +1,8 @@
 import {config} from "dotenv";
 import {Client, Intents, TextChannel} from "discord.js";
-import {bootstrap} from "./commands/deploy";
+import {bootstrap} from "./interaction/commands/index.command";
 import {SoundCloud} from "scdl-core";
-import {MessageController} from "./messages";
+import {MessageController} from "./interaction/messages/index.message";
 import mongoose from 'mongoose';
 import MongoDB from './utils/mongodb';
 import {ActivityTypes} from "discord.js/typings/enums";
@@ -10,7 +10,7 @@ import {Command} from "./constants/command";
 import play from "play-dl";
 import fs from "node:fs";
 import path from "node:path";
-import {SelectMenuController} from "./selectmenu-response-controller";
+import {SelectMenuController} from "./interaction/ui/response";
 import {MusicAreas} from "./mongodb/music-area.model";
 import messages from "./constants/messages";
 
@@ -43,24 +43,28 @@ client.on('nextSong', async (payload) => {
         return;
     }
     const guildId = payload.guildId;
-    await MusicAreas
-        .findOne(
-            {guildId: guildId},
-            async (err: any, musicAreaChannel: any) => {
-                if (musicAreaChannel === null || musicAreaChannel === undefined) {
-                    console.log('not found music area in this guild')
-                    return;
-                }
-                const {textChannelId} = musicAreaChannel;
-                if (textChannelId !== '' &&
-                    textChannelId) {
-                    const textChannel = await client.channels.cache.get(textChannelId) as TextChannel;
-                    await textChannel.send(messages.skippedSong({
-                        title: payload.nextSong.song.title,
-                        requester: payload.nextSong.requester
-                    }));
-                }
-            }).clone()
+    try {
+        await MusicAreas
+            .findOne(
+                {guildId: guildId},
+                async (err: any, musicAreaChannel: any) => {
+                    if (musicAreaChannel === null || musicAreaChannel === undefined) {
+                        console.log('not found music area in this guild')
+                        return;
+                    }
+                    const {textChannelId} = musicAreaChannel;
+                    if (textChannelId !== '' &&
+                        textChannelId) {
+                        const textChannel = await client.channels.cache.get(textChannelId) as TextChannel;
+                        await textChannel.send(messages.skippedSong({
+                            title: payload.nextSong.song.title,
+                            requester: payload.nextSong.requester
+                        }));
+                    }
+                }).clone()
+    } catch (e) {
+        console.log(e);
+    }
 })
 
 process.on('uncaughtException', function (err) {

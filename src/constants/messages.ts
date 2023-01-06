@@ -1,4 +1,5 @@
 export default {
+    processing: '> *Đã nhận link, bot đang xử lý.....*',
     error: '❌ Lỗi mẹ ùi!',
     notYoutubeLink: '🔊 Tìm một link youtube rồi thử lại!',
     notALink: '🔊 Tìm kiếm bằng từ khóa chưa hỗ trợ!',

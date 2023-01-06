@@ -21,13 +21,30 @@ export class YoutubeService {
         const result = await this.mixPlaylist(videoId);
         const songs: Song[] = [];
         if (!result) if (!url) throw new Error();
+        if (!result?.items) throw new Error('Mix playlist is invalid!');
         await result.items.forEach((track: any) => {
+            const rawDuration = track.duration.split(':');
+            let hours = 0;
+            let minutes = 0;
+            let seconds = 0;
+            let result = 0;
+            if (rawDuration.length === 3) {
+                hours = parseInt(rawDuration[0])
+                minutes = parseInt(rawDuration[1])
+                seconds = parseInt(rawDuration[2])
+                result = hours * 3600 + minutes * 60 + seconds;
+            } else {
+                minutes = parseInt(rawDuration[0])
+                seconds = parseInt(rawDuration[1])
+                result = minutes * 60 + seconds;
+            }
+
             songs.push({
                 title: track.title,
                 thumbnail: track.thumbnails[0].url ? track.thumbnails[0].url : '',
                 author: track.author.name,
                 url: track.url,
-                length: track.duration / 1000,
+                length: result,
                 platform: Platform.YOUTUBE,
             });
         })

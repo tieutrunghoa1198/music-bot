@@ -39,6 +39,11 @@ export class Command {
         description: 'Xóa danh sách hiện tại'
     }
 
+    public static readonly cleanMessage = {
+        name: 'xoahet-tinnhan',
+        description: 'Xóa tin nhắn trong 2 tiếng gần nhất.'
+    }
+
     public static readonly restrict = {
         name: 'restrict',
         description: 'Xóa danh sách hiện tại'
@@ -51,4 +56,5 @@ export class Command {
 }
 export class BuilderID {
     public static readonly trackSelectMenu = 'track_select_menu';
+    public static readonly pageSelectMenu = 'page_select_menu';
 }
