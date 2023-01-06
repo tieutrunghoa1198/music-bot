@@ -1,11 +1,13 @@
 import {AudioPlayerStatus} from "@discordjs/voice";
-import {createPlayMessage} from "../commands/music/embedMessages/play.embed";
-import {Player, QueueItem} from "../models/player";
+import {createPlayMessage} from "../interaction/ui/builder/embedMessages/play.embed";
+import {Player, QueueItem} from "../object/player";
 import {formatSeconds} from "../utils/formatTime";
 import messages from "../constants/messages";
 import {Message} from "discord.js";
-import {generateButton, paginationMsg} from "../commands/music/embedMessages/queue.embed";
-import {createSelectedTracks} from "../builders/selectMenu";
+import {paginationMsg} from "../interaction/ui/builder/embedMessages/queue.embed";
+import {createSelectedTracks, numberOfPageSelectMenu} from "../interaction/ui/builder/selectMenu/selectMenu";
+import {generateButton} from "../interaction/ui/builder/buttons/buttons";
+import {PlayerQueue} from "../constants/playerQueue";
 
 export class NotificationService {
     public static async nowPlaying(player: Player, interaction: any) {
@@ -93,8 +95,12 @@ export class NotificationService {
         const msg = await paginationMsg(player, 1);
         const row = generateButton();
         await interaction.followUp({
-            embeds: [msg],
-            components: [await createSelectedTracks(player.queue), row]
+            embeds: [msg.embedMessage],
+            components: [
+                await createSelectedTracks(msg.tracks),
+                await numberOfPageSelectMenu(player.queue.length/PlayerQueue.MAX_PER_PAGE, 1),
+                row
+            ]
         })
     }
 
@@ -102,8 +108,12 @@ export class NotificationService {
         const msg = await paginationMsg(player, 1);
         const row = generateButton();
         await message.channel.send({
-            embeds: [msg],
-            components: [await createSelectedTracks(player.queue), row]
+            embeds: [msg.embedMessage],
+            components: [
+                await createSelectedTracks(msg.tracks),
+                await numberOfPageSelectMenu(player.queue.length/PlayerQueue.MAX_PER_PAGE, 1),
+                row
+            ]
         })
     }
 }
