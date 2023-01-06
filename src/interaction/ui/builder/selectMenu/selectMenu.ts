@@ -31,10 +31,10 @@ export const createSelectedTracks = async (queueItems: QueueItem[]) => {
                 }
             }
             if (duplicateTimes == 0) {
-                newValue = songInQueue.song.title;
+                newValue = songInQueue.song.title.substring(0, 60);
                 trackToDisplay.push({label, description, value: newValue});
             } else {
-                newValue = songInQueue.song.title + CommonConstants.specialSeparator + (duplicateTimes + 1);
+                newValue = songInQueue.song.title.substring(0, 60) + CommonConstants.specialSeparator + (duplicateTimes + 1);
                 trackToDisplay.push({label, description, value: newValue});
             }
         }
@@ -58,9 +58,12 @@ export const numberOfPageSelectMenu = async (rawSize: number, currentPage: numbe
     let start = currentPage - range < 0 ? 0 : currentPage - range;
     if (size - arrSize < start) {
         start = size - arrSize;
+        if (start < 0) start = 0;
     }
     // double the range then minus 1
-    const end = start + ((range*2) - 1) > size ? size : start + ((range*2) - 1);
+    let end = start + ((range*2) - 1) > size ? size : start + ((range*2) - 1);
+    console.log(start, 'start')
+    console.log(end, 'end' )
     for (let i = start; i < end; i++) {
         listPages.push(
             {
