@@ -2,9 +2,7 @@ import { MessageEmbed } from 'discord.js';
 import {formatSeconds} from "../../../../utils/formatTime";
 import {QueueItem} from "../../../../object/player";
 import messages from "../../../../constants/messages";
-
 const MAX_SONGS_PER_PAGE = 10;
-
 const generatePageMessage = (items: QueueItem[], start: number) => {
     const embedMessage = new MessageEmbed({
         title: messages.yourQueue,
@@ -15,7 +13,6 @@ const generatePageMessage = (items: QueueItem[], start: number) => {
     });
     return embedMessage;
 };
-
 export const createQueueMessages = (queue: QueueItem[]): MessageEmbed[] => {
     if (queue.length < MAX_SONGS_PER_PAGE) {
         const embedMessage = generatePageMessage(queue, 0);

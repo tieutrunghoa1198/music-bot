@@ -3,7 +3,7 @@ import {NotificationService} from "../../../../services/notification";
 import messages from "../../../../constants/messages";
 import {CommonConstants} from "../../../../constants/common";
 import {Client} from "discord.js";
-import {BuilderID} from "../../../../constants/command";
+import {BuilderID} from "../../../../constants/musicCommand";
 
 async function interaction(interaction: any, client: Client) {
     if (interaction.customId !== BuilderID.trackSelectMenu) {
@@ -16,6 +16,7 @@ async function interaction(interaction: any, client: Client) {
     }
 
     if (player.queue.length > 0) {
+        if (player?.isReplay === true) player.isReplay = false;
         const result = await interaction.values[0].split(CommonConstants.specialSeparator)
         if (result?.length > 1) {
             const nowPlaying = await player.skipByTitle(result[0]) as QueueItem;

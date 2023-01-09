@@ -3,7 +3,7 @@ import {Player, players, QueueItem} from "../../../object/player";
 import messages from "../../../constants/messages";
 import {Song} from "../../../types/song";
 import {NotificationService} from "../../../services/notification";
-import {Command} from '../../../constants/command';
+import {MusicCommand} from '../../../constants/musicCommand';
 import {YoutubeService} from "../../../services/youtube";
 import {SoundCloudService} from "../../../services/soundcloud";
 import {Link, PlayFeature} from "../../../features/play";
@@ -12,25 +12,21 @@ import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(Command.play.name)
-        .setDescription(Command.play.description)
+        .setName(MusicCommand.play.name)
+        .setDescription(MusicCommand.play.description)
         .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
     async execute(interaction: any, client: Client) {
-        await interaction.deferReply();
         let input = interaction.options.getString('input');
         if (input === null) {
             await interaction.followUp(messages.error);
             return;
         }
-
         let player = players.get(interaction.guildId as string) as Player;
-
         if (!player) {
             player = await PlayFeature.createPlayer(interaction, client);
         }
         const username = interaction.member?.user.username || '';
         const linkType = await PlayFeature.classify(input);
-
         try {
             await PlayFeature.enterReadyState(player);
         }catch (e) {
@@ -38,7 +34,6 @@ export default {
             console.log('cannot enter ready state')
             return;
         }
-
         try {
             switch (linkType) {
                 case Link.YoutubeTrack:

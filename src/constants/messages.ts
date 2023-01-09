@@ -1,10 +1,16 @@
 export default {
+    replay: (value: string) => {
+        return `🔁  Chế độ lặp lại: **${value}**`
+    },
     processing: '> *Đã nhận link, bot đang xử lý.....*',
     error: '❌ Lỗi mẹ ùi!',
     notYoutubeLink: '🔊 Tìm một link youtube rồi thử lại!',
     notALink: '🔊 Tìm kiếm bằng từ khóa chưa hỗ trợ!',
     playerNotCreated: '🔊 Bot chưa vào kênh!',
     cantFindAnyThing: "❌ Chịu, không tìm thấy gì cả!",
+    userJoinVoiceChannel: (username: string) => {
+        return `🔊 Mời ${username} vào voice channel rồi thử lại nhé!`
+    },
     joinVoiceChannel: '🔊 Để bot vào voice channel rồi thử lại!',
     failToJoinVoiceChannel: '❌ Không vào nổi kênh nói!',
     playerNotFound: '❌ Player Không tìm thấy/chưa được tạo.',

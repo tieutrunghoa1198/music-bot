@@ -9,7 +9,6 @@ export default {
         .setName('test')
         .setDescription('checking player status'),
     async execute(interaction: any, client: Client) {
-        await interaction.deferReply();
         const player = players.get(interaction.guildId) as Player;
         if (!player) {
             await interaction.followUp(messages.joinVoiceChannel);

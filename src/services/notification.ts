@@ -93,7 +93,8 @@ export class NotificationService {
 
     public static async interactionShowQueue(interaction: any, player: Player) {
         const msg = await paginationMsg(player, 1);
-        const row = generateButton();
+        const maxPage = Math.ceil(player.queue.length/PlayerQueue.MAX_PER_PAGE);
+        const row = generateButton(1, maxPage);
         await interaction.followUp({
             embeds: [msg.embedMessage],
             components: [
@@ -106,7 +107,8 @@ export class NotificationService {
 
     public static async messageShowQueue(message: any, player: Player) {
         const msg = await paginationMsg(player, 1);
-        const row = generateButton();
+        const maxPage = Math.ceil(player.queue.length/PlayerQueue.MAX_PER_PAGE);
+        const row = generateButton(1, maxPage);
         await message.channel.send({
             embeds: [msg.embedMessage],
             components: [
@@ -116,4 +118,11 @@ export class NotificationService {
             ]
         })
     }
+}
+
+export const ephemeralResponse = async (interaction: any, message: string) => {
+    await interaction.followUp({
+        content: message,
+        ephemeral: true
+    });
 }

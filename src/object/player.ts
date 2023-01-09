@@ -13,13 +13,19 @@ import {
 import {Snowflake} from "discord-api-types/globals";
 import play from 'play-dl';
 import {Client} from "discord.js";
-import * as process from "process";
 export interface QueueItem {
     song: Song;
     requester: string;
 }
 
 export class Player {
+    get isReplay(): boolean {
+        return <boolean>this._isReplay;
+    }
+
+    set isReplay(value: boolean) {
+        this._isReplay = value;
+    }
     public guildId: string;
     public playing?: QueueItem;
     public queue: QueueItem[];
@@ -27,6 +33,7 @@ export class Player {
     public readonly audioPlayer: AudioPlayer;
     private isReady = false;
     private client: Client;
+    private _isReplay?: boolean;
     constructor(voiceConnection: VoiceConnection, guildId: string, client: Client) {
         this.voiceConnection = voiceConnection;
         this.guildId = guildId;
@@ -140,7 +147,7 @@ export class Player {
         try {
             const selectedSong = this.queue.filter(e => e.song.title.includes(title));
             this.playing = selectedSong[0];
-            const songUrl = this.playing.song.url;
+            const songUrl = this.playing?.song.url;
             const source = await play.stream(songUrl);
             const audioResource = createAudioResource(source.stream, {
                 inputType: source.type
@@ -173,21 +180,15 @@ export class Player {
 
     public async play(): Promise<void> {
         try {
+            if (this?._isReplay === true) {
+                const songUrl = this.playing?.song.url as string;
+                await Player.hPlay(this.audioPlayer, songUrl);
+                return;
+            }
             if (this.queue.length > 0) {
                 this.playing = this.queue.shift() as QueueItem;
                 const songUrl = this.playing.song.url;
-
-                try {
-                    const source = await play.stream(songUrl);
-                    const audioResource = createAudioResource(source.stream, {
-                        inputType: source.type
-                    });
-                    this.audioPlayer.play(audioResource);
-                } catch (err) {
-                    console.log(err)
-                }
-
-
+                await Player.hPlay(this.audioPlayer, songUrl);
             } else {
                 this.playing = undefined;
                 this.audioPlayer.stop();
@@ -199,6 +200,13 @@ export class Player {
         }
     }
 
+    private static async hPlay(audioPlayer: AudioPlayer, songUrl: string): Promise<void> {
+        const source = await play.stream(songUrl);
+        const audioResource = createAudioResource(source.stream, {
+            inputType: source.type
+        });
+        audioPlayer.play(audioResource);
+    }
 }
 
 // Map các server mà bot đang trong kênh thoại

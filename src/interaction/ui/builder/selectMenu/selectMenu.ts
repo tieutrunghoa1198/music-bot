@@ -1,18 +1,15 @@
 import {MessageActionRow, MessageSelectMenu} from "discord.js";
 import {QueueItem} from "../../../../object/player";
 import messages from "../../../../constants/messages";
-import {BuilderID} from "../../../../constants/command";
+import {BuilderID} from "../../../../constants/musicCommand";
 import {CommonConstants} from "../../../../constants/common";
 import {PlayerQueue} from "../../../../constants/playerQueue";
-
 export const createSelectedTracks = async (queueItems: QueueItem[]) => {
     const trackToDisplay: any[] = [];
-
     for (const songInQueue of queueItems) {
         if (trackToDisplay.length > 24) {
             continue;
         }
-
         let label = songInQueue.song.title;
         let description = songInQueue.song.author;
         let value = songInQueue.song.title;
@@ -62,8 +59,6 @@ export const numberOfPageSelectMenu = async (rawSize: number, currentPage: numbe
     }
     // double the range then minus 1
     let end = start + ((range*2) - 1) > size ? size : start + ((range*2) - 1);
-    console.log(start, 'start')
-    console.log(end, 'end' )
     for (let i = start; i < end; i++) {
         listPages.push(
             {

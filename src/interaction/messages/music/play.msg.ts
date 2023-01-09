@@ -8,6 +8,8 @@ import {Link, PlayFeature} from "../../../features/play";
 import {SoundCloudService} from "../../../services/soundcloud";
 import {SpotifyService} from "../../../services/spotify";
 import messages from "../../../constants/messages";
+import path from "node:path";
+import fs from "node:fs";
 
 const handleYoutubeLink = async (msg: Message, client: Client) => {
     await MusicAreas
@@ -30,7 +32,14 @@ const handleYoutubeLink = async (msg: Message, client: Client) => {
                 }
 
                 const processingMsg = await msg.channel.send(messages.processing);
-
+                const voiceChannel = msg.member?.voice.channel;
+                if (!voiceChannel) {
+                    await msg.channel.send(messages.userJoinVoiceChannel(msg.author.toString()));
+                    await processingMsg.delete().catch((err: any) => {
+                        console.log(err);
+                    });
+                    return;
+                }
                 let player = players.get(msg.guildId as string) as Player;
 
                 if (!player) {

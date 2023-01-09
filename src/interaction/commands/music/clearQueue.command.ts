@@ -1,17 +1,16 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {players} from "../../../object/player";
 import messages from "../../../constants/messages";
-import {Command} from "../../../constants/command";
+import {MusicCommand} from "../../../constants/musicCommand";
 import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(Command.clear.name)
-        .setDescription(Command.clear.description),
+        .setName(MusicCommand.clear.name)
+        .setDescription(MusicCommand.clear.description),
     async execute(interaction: any, client: Client) {
-        await interaction.deferReply();
         let player = players.get(interaction.guildId as string);
-        if (!player) {
+        if (!player?.voiceConnection) {
             await interaction.followUp(messages.playerNotCreated)
         } else {
             player.queue = [];
