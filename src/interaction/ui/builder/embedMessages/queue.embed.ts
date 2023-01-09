@@ -1,22 +1,16 @@
-import {EmbedFieldData, MessageActionRow, MessageButton, MessageEmbed} from "discord.js";
+import {EmbedFieldData, MessageEmbed} from "discord.js";
 import {Player, QueueItem} from "../../../../object/player";
 import {boldText, codeBlockText, formatSeconds} from "../../../../utils/formatTime";
 import {PlayerQueue} from "../../../../constants/playerQueue";
-
-
-
 export const paginationMsg = async (player: Player, currentPage: number): Promise<any> => {
     const {MAX_PER_PAGE} = PlayerQueue;
     const queueLength = player.queue.length;
     const numberOfPages = Math.ceil(queueLength/MAX_PER_PAGE);
     const currentList: QueueItem[] = [];
     let msg = new MessageEmbed();
-
     if (currentPage > numberOfPages || currentPage <= 0) {
-        console.log(currentPage, numberOfPages);
         return null;
     }
-
     msg.setTitle(`:notes: Danh sách hiện tại | ${queueLength} bài hát`)
     msg.setColor(0x99FF00)
     for (let i = 0; i < MAX_PER_PAGE; i++) {

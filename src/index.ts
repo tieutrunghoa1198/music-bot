@@ -6,11 +6,10 @@ import {MessageController} from "./interaction/messages/index.message";
 import mongoose from 'mongoose';
 import MongoDB from './utils/mongodb';
 import {ActivityTypes} from "discord.js/typings/enums";
-import {Command} from "./constants/command";
+import {MusicCommand} from "./constants/musicCommand";
 import play from "play-dl";
 import fs from "node:fs";
 import path from "node:path";
-import {SelectMenuController} from "./interaction/ui/response";
 import {MusicAreas} from "./mongodb/music-area.model";
 import messages from "./constants/messages";
 
@@ -27,14 +26,13 @@ const client = new Client({
 });
 client.on("ready", () => {
     console.log(`> Bot is on ready`);
-    client?.user?.setActivity(`with /${Command.play.name}`, { type: ActivityTypes.PLAYING })
+    client?.user?.setActivity(`with /${MusicCommand.play.name}`, { type: ActivityTypes.PLAYING })
 });
 
 client.login(process.env.TOKEN).then(async () => {
     await SoundCloud.connect();
     await bootstrap(client);
     await MessageController.handle(client);
-    await SelectMenuController.handle(client);
 });
 
 client.on('nextSong', async (payload) => {

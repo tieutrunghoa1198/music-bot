@@ -8,13 +8,12 @@ export default {
         .setName('status')
         .setDescription('checking player status'),
     async execute(interaction: any, client: Client) {
-        await interaction.deferReply();
         let player = players.get(interaction.guildId as string);
         if (!player) {
             await interaction.followUp(messages.error)
             return;
         }
-
-        console.log(player.voiceConnection.state)
+        console.log(player);
+        // console.log(player.voiceConnection.state)
     }
 }
