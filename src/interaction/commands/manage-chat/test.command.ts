@@ -7,7 +7,8 @@ import {Client} from "discord.js";
 export default {
     data: new SlashCommandBuilder()
         .setName('test')
-        .setDescription('checking player status'),
+        .setDescription('checking player status')
+        .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         const player = players.get(interaction.guildId) as Player;
         if (!player) {

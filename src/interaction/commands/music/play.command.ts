@@ -14,6 +14,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName(MusicCommand.play.name)
         .setDescription(MusicCommand.play.description)
+        .setDMPermission(false)
         .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
     async execute(interaction: any, client: Client) {
         let input = interaction.options.getString('input');
