@@ -187,7 +187,7 @@ export class Player {
             }
             if (this.queue.length > 0) {
                 this.playing = this.queue.shift() as QueueItem;
-                const songUrl = this.playing.song.url;
+                const songUrl = this.playing?.song.url;
                 await Player.hPlay(this.audioPlayer, songUrl);
             } else {
                 this.playing = undefined;

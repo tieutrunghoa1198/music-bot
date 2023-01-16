@@ -7,7 +7,7 @@ import {Client, TextChannel} from "discord.js";
 export default {
     data: new SlashCommandBuilder()
         .setName(ExpFeatures.cleanMessage.name)
-        .setDescription(ExpFeatures.cleanMessage.description),
+        .setDescription(ExpFeatures.cleanMessage.description).setDMPermission(false),
     execute: async function (interaction: any, client: Client) {
         const textChannelId = interaction.channelId;
         const textChannel: TextChannel = client.channels.cache.get(textChannelId) as TextChannel;

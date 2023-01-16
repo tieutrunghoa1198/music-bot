@@ -7,7 +7,8 @@ import {Client} from "discord.js";
 export default {
     data: new SlashCommandBuilder()
         .setName(MusicCommand.skip.name)
-        .setDescription(MusicCommand.skip.description),
+        .setDescription(MusicCommand.skip.description)
+        .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         try {
             let player = players.get(interaction.guildId as string);

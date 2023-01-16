@@ -41,7 +41,7 @@ const getAllCommands = (): any[] => {
 }
 
 const isUserInvoiceChannel = async (interaction: any): Promise<boolean> => {
-    const voiceChannel = interaction.member.voice.channel;
+    const voiceChannel = interaction.member?.voice.channel;
     const folderName = 'music';
     const folderPath = path.join(__dirname, folderName);
     const files = fs.readdirSync(folderPath);

@@ -8,7 +8,8 @@ import {Client} from "discord.js";
 export default {
     data: new SlashCommandBuilder()
         .setName(MusicCommand.listQueue.name)
-        .setDescription(MusicCommand.listQueue.description),
+        .setDescription(MusicCommand.listQueue.description)
+        .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         const player = players.get(interaction.guildId as string) as Player;
         if (!player) {

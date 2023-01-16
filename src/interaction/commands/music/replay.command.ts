@@ -8,6 +8,7 @@ export default {
     data: new SlashCommandBuilder()
         .setName(MusicCommand.replay.name)
         .setDescription(MusicCommand.replay.description)
+        .setDMPermission(false)
         .addStringOption(option =>
             option.setName('replay')
                 .setDescription('on/off')

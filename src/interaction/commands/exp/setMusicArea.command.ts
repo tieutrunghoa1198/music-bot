@@ -7,7 +7,8 @@ import {Client} from "discord.js";
 export default {
     data: new SlashCommandBuilder()
         .setName(ExpFeatures.setMusicArea.name)
-        .setDescription(ExpFeatures.setMusicArea.description),
+        .setDescription(ExpFeatures.setMusicArea.description)
+        .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         const player = players.get(interaction.guildId as string) as Player;
         if (!player) {
@@ -29,7 +30,6 @@ export default {
                 .updateOne({guildId: interaction.guildId}, { $set: {textChannelId: interaction.channelId}})
             await interaction.followUp(messages.settingUpPaP(interaction.channelId));
         }
-
         return;
     }
 }
