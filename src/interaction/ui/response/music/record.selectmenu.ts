@@ -1,8 +1,8 @@
 import {Player, players, QueueItem} from "../../../../object/player";
 import messages from "../../../../constants/messages";
-import {CommonConstants} from "../../../../constants/common";
+import {GlobalConstants} from "../../../../constants/common";
 import {Client, Message} from "discord.js";
-import {BuilderID} from "../../../../constants/musicCommand";
+import {BuilderID} from "../../../../constants/musicCommands";
 import {createSelectedTracks, numberOfPageSelectMenu} from "../../builder/selectMenu/selectMenu";
 import {PlayerQueue} from "../../../../constants/playerQueue";
 import {paginationMsg} from "../../builder/embedMessages/queue.embed";
@@ -29,7 +29,7 @@ async function interaction(interaction: any, client: Client) {
             await message.edit({
                 embeds: [msg?.embedMessage],
                 components: [
-                    await createSelectedTracks(msg.tracks),
+                    await createSelectedTracks(msg?.tracks),
                     await numberOfPageSelectMenu(player.queue.length/PlayerQueue.MAX_PER_PAGE, parseInt(result)),
                     btn
                 ]

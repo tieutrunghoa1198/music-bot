@@ -1,13 +1,13 @@
 import {SlashCommandBuilder} from "@discordjs/builders";
 import {players} from "../../../object/player";
 import messages from "../../../constants/messages";
-import {MusicCommand} from "../../../constants/musicCommand";
+import {MusicCommands} from "../../../constants/musicCommands";
 import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(MusicCommand.replay.name)
-        .setDescription(MusicCommand.replay.description)
+        .setName(MusicCommands.replay.name)
+        .setDescription(MusicCommands.replay.description)
         .setDMPermission(false)
         .addStringOption(option =>
             option.setName('replay')

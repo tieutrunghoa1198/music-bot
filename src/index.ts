@@ -6,7 +6,7 @@ import {MessageController} from "./interaction/messages/index.message";
 import mongoose from 'mongoose';
 import MongoDB from './utils/mongodb';
 import {ActivityTypes} from "discord.js/typings/enums";
-import {MusicCommand} from "./constants/musicCommand";
+import {MusicCommands} from "./constants/musicCommands";
 import play from "play-dl";
 import fs from "node:fs";
 import path from "node:path";
@@ -26,7 +26,7 @@ const client = new Client({
 });
 client.on("ready", () => {
     console.log(`> Bot is on ready`);
-    client?.user?.setActivity(`with /${MusicCommand.play.name}`, { type: ActivityTypes.PLAYING })
+    client?.user?.setActivity(`with /${MusicCommands.play.name}`, { type: ActivityTypes.PLAYING })
 });
 
 client.login(process.env.TOKEN).then(async () => {

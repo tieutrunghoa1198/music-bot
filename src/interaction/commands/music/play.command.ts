@@ -3,7 +3,7 @@ import {Player, players, QueueItem} from "../../../object/player";
 import messages from "../../../constants/messages";
 import {Song} from "../../../types/song";
 import {NotificationService} from "../../../services/notification";
-import {MusicCommand} from '../../../constants/musicCommand';
+import {MusicCommands} from '../../../constants/musicCommands';
 import {YoutubeService} from "../../../services/youtube";
 import {SoundCloudService} from "../../../services/soundcloud";
 import {Link, PlayFeature} from "../../../features/play";
@@ -12,8 +12,8 @@ import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(MusicCommand.play.name)
-        .setDescription(MusicCommand.play.description)
+        .setName(MusicCommands.play.name)
+        .setDescription(MusicCommands.play.description)
         .setDMPermission(false)
         .addStringOption(option => option.setName('input').setDescription('Link to be played').setRequired(true)),
     async execute(interaction: any, client: Client) {

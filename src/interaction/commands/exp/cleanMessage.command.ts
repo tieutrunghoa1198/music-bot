@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 
-import {ExpFeatures} from "../../../constants/musicCommand";
+import {ExpCommands} from "../../../constants/musicCommands";
 import {Client, TextChannel} from "discord.js";
 
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(ExpFeatures.cleanMessage.name)
-        .setDescription(ExpFeatures.cleanMessage.description).setDMPermission(false),
+        .setName(ExpCommands.cleanMessage.name)
+        .setDescription(ExpCommands.cleanMessage.description).setDMPermission(false),
     execute: async function (interaction: any, client: Client) {
         const textChannelId = interaction.channelId;
         const textChannel: TextChannel = client.channels.cache.get(textChannelId) as TextChannel;

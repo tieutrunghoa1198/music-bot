@@ -1,9 +1,9 @@
 import {Player, players, QueueItem} from "../../../../object/player";
 import {NotificationService} from "../../../../services/notification";
 import messages from "../../../../constants/messages";
-import {CommonConstants} from "../../../../constants/common";
+import {GlobalConstants} from "../../../../constants/common";
 import {Client} from "discord.js";
-import {BuilderID} from "../../../../constants/musicCommand";
+import {BuilderID} from "../../../../constants/musicCommands";
 
 async function interaction(interaction: any, client: Client) {
     if (interaction.customId !== BuilderID.trackSelectMenu) {
@@ -17,7 +17,7 @@ async function interaction(interaction: any, client: Client) {
 
     if (player.queue.length > 0) {
         if (player?.isReplay === true) player.isReplay = false;
-        const result = await interaction.values[0].split(CommonConstants.specialSeparator)
+        const result = await interaction.values[0].split(GlobalConstants.specialSeparator)
         if (result?.length > 1) {
             const nowPlaying = await player.skipByTitle(result[0]) as QueueItem;
             if (nowPlaying === null) {

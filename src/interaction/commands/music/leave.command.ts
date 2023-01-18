@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {players} from "../../../object/player";
 import messages from "../../../constants/messages";
-import {MusicCommand} from "../../../constants/musicCommand";
+import {MusicCommands} from "../../../constants/musicCommands";
 import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(MusicCommand.leave.name)
-        .setDescription(MusicCommand.leave.description)
+        .setName(MusicCommands.leave.name)
+        .setDescription(MusicCommands.leave.description)
         .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         let player = players.get(interaction.guildId as string);

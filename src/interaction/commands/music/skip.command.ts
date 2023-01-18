@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {players} from "../../../object/player";
 import messages from "../../../constants/messages";
-import {MusicCommand} from "../../../constants/musicCommand";
+import {MusicCommands} from "../../../constants/musicCommands";
 import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(MusicCommand.skip.name)
-        .setDescription(MusicCommand.skip.description)
+        .setName(MusicCommands.skip.name)
+        .setDescription(MusicCommands.skip.description)
         .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         try {

@@ -1,14 +1,14 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {Player, players} from "../../../object/player";
 import messages from "../../../constants/messages";
-import {MusicCommand} from "../../../constants/musicCommand";
+import {MusicCommands} from "../../../constants/musicCommands";
 import {NotificationService} from "../../../services/notification";
 import {Client} from "discord.js";
 
 export default {
     data: new SlashCommandBuilder()
-        .setName(MusicCommand.listQueue.name)
-        .setDescription(MusicCommand.listQueue.description)
+        .setName(MusicCommands.listQueue.name)
+        .setDescription(MusicCommands.listQueue.description)
         .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         const player = players.get(interaction.guildId as string) as Player;

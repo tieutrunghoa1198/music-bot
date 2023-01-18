@@ -4,7 +4,7 @@ import messages from "../../../../constants/messages";
 import {paginationMsg} from "../../builder/embedMessages/queue.embed";
 import {createSelectedTracks, numberOfPageSelectMenu} from "../../builder/selectMenu/selectMenu";
 import {generateButton} from "../../builder/buttons/buttons";
-import {CommonConstants} from "../../../../constants/common";
+import {GlobalConstants} from "../../../../constants/common";
 import {PlayerQueue} from "../../../../constants/playerQueue";
 
 export default {

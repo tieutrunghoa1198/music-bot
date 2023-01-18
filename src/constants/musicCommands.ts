@@ -1,4 +1,4 @@
-export class MusicCommand {
+export class MusicCommands {
     public static readonly nowPlaying = {
         name: 'dangphat',
         description: 'Bài hát đang phát!'
@@ -37,7 +37,7 @@ export class MusicCommand {
     }
 }
 
-export class ExpFeatures {
+export class ExpCommands {
     public static readonly setMusicArea = {
         name: 'music-area',
         description: 'Cài đặt kênh cho PaP'

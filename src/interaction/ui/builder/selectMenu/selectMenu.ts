@@ -1,8 +1,8 @@
 import {MessageActionRow, MessageSelectMenu} from "discord.js";
 import {QueueItem} from "../../../../object/player";
 import messages from "../../../../constants/messages";
-import {BuilderID} from "../../../../constants/musicCommand";
-import {CommonConstants} from "../../../../constants/common";
+import {BuilderID} from "../../../../constants/musicCommands";
+import {GlobalConstants} from "../../../../constants/common";
 import {PlayerQueue} from "../../../../constants/playerQueue";
 export const createSelectedTracks = async (queueItems: QueueItem[]) => {
     const trackToDisplay: any[] = [];
@@ -31,19 +31,16 @@ export const createSelectedTracks = async (queueItems: QueueItem[]) => {
                 newValue = songInQueue.song.title.substring(0, 60);
                 trackToDisplay.push({label, description, value: newValue});
             } else {
-                newValue = songInQueue.song.title.substring(0, 60) + CommonConstants.specialSeparator + (duplicateTimes + 1);
+                newValue = songInQueue.song.title.substring(0, 60) + GlobalConstants.specialSeparator + (duplicateTimes + 1);
                 trackToDisplay.push({label, description, value: newValue});
             }
         }
     }
-    return new MessageActionRow()
-        .addComponents(
-            new MessageSelectMenu()
-                .setCustomId(BuilderID.trackSelectMenu)
-                .setPlaceholder(messages.selectSongToPlay + ` | ${trackToDisplay.length} bài`)
-                .addOptions(trackToDisplay),
-        );
-
+    const trackSelectMenu = new MessageSelectMenu()
+        .setCustomId(BuilderID.trackSelectMenu)
+        .setPlaceholder(messages.selectSongToPlay + ` | ${trackToDisplay.length} bài`)
+        .addOptions(trackToDisplay);
+    return new MessageActionRow().addComponents(trackSelectMenu);
 }
 
 export const numberOfPageSelectMenu = async (rawSize: number, currentPage: number) => {
@@ -68,12 +65,10 @@ export const numberOfPageSelectMenu = async (rawSize: number, currentPage: numbe
             }
         )
     }
-    return new MessageActionRow()
-        .addComponents(
-            new MessageSelectMenu()
-                .setCustomId(BuilderID.pageSelectMenu)
-                .setPlaceholder(`Chọn trang | ${listPages.length} trang.`)
-                .addOptions(listPages),
-        );
+    const pageSelectMenu = new MessageSelectMenu()
+        .setCustomId(BuilderID.pageSelectMenu)
+        .setPlaceholder(`Chọn trang | ${listPages.length} trang.`)
+        .addOptions(listPages);
+    return new MessageActionRow().addComponents(pageSelectMenu);
 }
 

@@ -1,13 +1,13 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import {Player, players} from "../../../object/player";
 import messages from "../../../constants/messages";
-import {ExpFeatures} from "../../../constants/musicCommand";
+import {ExpCommands} from "../../../constants/musicCommands";
 import {MusicAreas} from "../../../mongodb/music-area.model";
 import {Client} from "discord.js";
 export default {
     data: new SlashCommandBuilder()
-        .setName(ExpFeatures.setMusicArea.name)
-        .setDescription(ExpFeatures.setMusicArea.description)
+        .setName(ExpCommands.setMusicArea.name)
+        .setDescription(ExpCommands.setMusicArea.description)
         .setDMPermission(false),
     async execute(interaction: any, client: Client) {
         const player = players.get(interaction.guildId as string) as Player;
