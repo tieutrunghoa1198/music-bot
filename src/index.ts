@@ -1,9 +1,6 @@
 import {config} from "dotenv";
 import {Client, Intents, TextChannel} from "discord.js";
-import {bootstrap} from "./interaction/commands/index.command";
 import {SoundCloud} from "scdl-core";
-import {MessageController} from "./interaction/messages/index.message";
-import mongoose from 'mongoose';
 import MongoDB from './utils/mongodb';
 import {ActivityTypes} from "discord.js/typings/enums";
 import {MusicCommands} from "./constants/musicCommands";
@@ -12,9 +9,15 @@ import fs from "node:fs";
 import path from "node:path";
 import {MusicAreas} from "./mongodb/music-area.model";
 import messages from "./constants/messages";
+import mongoose from "mongoose";
+import {bootstrap} from "./mvc/index.command";
 
 config();
-MongoDB.dbConnect(mongoose);
+try {
+    MongoDB.dbConnect(mongoose);
+} catch (e) {
+    console.log(e)
+}
 
 const client = new Client({
     intents: [
@@ -32,7 +35,6 @@ client.on("ready", () => {
 client.login(process.env.TOKEN).then(async () => {
     await SoundCloud.connect();
     await bootstrap(client);
-    await MessageController.handle(client);
 });
 
 client.on('nextSong', async (payload) => {

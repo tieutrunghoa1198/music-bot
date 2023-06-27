@@ -11,6 +11,5 @@ const RestrictChannelModel = new Schema({
             roleName: String
         }
     ],
-
 })
-export const RestrictChannel = mongoose.model('restrictchannel', RestrictChannelModel)
+export const RestrictChannel = mongoose.model('restrictChannel', RestrictChannelModel)

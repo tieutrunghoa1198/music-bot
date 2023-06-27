@@ -1,5 +1,5 @@
+require('dotenv').config()
 const uri = process.env.uri;
-
 const dbConnect = (mongoose: any) => {
     try {
         mongoose.set('strictQuery', true);

@@ -48,7 +48,7 @@ export class ExpCommands {
     }
     public static readonly restrict = {
         name: 'restrict',
-        description: 'Xóa danh sách hiện tại'
+        description: 'Choose restrict channel & permitted role'
     }
 }
 export class BuilderID {
