@@ -1,10 +1,10 @@
 require('dotenv').config()
 import {Client} from 'discord.js';
-import {DeployCommands} from "./command-controllers/deployCommands";
-import {InteractionHandling} from "./command-controllers/interactionHandling";
-import {MessageController} from "./message-controllers/index.message";
-import {handleSelectMenu} from "./selectmenu-controllers/index.selectmenu";
-import {handleButton} from "./button-controllers/index.button";
+import {DeployCommands} from "./controllers/command/deployCommands";
+import {InteractionHandling} from "./controllers/command/interactionHandling";
+import {MessageController} from "./controllers/message/index.message";
+import {handleSelectMenu} from "./controllers/selectmenu/index.selectmenu";
+import {handleButton} from "./controllers/button/index.button";
 export const bootstrap = async (client: Client) => {
     try {
         new DeployCommands();
