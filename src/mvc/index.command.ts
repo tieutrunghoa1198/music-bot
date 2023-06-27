@@ -43,6 +43,11 @@ const interactionCreate = async (client: Client) => {
             await interaction.deferUpdate();
             await handleButton(interaction, client);
         }
+
+        if (interaction.isAutocomplete()) {
+            const slashCmd = new InteractionHandling(interaction, client);
+            await slashCmd.autoComplete();
+        }
     })
 }
 
