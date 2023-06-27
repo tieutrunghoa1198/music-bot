@@ -23,3 +23,10 @@ export const limitString = (text: string, limit: number) => {
     }
     return text;
 }
+
+export const ephemeralResponse = async (interaction: any, message: string) => {
+    await interaction.followUp({
+        content: message,
+        ephemeral: true
+    });
+}
