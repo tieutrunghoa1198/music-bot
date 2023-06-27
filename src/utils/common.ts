@@ -16,3 +16,10 @@ export const exactMatch = (a: any, b: any) => {
     out = out.map(x => x.join(' ')).filter(x => x);
     return out;
 }
+
+export const limitString = (text: string, limit: number) => {
+    if (text.length > limit) {
+        text = text.slice(0, limit);
+    }
+    return text;
+}

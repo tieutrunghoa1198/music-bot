@@ -55,4 +55,8 @@ export class MessageNotification implements INotification {
             ]
         })
     }
+
+    public async defaultError(userInteraction: any) {
+        await userInteraction.channel.send('asd');
+    }
 }

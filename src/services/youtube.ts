@@ -3,6 +3,17 @@ import play from 'play-dl';
 
 export class YoutubeService {
     private static mixPlaylist = require('yt-mix-playlist');
+
+    public static async search(content: string, limit: number = 5): Promise<[]> {
+        if (content === '') return [];
+        const searched = await play.search(content,
+            {
+                source : { youtube : 'video' },
+                limit
+            })
+        return searched as [];
+    }
+
     public static async getVideoDetail(content: string): Promise<Song> {
         const video = await play.video_info(content);
         const vid_info = video.video_details;

@@ -71,4 +71,8 @@ export class InteractionNotification implements INotification
         })
     }
 
+    public async defaultError(userInteraction: any) {
+        await userInteraction.followUp({ content: messages.defaultError});
+    }
+
 }

@@ -3,6 +3,7 @@ export default {
         return `🔁  Chế độ lặp lại: **${value}**`
     },
     processing: '> *Đã nhận link, bot đang xử lý.....*',
+    defaultError: '❌ Vui lòng thử lại với từ khoá khác.',
     error: '❌ Lỗi mẹ ùi!',
     notYoutubeLink: '🔊 Tìm một link youtube rồi thử lại!',
     notALink: '🔊 Tìm kiếm bằng từ khóa chưa hỗ trợ!',

@@ -159,6 +159,11 @@ export class PlayFeature {
                             });
                     });
                 break;
+            case Link.Empty:
+                NotificationFactory
+                    .Notifier(userInputType)
+                    .defaultError(userInteraction)
+                break;
         }
     }
 
