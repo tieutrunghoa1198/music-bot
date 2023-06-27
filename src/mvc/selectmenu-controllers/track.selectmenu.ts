@@ -1,10 +1,10 @@
 import {Player, players, QueueItem} from "../models/player";
-import {NotificationService} from "../../services/notification";
+import {NotificationService} from "../../services/noti/notification";
 import messages from "../../constants/messages";
 import {GlobalConstants} from "../../constants/common";
 import {Client} from "discord.js";
 import {BuilderID} from "../../constants/musicCommands";
-import {InteractionNotification} from "../../services/InteractionNotification";
+import {InteractionNotification} from "../../services/noti/InteractionNotification";
 
 async function interaction(interaction: any, client: Client) {
 

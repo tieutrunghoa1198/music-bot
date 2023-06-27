@@ -2,10 +2,10 @@ import {SlashCommandBuilder} from "@discordjs/builders";
 import {Player, players} from "../../models/player";
 import messages from "../../../constants/messages";
 import {MusicCommands} from '../../../constants/musicCommands';
-import {PlayFeature} from "../../models/play";
+import {PlayerService} from "../../../services/music/PlayerService";
 import {Client} from "discord.js";
 import {InputType} from "../../../types/InputType";
-import {YoutubeService} from "../../../services/youtube";
+import {YoutubeService} from "../../../services/music/youtube";
 import {YouTubeVideo} from "play-dl";
 import {limitString} from "../../../utils/common";
 
@@ -27,19 +27,19 @@ export default {
         }
         let player = players.get(interaction.guildId as string) as Player;
         if (!player) {
-            player = await PlayFeature.createPlayer(interaction, client);
+            player = await PlayerService.createPlayer(interaction, client);
         }
         const username = interaction.member?.user.username || '';
-        const linkType = await PlayFeature.classify(input);
+        const linkType = await PlayerService.classify(input);
         try {
-            await PlayFeature.enterReadyState(player);
+            await PlayerService.enterReadyState(player);
         }catch (e) {
             await interaction.followUp(messages.joinVoiceChannel);
             console.log('cannot enter ready state')
             return;
         }
         try {
-            await PlayFeature.process(
+            await PlayerService.process(
                 input,
                 linkType,
                 InputType.INTERACTION,
@@ -56,22 +56,22 @@ export default {
         }
     },
     async autocomplete(interaction: any, client: Client) {
-        const input = interaction.options.getString('input');
-        const results = await YoutubeService.search(input);
-        if (results.length === 0) {
+        try {
+            const input = interaction.options.getString('input');
+            const results = await YoutubeService.search(input);
+            await interaction.respond(
+                results.map((choice: YouTubeVideo) => ({
+                    name: limitString(choice.title as string, 80) + ' | ' + limitString(choice.durationRaw, 10),
+                    value: choice.url })),
+            );
+        } catch (e) {
             await interaction.respond([
                 {
                     name: 'Không tìm thấy kết quả',
                     value: ''
                 }
             ]);
-            return;
         }
-        await interaction.respond(
-            results.map((choice: YouTubeVideo) => ({
-                name: limitString(choice.title as string, 80) + ' | ' + limitString(choice.durationRaw, 10),
-                value: choice.url })),
-        );
     }
 }
 

@@ -1,17 +1,18 @@
 // @ts-nocheck
-import {Player, players, QueueItem} from "./player";
+import {Player, players, QueueItem} from "../../mvc/models/player";
 import {Client, GuildMember} from "discord.js";
 import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
 import {soundCloudTrackRegex, youtubeVideoRegex} from "../../constants/regex";
 import {Song} from "../../types/song";
-import {SoundCloudService} from "../../services/soundcloud";
+import {SoundCloudService} from "./soundcloud";
 import play from "play-dl";
-import {YoutubeService} from "../../services/youtube";
-import {SpotifyService} from "../../services/spotify";
+import {YoutubeService} from "./youtube";
+import {SpotifyService} from "./spotify";
 import {InputType} from "../../types/InputType";
-import {NotificationFactory} from "../../services/NotificationFactory";
+import {NotificationFactory} from "../noti/NotificationFactory";
+import {Link} from "../../constants/link";
 
-export class PlayFeature {
+export class PlayerService {
 
     public static async handleTrack(song: Song, player: Player, username: string): QueueItem {
         const queueItem: QueueItem =
@@ -107,10 +108,9 @@ export class PlayFeature {
     {
         switch (linkType) {
             case Link.YoutubeTrack:
-                console.log('asd')
                 await YoutubeService.getVideoDetail(inputLink)
                     .then(async (track: Song) => {
-                        const queueItem: QueueItem = await PlayFeature.handleTrack(track, player, requester);
+                        const queueItem: QueueItem = await PlayerService.handleTrack(track, player, requester);
                         NotificationFactory
                             .Notifier(userInputType)
                             .showNowPlaying(player, userInteraction, queueItem)
@@ -119,7 +119,7 @@ export class PlayFeature {
             case Link.YoutubeRandomList:
                 await YoutubeService.getRandomList(inputLink)
                     .then(async data => {
-                        await PlayFeature.handlePlaylist(data.songs, player, requester)
+                        await PlayerService.handlePlaylist(data.songs, player, requester)
                             .then(async () => {
                                 NotificationFactory
                                     .Notifier(userInputType)
@@ -130,7 +130,7 @@ export class PlayFeature {
             case Link.SoundCloudTrack:
                 await SoundCloudService.getTrackDetail(inputLink)
                     .then(async (track: Song) => {
-                        const queueItem: QueueItem = await PlayFeature.handleTrack(track, player, requester);
+                        const queueItem: QueueItem = await PlayerService.handleTrack(track, player, requester);
                         NotificationFactory
                             .Notifier(userInputType)
                             .showNowPlaying(player, userInteraction, queueItem)
@@ -139,7 +139,7 @@ export class PlayFeature {
             case Link.SoundCloudPlaylist:
                 await SoundCloudService.getPlaylist(inputLink)
                     .then(async data => {
-                        await PlayFeature.handlePlaylist(data.songs, player, requester)
+                        await PlayerService.handlePlaylist(data.songs, player, requester)
                             .then(async () => {
                                 NotificationFactory
                                     .Notifier(userInputType)
@@ -151,7 +151,7 @@ export class PlayFeature {
                 await SpotifyService.getUrlInfo(inputLink)
                     .then(async songs => {
                         songs = songs as Song[]
-                        await PlayFeature.handlePlaylist(songs, player, requester)
+                        await PlayerService.handlePlaylist(songs, player, requester)
                             .then(async () => {
                                 NotificationFactory
                                     .Notifier(userInputType)
@@ -169,13 +169,3 @@ export class PlayFeature {
 
 }
 
-export enum Link {
-    YoutubeTrack = 'yt_track',
-    YoutubeRandomList = 'yt_random',
-    SoundCloudTrack = 'sc_track',
-    SoundCloudPlaylist = 'sc_playlist',
-    SpotifyPlaylist = 'sp_playlist',
-    SpotifyTrack = 'sp_track',
-    SpotifyAlbum = 'sp_album',
-    Empty = ''
-}

@@ -3,7 +3,7 @@ import {players} from "../../models/player";
 import messages from "../../../constants/messages";
 import {AudioPlayerStatus} from "@discordjs/voice";
 import {MusicCommands} from "../../../constants/musicCommands";
-import {NotificationService} from "../../../services/notification";
+import {NotificationService} from "../../../services/noti/notification";
 import {Client} from "discord.js";
 
 export default {

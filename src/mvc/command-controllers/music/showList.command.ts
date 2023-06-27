@@ -3,7 +3,7 @@ import {Player, players} from "../../models/player";
 import messages from "../../../constants/messages";
 import {MusicCommands} from "../../../constants/musicCommands";
 import {Client} from "discord.js";
-import {InteractionNotification} from "../../../services/InteractionNotification";
+import {InteractionNotification} from "../../../services/noti/InteractionNotification";
 
 export default {
     data: new SlashCommandBuilder()

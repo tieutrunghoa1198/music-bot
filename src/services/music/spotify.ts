@@ -1,7 +1,7 @@
 import play, {SoundCloudTrack, SpotifyPlaylist, SpotifyTrack} from "play-dl";
-import {Platform, Song} from "../types/song";
+import {Platform, Song} from "../../types/song";
 import {YouTubeVideo} from "play-dl";
-import {exactMatch} from "../utils/common";
+import {exactMatch} from "../../utils/common";
 export class SpotifyService {
     public static async getTrack(url: string) {
         let track = await play.spotify(url) as SpotifyTrack;

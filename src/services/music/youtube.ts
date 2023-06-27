@@ -1,4 +1,4 @@
-import {Platform, Song} from "../types/song";
+import {Platform, Song} from "../../types/song";
 import play from 'play-dl';
 
 export class YoutubeService {

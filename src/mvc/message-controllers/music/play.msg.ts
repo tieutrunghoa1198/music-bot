@@ -1,7 +1,7 @@
 import {Player, players} from "../../models/player";
 import {Client, Message} from "discord.js";
 import {MusicAreas} from '../../../mongodb/music-area.model'
-import {PlayFeature} from "../../models/play";
+import {PlayerService} from "../../../services/music/PlayerService";
 import messages from "../../../constants/messages";
 import {InputType} from "../../../types/InputType";
 
@@ -37,13 +37,13 @@ const handleYoutubeLink = async (msg: Message, client: Client) => {
                 let player = players.get(msg.guildId as string) as Player;
 
                 if (!player) {
-                    player = await PlayFeature.createPlayer(msg, client);
+                    player = await PlayerService.createPlayer(msg, client);
                 }
                 const requester = msg.member?.user.username || '';
-                const linkType = await PlayFeature.classify(msg.content);
+                const linkType = await PlayerService.classify(msg.content);
 
                 try {
-                    await PlayFeature.enterReadyState(player);
+                    await PlayerService.enterReadyState(player);
                 }catch (e) {
                     await msg.channel.send(messages.joinVoiceChannel);
                     console.log('cannot enter ready state')
@@ -52,7 +52,7 @@ const handleYoutubeLink = async (msg: Message, client: Client) => {
 
                 try {
                     if (linkType === '') return;
-                    await PlayFeature.process(
+                    await PlayerService.process(
                         msg.content,
                         linkType,
                         InputType.MESSAGE,

@@ -1,6 +1,6 @@
-import {createPlayMessage} from "../mvc/views/embedMessages/play.embed";
-import {Player, QueueItem} from "../mvc/models/player";
-import {formatSeconds} from "../utils/formatTime";
+import {createPlayMessage} from "../../mvc/views/embedMessages/play.embed";
+import {Player, QueueItem} from "../../mvc/models/player";
+import {formatSeconds} from "../../utils/formatTime";
 export class NotificationService {
     public static async nowPlaying(player: Player, interaction: any) {
         if (interaction === undefined || null) {
