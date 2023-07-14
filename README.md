@@ -19,6 +19,18 @@
 - Show current list (/danhsach)
 
 
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`TOKEN` = Bot token
+
+`uri` = Your mongodb uri or any type of mongodb database
+
+`clientId` = Bot clientId
+
+`guildId` = Your discord guildId 
+
 
 ## Run Locally (Linux System)
 
