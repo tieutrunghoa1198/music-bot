@@ -17,7 +17,7 @@ export default {
         }
 
         const musicAreaChannel = await MusicAreas.findOne({guildId: interaction.guildId})
-        if (musicAreaChannel == null || musicAreaChannel == undefined) {
+        if (musicAreaChannel === null || musicAreaChannel === undefined) {
             await MusicAreas.collection.insertOne({
                 guildId: interaction.guildId,
                 guildName: interaction.member?.guild.name,

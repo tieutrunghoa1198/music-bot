@@ -31,6 +31,7 @@ export default {
         }
         const username = interaction.member?.user.username || '';
         const linkType = await PlayerService.classify(input);
+
         try {
             await PlayerService.enterReadyState(player);
         }catch (e) {
@@ -38,6 +39,7 @@ export default {
             console.log('cannot enter ready state')
             return;
         }
+
         try {
             await PlayerService.process(
                 input,
