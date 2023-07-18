@@ -1,20 +1,43 @@
-// @ts-nocheck
-import {Player, players, QueueItem} from "../../mvc/models/player";
+//@ts-nocheck
+import {Player, QueueItem} from "../../models/player";
 import {Client, GuildMember} from "discord.js";
 import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
-import {soundCloudTrackRegex, youtubeVideoRegex} from "../../constants/regex";
-import {Song} from "../../types/song";
+import * as Constant from "../../constants";
 import {SoundCloudService} from "./soundcloud";
 import play from "play-dl";
-import {YoutubeService} from "./youtube";
-import {SpotifyService} from "./spotify";
 import {InputType} from "../../types/InputType";
+import {YoutubeService} from "./youtube";
+import {Song} from "../../types/song";
 import {NotificationFactory} from "../noti/NotificationFactory";
-import {Link} from "../../constants/link";
+import {SpotifyService} from "./spotify";
+import {players} from "../../models/abstractPlayer";
 
 export class PlayerService {
+    private readonly player: Player;
+    private readonly interactionObj: any;
+    private readonly userInputType: InputType;
+    constructor(interactionObj: any, client: Client, userInputType: InputType) {
+        this.interactionObj = interactionObj;
+        this.userInputType = userInputType;
+        this.player = PlayerService.createPlayer(this.interactionObj, client);
+        // console.log(interactionObj)
 
-    public static async handleTrack(song: Song, player: Player, username: string): QueueItem {
+    }
+
+    public async startPlay(input: string) {
+        const requester = this.getRequester();
+        const linkType = await this.classify(input);
+        await this.enterReadyState(this.player);
+        await this.process(
+            input,
+            linkType,
+            this.userInputType,
+            this.player,
+            requester,
+            this.interactionObj)
+    }
+
+    private async handleTrack(song: Song, player: Player, username: string): QueueItem {
         const queueItem: QueueItem =
             {
                 song,
@@ -24,7 +47,7 @@ export class PlayerService {
         return queueItem;
     }
 
-    public static async handlePlaylist(tracks: Song[], player: Player, username: string): Promise<QueueItem[]>{
+    private async handlePlaylist(tracks: Song[], player: Player, username: string): Promise<QueueItem[]>{
         const queueItems: QueueItem[] = [];
         await tracks.forEach(song => {
             queueItems.push({
@@ -36,7 +59,118 @@ export class PlayerService {
         return queueItems;
     }
 
-    public static async createPlayer(interactObj: any, client: Client) {
+    private async process(
+        inputLink: String,
+        linkType: Constant.Link,
+        userInputType: InputType,
+        player: Player,
+        requester: String,
+        userInteraction: any)
+    {
+        switch (linkType) {
+            case Constant.Link.YoutubeTrack:
+                await YoutubeService.getVideoDetail(inputLink)
+                    .then(async (track: Song) => {
+                        const queueItem: QueueItem = await this.handleTrack(track, player, requester);
+                        NotificationFactory
+                            .Notifier(userInputType)
+                            .showNowPlaying(player, userInteraction, queueItem)
+                    });
+                break;
+            case Constant.Link.YoutubeRandomList:
+                await YoutubeService.getRandomList(inputLink)
+                    .then(async data => {
+                        await this.handlePlaylist(data.songs, player, requester)
+                            .then(async () => {
+                                NotificationFactory
+                                    .Notifier(userInputType)
+                                    .showQueue(userInteraction, player)
+                            });
+                    })
+                break;
+            case Constant.Link.SoundCloudTrack:
+                await SoundCloudService.getTrackDetail(inputLink)
+                    .then(async (track: Song) => {
+                        const queueItem: QueueItem = await this.handleTrack(track, player, requester);
+                        NotificationFactory
+                            .Notifier(userInputType)
+                            .showNowPlaying(player, userInteraction, queueItem)
+                    })
+                break;
+            case Constant.Link.SoundCloudPlaylist:
+                await SoundCloudService.getPlaylist(inputLink)
+                    .then(async data => {
+                        await this.handlePlaylist(data.songs, player, requester)
+                            .then(async () => {
+                                NotificationFactory
+                                    .Notifier(userInputType)
+                                    .showQueue(userInteraction, player)
+                            });
+                    })
+                break;
+            case Constant.Link.SpotifyPlaylist:
+                await SpotifyService.getUrlInfo(inputLink)
+                    .then(async songs => {
+                        songs = songs as Song[]
+                        await this.handlePlaylist(songs, player, requester)
+                            .then(async () => {
+                                NotificationFactory
+                                    .Notifier(userInputType)
+                                    .showQueue(userInteraction, player)
+                            });
+                    });
+                break;
+            case Constant.Link.Empty:
+                NotificationFactory
+                    .Notifier(userInputType)
+                    .defaultError(userInteraction)
+                break;
+        }
+    }
+
+    private async enterReadyState(player: Player) {
+        try {
+            await entersState(
+                <VoiceConnection>player?.voiceConnection,
+                VoiceConnectionStatus.Ready,
+                10e3,
+            );
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    private async classify(url: string) {
+        let urlType;
+        switch (true) {
+            case url.match(Constant.youtubeVideoRegex)?.length > 0:
+                if (url.includes('&list=RD')) urlType = Constant.Link.YoutubeRandomList;
+                else urlType = Constant.Link.YoutubeTrack;
+                break;
+            case url.match(Constant.soundCloudTrackRegex)?.length > 0:
+                if (SoundCloudService.isPlaylist(url)) urlType = Constant.Link.SoundCloudPlaylist
+                else urlType = Constant.Link.SoundCloudTrack;
+                break;
+            case url.startsWith('https://open.spotify.com/'):
+                let track = await play.spotify(url);
+                switch (track.type) {
+                    case "playlist":
+                        urlType = Constant.Link.SpotifyPlaylist;
+                        break;
+                    case "album":
+                        urlType = Constant.Link.SpotifyAlbum;
+                        break;
+                    case "track":
+                        urlType = Constant.Link.SpotifyTrack;
+                }
+                break;
+            default:
+                urlType = Constant.Link.Empty;
+        }
+        return urlType;
+    }
+
+    public static createPlayer(interactObj: any, client: Client, isInteraction?: any) {
         let player = players.get(interactObj.guildId as string) as Player;
         if (!player) {
             if (
@@ -60,112 +194,7 @@ export class PlayerService {
         return player;
     }
 
-    public static async classify(url: string) {
-        let urlType;
-        switch (true) {
-            case url.match(youtubeVideoRegex)?.length > 0:
-                if (url.includes('&list=RD')) urlType = Link.YoutubeRandomList;
-                else urlType = Link.YoutubeTrack;
-                break;
-            case url.match(soundCloudTrackRegex)?.length > 0:
-                if (SoundCloudService.isPlaylist(url)) urlType = Link.SoundCloudPlaylist
-                else urlType = Link.SoundCloudTrack;
-                break;
-            case url.startsWith('https://open.spotify.com/'):
-                let track = await play.spotify(url);
-                switch (track.type) {
-                    case "playlist":
-                        urlType = Link.SpotifyPlaylist;
-                        break;
-                    case "album":
-                        urlType = Link.SpotifyAlbum;
-                        break;
-                    case "track":
-                        urlType = Link.SpotifyTrack;
-                }
-                break;
-            default:
-                urlType = Link.Empty;
-        }
-        return urlType;
+    private getRequester(): string {
+        return this.interactionObj.member?.user.username || '';
     }
-
-    public static async enterReadyState(player: Player) {
-        await entersState(
-            <VoiceConnection>player?.voiceConnection,
-            VoiceConnectionStatus.Ready,
-            10e3,
-        );
-    }
-
-    public static async process(
-        inputLink: String,
-        linkType: Link,
-        userInputType: InputType,
-        player: Player,
-        requester: String,
-        userInteraction: any)
-    {
-        switch (linkType) {
-            case Link.YoutubeTrack:
-                await YoutubeService.getVideoDetail(inputLink)
-                    .then(async (track: Song) => {
-                        const queueItem: QueueItem = await PlayerService.handleTrack(track, player, requester);
-                        NotificationFactory
-                            .Notifier(userInputType)
-                            .showNowPlaying(player, userInteraction, queueItem)
-                    });
-                break;
-            case Link.YoutubeRandomList:
-                await YoutubeService.getRandomList(inputLink)
-                    .then(async data => {
-                        await PlayerService.handlePlaylist(data.songs, player, requester)
-                            .then(async () => {
-                                NotificationFactory
-                                    .Notifier(userInputType)
-                                    .showQueue(userInteraction, player)
-                            });
-                    })
-                break;
-            case Link.SoundCloudTrack:
-                await SoundCloudService.getTrackDetail(inputLink)
-                    .then(async (track: Song) => {
-                        const queueItem: QueueItem = await PlayerService.handleTrack(track, player, requester);
-                        NotificationFactory
-                            .Notifier(userInputType)
-                            .showNowPlaying(player, userInteraction, queueItem)
-                    })
-                break;
-            case Link.SoundCloudPlaylist:
-                await SoundCloudService.getPlaylist(inputLink)
-                    .then(async data => {
-                        await PlayerService.handlePlaylist(data.songs, player, requester)
-                            .then(async () => {
-                                NotificationFactory
-                                    .Notifier(userInputType)
-                                    .showQueue(userInteraction, player)
-                            });
-                    })
-                break;
-            case Link.SpotifyPlaylist:
-                await SpotifyService.getUrlInfo(inputLink)
-                    .then(async songs => {
-                        songs = songs as Song[]
-                        await PlayerService.handlePlaylist(songs, player, requester)
-                            .then(async () => {
-                                NotificationFactory
-                                    .Notifier(userInputType)
-                                    .showQueue(userInteraction, player)
-                            });
-                    });
-                break;
-            case Link.Empty:
-                NotificationFactory
-                    .Notifier(userInputType)
-                    .defaultError(userInteraction)
-                break;
-        }
-    }
-
 }
-

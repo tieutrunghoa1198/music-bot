@@ -1,13 +1,15 @@
 import {INotification} from "../interface/INotification";
-import {Player, QueueItem} from "../../mvc/models/player";
+import {Player} from "../../models/player";
 import {formatSeconds} from "../../utils/formatTime";
 import {AudioPlayerStatus} from "@discordjs/voice";
-import messages from "../../constants/messages";
-import {createPlayMessage} from "../../mvc/views/embedMessages/play.embed";
-import {paginationMsg} from "../../mvc/views/embedMessages/queue.embed";
-import {PlayerQueue} from "../../constants/playerQueue";
-import {generateButton} from "../../mvc/views/buttons/buttons";
-import {createSelectedTracks, numberOfPageSelectMenu} from "../../mvc/views/selectMenu/selectMenu";
+import {createPlayMessage} from "../../views/embedMessages/play.embed";
+import {paginationMsg} from "../../views/embedMessages/queue.embed";
+import {createSelectedTracks, numberOfPageSelectMenu} from "../../views/selectMenu/selectMenu";
+import * as Constant from '../../constants/index'
+import {players, QueueItem} from "../../models/abstractPlayer";
+import {generateButton} from "../../views/buttons";
+import {AudioPlayerComponent} from "../../views/group/audioPlayer.component";
+import {Song} from "../../types/song";
 
 export class InteractionNotification implements INotification
 {
@@ -29,19 +31,7 @@ export class InteractionNotification implements INotification
         const guildName = userInteraction.member.guild.name;
         const icon = userInteraction.member.guild.iconURL();
         const song = queueItem.song;
-
-        const payload = {
-            title: song.title,
-            author: song.author,
-            thumbnail: song.thumbnail,
-            length: formatSeconds(song.length),
-            platform: song.platform,
-            guildName,
-            requester: queueItem.requester,
-            icon,
-        }
-
-
+        const payload = this.getNowPlayingPayload(song, guildName, queueItem, icon);
         const message = await userInteraction.fetchReply();
 
         if (!message) {
@@ -50,7 +40,7 @@ export class InteractionNotification implements INotification
         }
 
         if (player?.audioPlayer.state.status === AudioPlayerStatus.Playing && player.queue.length > 0) {
-            await userInteraction.followUp(messages.addedToQueue(payload));
+            await userInteraction.followUp(Constant.Messages.addedToQueue(payload));
             return;
         }
 
@@ -59,20 +49,35 @@ export class InteractionNotification implements INotification
 
     public async showQueue(userInteraction: any, player: Player) {
         const msg = await paginationMsg(player, 1);
-        const maxPage = Math.ceil(player.queue.length/PlayerQueue.MAX_PER_PAGE);
-        const row = generateButton(1, maxPage);
-        await userInteraction.followUp({
-            embeds: [msg.embedMessage],
-            components: [
-                await createSelectedTracks(msg.tracks),
-                await numberOfPageSelectMenu(player.queue.length/PlayerQueue.MAX_PER_PAGE, 1),
-                row
-            ]
+        const audioComponent = await AudioPlayerComponent(msg, player, 1);
+        const guildName = userInteraction.member.guild.name;
+        const icon = userInteraction.member.guild.iconURL();
+        const song = player.playing?.song as Song;
+        const payload = this.getNowPlayingPayload(song, guildName, player.playing as QueueItem, icon);
+        player.replaceMessage().then();
+        const response = await userInteraction.followUp({
+            embeds: [createPlayMessage(payload)],
+            components: audioComponent.components
         })
+        player.message = response.id
+        player.textChannel = response.channelId
     }
 
     public async defaultError(userInteraction: any) {
-        await userInteraction.followUp({ content: messages.defaultError});
+        await userInteraction.followUp({ content: Constant.Messages.defaultError});
+    }
+
+    private getNowPlayingPayload(song: Song, guildName: string, queueItem: QueueItem, icon: string) {
+        return {
+            title: song?.title || 'Unknown',
+            author: song?.author || 'Unknown',
+            thumbnail: song?.thumbnail || 'Unknown',
+            length: formatSeconds(song?.length) || 'Unknown',
+            platform: song?.platform || 'Unknown',
+            guildName,
+            requester: queueItem?.requester || 'Unknown',
+            icon,
+        }
     }
 
 }

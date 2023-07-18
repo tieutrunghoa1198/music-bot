@@ -1,0 +1,7 @@
+export * from './nextSong.component'
+export * from './prevSong.component'
+export * from './repeat.component'
+export * from './buttons'
+export * from './clearQueue.component'
+export * from './pauseResume.component'
+export * from './removeAudio.component'

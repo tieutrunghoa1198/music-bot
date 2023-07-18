@@ -1,0 +1,16 @@
+import {EmbedFieldData, MessageEmbed} from "discord.js";
+import {Messages} from "../../constants";
+export const AddSongMessage = (payload: any) => {
+    const author: EmbedFieldData = {
+        name: Messages.platform,
+        value: payload.platform,
+        inline: true
+    }
+
+    return new MessageEmbed()
+        .setTitle(payload.title)
+        .setColor(0x99FF00)
+        .setAuthor({ name: `${payload.guildName} - Đang phát`, iconURL: payload.icon })
+        .setThumbnail(payload.thumbnail)
+        .addFields(author);
+}

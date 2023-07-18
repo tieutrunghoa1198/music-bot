@@ -54,4 +54,10 @@ export class ExpCommands {
 export class BuilderID {
     public static readonly trackSelectMenu = 'track_select_menu';
     public static readonly pageSelectMenu = 'page_select_menu';
+    public static readonly nextSong = 'next-song';
+    public static readonly prevSong = 'prev-song';
+    public static readonly repeatSong = 'repeat'
+    public static readonly clearQueue = 'clear-queue'
+    public static readonly removeAudio = 'remove-audio'
+    public static readonly pauseResume = 'pause-resume'
 }

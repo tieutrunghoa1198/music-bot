@@ -1,4 +1,4 @@
-export default {
+export const Messages = {
     replay: (value: string) => {
         return `🔁  Chế độ lặp lại: **${value}**`
     },

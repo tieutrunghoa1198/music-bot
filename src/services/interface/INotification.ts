@@ -1,4 +1,5 @@
-import {Player, QueueItem} from "../../mvc/models/player";
+import {Player} from "../../models/player";
+import {QueueItem} from "../../models/abstractPlayer";
 
 export interface INotification {
     showNowPlaying(player: Player, userInteraction: any, queueItem: QueueItem): void,

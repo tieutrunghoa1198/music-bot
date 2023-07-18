@@ -1,8 +1,6 @@
-import {Bot} from "./struct/bot";
+import {Bot} from "./bot";
 
-const bot = new Bot();
-bot.start();
-
+new Bot().start();
 process.on('uncaughtException', function (err) {
     console.error(err);
     console.log("Node NOT Exiting...");
