@@ -1,13 +1,13 @@
-import {Player, QueueItem} from "../../mvc/models/player";
+import {Player} from "../../models/player";
 import {formatSeconds} from "../../utils/formatTime";
 import {AudioPlayerStatus} from "@discordjs/voice";
-import messages from "../../constants/messages";
-import {createPlayMessage} from "../../mvc/views/embedMessages/play.embed";
+import {createPlayMessage} from "../../views/embedMessages/play.embed";
+import * as Constant from '../../constants/index'
 import {INotification} from "../interface/INotification";
-import {paginationMsg} from "../../mvc/views/embedMessages/queue.embed";
-import {PlayerQueue} from "../../constants/playerQueue";
-import {generateButton} from "../../mvc/views/buttons/buttons";
-import {createSelectedTracks, numberOfPageSelectMenu} from "../../mvc/views/selectMenu/selectMenu";
+import {paginationMsg} from "../../views/embedMessages/queue.embed";
+import {AudioPlayerComponent} from "../../views/group/audioPlayer.component";
+import {QueueItem} from "../../models/abstractPlayer";
+import {Song} from "../../types/song";
 
 export class MessageNotification implements INotification {
     private static instance: MessageNotification
@@ -35,7 +35,7 @@ export class MessageNotification implements INotification {
         }
 
         if (player?.audioPlayer.state.status === AudioPlayerStatus.Playing && player.queue.length > 0) {
-            await userInteraction.channel.send(messages.addedToQueue(payload));
+            await userInteraction.channel.send(Constant.Messages.addedToQueue(payload));
             return;
         }
 
@@ -44,19 +44,34 @@ export class MessageNotification implements INotification {
 
     public async showQueue(userInteraction: any, player: Player) {
         const msg = await paginationMsg(player, 1);
-        const maxPage = Math.ceil(player.queue.length/PlayerQueue.MAX_PER_PAGE);
-        const row = generateButton(1, maxPage);
-        await userInteraction.channel.send({
-            embeds: [msg.embedMessage],
-            components: [
-                await createSelectedTracks(msg.tracks),
-                await numberOfPageSelectMenu(player.queue.length/PlayerQueue.MAX_PER_PAGE, 1),
-                row
-            ]
+        const audioComponent = await AudioPlayerComponent(msg, player, 1);
+        const song = player.playing?.song as Song;
+        const guildName = userInteraction.member?.guild.name as string;
+        const icon = userInteraction.member?.guild.iconURL() as string;
+        const payload = this.getNowPlayingPayload(song, guildName, player.playing as QueueItem, icon);
+        player.replaceMessage().then();
+        const response = await userInteraction.channel.send({
+            embeds: [await createPlayMessage(payload)],
+            components: audioComponent.components
         })
+        player.message = response.id
+        player.textChannel = response.channelId
     }
 
     public async defaultError(userInteraction: any) {
         await userInteraction.channel.send('asd');
+    }
+
+    private getNowPlayingPayload(song: Song, guildName: string, queueItem: QueueItem, icon: string) {
+        return {
+            title: song?.title || 'Unknown',
+            author: song?.author || 'Unknown',
+            thumbnail: song?.thumbnail || 'Unknown',
+            length: formatSeconds(song?.length) || 'Unknown',
+            platform: song?.platform || 'Unknown',
+            guildName,
+            requester: queueItem?.requester || 'Unknown',
+            icon,
+        }
     }
 }

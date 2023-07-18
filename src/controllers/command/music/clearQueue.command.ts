@@ -1,0 +1,19 @@
+import { SlashCommandBuilder } from "@discordjs/builders";
+import {Client} from "discord.js";
+import {players} from "../../../models/abstractPlayer";
+import {Messages, MusicCommands} from "../../../constants";
+export default {
+    data: new SlashCommandBuilder()
+        .setName(MusicCommands.clear.name)
+        .setDescription(MusicCommands.clear.description)
+        .setDMPermission(false),
+    async execute(interaction: any, client: Client) {
+        let player = players.get(interaction.guildId as string);
+        if (!player?.voiceConnection) {
+            await interaction.followUp(Messages.playerNotCreated)
+        } else {
+            player.queue = [];
+            await interaction.followUp(Messages.emptyQueue);
+        }
+    }
+}
