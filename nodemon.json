@@ -2,5 +2,5 @@
   "watch": ["src"],
   "ext": "ts,json",
   "ignore": ["src/**/*.test.ts"],
-  "exec": "ts-node --project tsconfig.json src/index.ts"
+  "exec": "rm -rf dist && tsc && ts-node --project tsconfig.json src/index.ts"
 }

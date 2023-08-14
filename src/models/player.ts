@@ -233,10 +233,10 @@ export class Player implements AbstractPlayer{
                 this.playing = undefined;
                 this.audioPlayer.stop();
             }
-        } catch (e) {
+        } catch (e: any) {
             // If there is any problem with player, then play the next song in queue
-            console.log(e, 'Error: player.ts');
-            await this.play();
+            console.log(e.message, 'Error: player.ts');
+            await this.play()
         }
     }
 

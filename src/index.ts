@@ -1,3 +1,4 @@
+require('module-alias/register');
 import {Bot} from "./bot";
 
 new Bot().start();

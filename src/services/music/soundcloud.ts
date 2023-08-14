@@ -1,7 +1,11 @@
-import {Platform, Song} from "../../types/song";
-import {soundCloudPlaylistRegex, soundCloudTrackRegex} from "../../constants/regex";
+import {Platform, Song} from "@/types/song";
+import {soundCloudPlaylistRegex, soundCloudTrackRegex} from "@/constants";
 import { SoundCloud } from 'scdl-core';
-import {Playlist} from "../../types/playlist";
+import {Playlist} from "@/types/playlist";
+import {soundCloudUrl} from "scdl-core/dist/constants/configs";
+import puppeteer, {HTTPRequest} from "puppeteer";
+import PuppeteerIntercept from "@/services/others/puppeteer-intercept";
+import play from "play-dl";
 
 export class SoundCloudService {
     public static async download(url: string, highWaterMark: number) {
@@ -72,4 +76,67 @@ export class SoundCloudService {
         }
         return '';
     }
+
+    public async updateToken() {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+
+        // Intercept network requests
+        await page.setRequestInterception(true);
+        page.on('request', (request) => {
+            // Capture the URL of the request
+            const requestUrl = request.url();
+            console.log('Intercepted request:', requestUrl);
+            if (requestUrl.includes('client_id')) {
+                play.setToken({
+                    soundcloud: {
+                        client_id: requestUrl.split('client_id=')[1]
+                    }
+                })
+            }
+            // You can also check the request method (GET, POST, etc.) and handle accordingly
+            // const requestMethod = request.method();
+
+            // Allow the request to continue
+            request.continue();
+        });
+
+        try {
+            // Navigate to the website you want to capture data from
+            await page.goto('https://soundcloud.com');
+
+            // Optionally, perform actions on the page (e.g., click buttons, input data, etc.)
+            // ...
+
+            // Wait for a specific condition (e.g., certain content loaded)
+            // await page.waitForSelector('.target-element');
+
+            // Capture additional data from the page (if needed)
+            // const pageContent = await page.content();
+            // console.log('Page content:', pageContent);
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            // Close the browser
+            await browser.close();
+        }
+    }
+    //
+    // private findToken(request: HTTPRequest): void {
+    //     const url = request.url();
+    //     const found = this.findClientId(url);
+    //     console.log(url)
+    //
+    //     found.length > 0 ? this.setClientId(found) : request.continue();
+    // }
+    //
+    // private setClientId(url: string): string {
+    //     return '';
+    // }
+    //
+    // private findClientId(url: string): string {
+    //     console.log('Intercept', url);
+    //     return '';
+    // }
+
 }
