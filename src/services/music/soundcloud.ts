@@ -1,7 +1,12 @@
-import {Platform, Song} from "../../types/song";
-import {soundCloudPlaylistRegex, soundCloudTrackRegex} from "../../constants/regex";
+import {Platform, Song} from "@/types/song";
+import {soundCloudPlaylistRegex, soundCloudTrackRegex} from "@/constants";
 import { SoundCloud } from 'scdl-core';
-import {Playlist} from "../../types/playlist";
+import {Playlist} from "@/types/playlist";
+import puppeteer, {HTTPRequest, Puppeteer} from "puppeteer";
+
+import play from "play-dl";
+import PuppeteerIntercept from "@/services/others/puppeteer-intercept";
+import {soundCloudUrl} from "scdl-core/dist/constants/configs";
 
 export class SoundCloudService {
     public static async download(url: string, highWaterMark: number) {
@@ -72,4 +77,38 @@ export class SoundCloudService {
         }
         return '';
     }
+
+    // public async updateToken() {
+    //     const puppeteer = new PuppeteerIntercept();
+    //
+    //     // await puppeteer.onRequest(this.findToken)
+    //     // await puppeteer.sendRequest(soundCloudUrl, this.findToken);
+    // }
+    //
+    // public findToken(request: HTTPRequest): void {
+    //     console.log('asd asd asd ')
+    //     const url = request.url();
+    //     console.log(request)
+    //     const found = this.findClientId(url);
+    //     if (url.includes('client_id')) {
+    //         play.setToken({
+    //             soundcloud: {
+    //                 client_id: url.split('client_id=')[1]
+    //             }
+    //         })
+    //     }
+    //     console.log(url)
+    //     request.continue();
+    //     // found.length > 0 ? this.setClientId(found) : request.continue();
+    // }
+    //
+    // private setClientId(url: string): string {
+    //     return '';
+    // }
+    //
+    // private findClientId(url: string): string {
+    //     console.log('Intercept', url);
+    //     return '';
+    // }
+
 }
