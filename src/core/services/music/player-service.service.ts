@@ -43,7 +43,7 @@ export class PlayerService {
                 song,
                 requester: username as string
             }
-        await player?.addSong([queueItem]);
+
         return queueItem;
     }
 
@@ -60,65 +60,84 @@ export class PlayerService {
     }
 
     private async process(
-        inputLink: String,
+        inputLink: string,
         linkType: Constant.Link,
         userInputType: InputType,
         player: Player,
-        requester: String,
+        requester: string,
         userInteraction: any)
     {
         switch (linkType) {
             case Constant.Link.YoutubeTrack:
-                await YoutubeService.getVideoDetail(inputLink)
-                    .then(async (track: Song) => {
-                        const queueItem: QueueItem = await this.handleTrack(track, player, requester);
-                        NotificationFactory
-                            .Notifier(userInputType)
-                            .showNowPlaying(player, userInteraction, queueItem)
-                    });
+                const song = await YoutubeService.getVideoDetail(inputLink);
+
+                await player?.addSong([
+                    {
+                        song,
+                        requester: requester as string
+                    }
+                ]);
+
+                NotificationFactory
+                    .Notifier(userInputType)
+                    .showNowPlaying(
+                        player,
+                        userInteraction,
+                        {
+                            song,
+                            requester: requester as string
+                        }
+                    )
                 break;
             case Constant.Link.YoutubeRandomList:
-                await YoutubeService.getRandomList(inputLink)
-                    .then(async data => {
-                        await this.handlePlaylist(data.songs, player, requester)
-                            .then(async () => {
-                                NotificationFactory
-                                    .Notifier(userInputType)
-                                    .showQueue(userInteraction, player)
-                            });
-                    })
+                const listTrack = await YoutubeService.getRandomList(inputLink);
+
+                await player?.addSong(
+                    listTrack.songs.map(song => ({
+                        song,
+                        requester: requester as string
+                    }))
+                );
+
+                NotificationFactory
+                    .Notifier(userInputType)
+                    .showQueue(userInteraction, player);
                 break;
             case Constant.Link.SoundCloudTrack:
-                await SoundCloudService.getTrackDetail(inputLink)
-                    .then(async (track: Song) => {
-                        const queueItem: QueueItem = await this.handleTrack(track, player, requester);
-                        NotificationFactory
-                            .Notifier(userInputType)
-                            .showNowPlaying(player, userInteraction, queueItem)
-                    })
+                const track = await SoundCloudService.getTrackDetail(inputLink);
+
+                await player.addSong([
+                    {
+                        song: track,
+                        requester: requester as string
+                    }
+                ]);
+
+                NotificationFactory
+                    .Notifier(userInputType)
+                    .showNowPlaying(
+                        player,
+                        userInteraction,
+                        {
+                            song: track,
+                            requester: requester as string
+                        },
+                    )
                 break;
             case Constant.Link.SoundCloudPlaylist:
-                await SoundCloudService.getPlaylist(inputLink)
-                    .then(async data => {
-                        await this.handlePlaylist(data.songs, player, requester)
-                            .then(async () => {
-                                NotificationFactory
-                                    .Notifier(userInputType)
-                                    .showQueue(userInteraction, player)
-                            });
-                    })
-                break;
-            case Constant.Link.SpotifyPlaylist:
-                await SpotifyService.getUrlInfo(inputLink)
-                    .then(async songs => {
-                        songs = songs as Song[]
-                        await this.handlePlaylist(songs, player, requester)
-                            .then(async () => {
-                                NotificationFactory
-                                    .Notifier(userInputType)
-                                    .showQueue(userInteraction, player)
-                            });
-                    });
+                const listTracks = await SoundCloudService.getPlaylist(inputLink);
+
+                await player.addSong(
+                    listTracks.map(song => ({
+                        song,
+                        requester: requester as string
+                    }))
+                );
+
+                NotificationFactory
+                    .Notifier(userInputType)
+                    .showQueue(userInteraction, player)
+                ;
                 break;
             case Constant.Link.Empty:
                 NotificationFactory

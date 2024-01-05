@@ -24,6 +24,6 @@ export class NotificationService {
             requester: queueItem.requester,
             icon,
         }
-        await interaction.followUp({embeds: [await createPlayMessage(payload)]});
+        await interaction.followUp({embeds: [createPlayMessage(payload)]});
     }
 }

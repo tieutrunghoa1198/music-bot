@@ -27,11 +27,7 @@ const handleYoutubeLink = async (msg: Message, client: Client) => {
 }
 const voiceCondition = async (msg: any, musicAreaChannel: any): Promise<Boolean> => {
     const input = msg.content;
-    if (msg === null || msg === undefined) {
-        //@ts-ignore
-        await msg.channel.send('Message Deleted');
-        return false;
-    }
+
     if (!input.startsWith('http')) {
         return false;
     }

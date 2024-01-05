@@ -25,20 +25,8 @@ export class DeployCommands {
         return myCommand;
     }
 
-    private static getCommandFileExt = (commandExtension: string) => {
-        const cmdExt: string = commandExtension;
-        let cmdFileExt: string;
-        let fileExt: string;
-        if (process.env.NODE_ENV === 'production') {
-            fileExt = '.js'
-            cmdFileExt = cmdExt + fileExt;
-        } else {
-            fileExt = '.ts'
-            cmdFileExt = cmdExt + fileExt;
-        }
-        return {
-            fileExt,
-            cmdFileExt
-        }
-    }
+    private static getCommandFileExt = (commandExtension: string) =>
+        (process.env.NODE_ENV === 'production')
+            ? { fileExt: '.js', cmdFileExt: commandExtension + '.js'}
+            : { fileExt: '.ts', cmdFileExt: commandExtension + '.ts'}
 }

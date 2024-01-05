@@ -65,7 +65,8 @@ export class InteractionNotification implements INotification
         await userInteraction.followUp({ content: Constant.Messages.defaultError});
     }
 
-    private getNowPlayingPayload(song: Song, guildName: string, queueItem: QueueItem, icon: string) {
+    private getNowPlayingPayload = (song: Song, guildName: string, queueItem: QueueItem, icon: string) => {
+        console.log(song?.thumbnail);
         return {
             title: song?.title || 'Unknown',
             author: song?.author || 'Unknown',

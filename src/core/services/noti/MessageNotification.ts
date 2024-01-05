@@ -39,7 +39,7 @@ export class MessageNotification implements INotification {
             return;
         }
 
-        await userInteraction.channel.send({ embeds: [await createPlayMessage(payload)]});
+        await userInteraction.channel.send({ embeds: [createPlayMessage(payload)]});
     }
 
     public async showQueue(userInteraction: any, player: Player) {
@@ -51,7 +51,7 @@ export class MessageNotification implements INotification {
         const payload = this.getNowPlayingPayload(song, guildName, player.playing as QueueItem, icon);
         player.replaceMessage().then();
         const response = await userInteraction.channel.send({
-            embeds: [await createPlayMessage(payload)],
+            embeds: [createPlayMessage(payload)],
             components: audioComponent.components
         })
         player.message = response.id
