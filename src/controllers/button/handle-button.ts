@@ -1,7 +1,7 @@
 import {Client} from "discord.js";
-import {ephemeralResponse} from "@/utils/common";
-import {DeployCommands} from "@/utils/deployCommands";
-import {Messages} from "@/constants/messages.constant";
+import {ephemeralResponse} from "@/core/utils/common.util";
+import {DeployCommands} from "@/core/utils/deploy-commands.util";
+import {Messages} from "@/core/constants/messages.constant";
 
 export const handleButton = async (interaction: any, client: Client) => {
     try {

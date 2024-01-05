@@ -1,5 +1,5 @@
 import {Client} from "discord.js";
-import {BuilderID} from "../../../constants/index.constant";
+import {BuilderID} from "@/core/constants/index.constant";
 
 export default {
     customId: BuilderID.prevSong,

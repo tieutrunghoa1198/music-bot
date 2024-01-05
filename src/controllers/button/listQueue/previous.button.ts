@@ -1,10 +1,10 @@
 import {Client} from "discord.js";
-import {Player} from "@/models/player";
-import {paginationMsg} from "@/views/embedMessages/queue.embed";
-import {createSelectedTracks, numberOfPageSelectMenu} from "@/views/selectMenu/selectMenu";
-import {players} from "@/models/abstract-player.model";
-import {generateButton} from "@/views/buttons";
-import {Messages, PlayerQueue} from "../../../constants/index.constant";
+import {Player} from "@/core/models/player";
+import {paginationMsg} from "@/core/views/embedMessages/queue.embed";
+import {createSelectedTracks, numberOfPageSelectMenu} from "@/core/views/selectMenu/selectMenu";
+import {players} from "@/core/models/abstract-player.model";
+import {generateButton} from "@/core/views/buttons";
+import {Messages, PlayerQueue} from "@/core/constants/index.constant";
 
 export default {
     customId: 'prev',

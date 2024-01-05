@@ -1,9 +1,9 @@
 import {SlashCommandBuilder} from "@discordjs/builders";
-import {Player} from "../../../models/player";
+import {Player} from "@/core/models/player";
 import {Client} from "discord.js";
-import {InteractionNotification} from "../../../services/noti/InteractionNotification";
-import {players} from "../../../models/abstract-player.model";
-import {Messages, MusicCommands} from "../../../constants/index.constant";
+import {InteractionNotification} from "@/core/services/noti/InteractionNotification";
+import {players} from "@/core/models/abstract-player.model";
+import {Messages, MusicCommands} from "@/core/constants/index.constant";
 
 export default {
     data: new SlashCommandBuilder()

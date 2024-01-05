@@ -2,18 +2,23 @@ import {Client, Intents, TextChannel} from "discord.js";
 import {SoundCloud} from "scdl-core";
 import {config} from "dotenv";
 import {ActivityTypes} from "discord.js/typings/enums";
-import {MusicAreas} from "./mongodb/music-area.model";
-import MongoDB from "./utils/mongodb";
+import {MusicAreas} from "@/core/mongodb/music-area.model";
+import MongoDB from "@/core/utils/mongodb.util";
 import mongoose from "mongoose";
 import {HandleInteraction} from "./controllers/command/handleInteraction";
-import {Messages, MusicCommands} from "./constants/index.constant";
+import {Messages, MusicCommands} from "@/core/constants/index.constant";
 import {InteractionCreate, MessageCreate} from "./controllers";
-import {players} from "./models/abstract-player.model";
+import {players} from "@/core/models/abstract-player.model";
 
 config()
 export class Bot {
+
+    private static instance: Bot;
     private readonly client: Client;
-    constructor() {
+
+    //-------------------------------------------
+
+    private constructor() {
         this.client = new Client({
             intents: [
                 Intents.FLAGS.GUILDS,
@@ -23,6 +28,14 @@ export class Bot {
             ],
         });
     }
+
+    public static getInstance(): Bot {
+        if (!Bot.instance) Bot.instance = new Bot();
+
+        return Bot.instance;
+    }
+
+    //-------------------------------------------
 
     start() {
         this.client.login(process.env.TOKEN).then(async () => {

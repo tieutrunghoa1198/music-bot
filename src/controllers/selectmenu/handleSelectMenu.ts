@@ -1,7 +1,7 @@
 import {Client} from "discord.js";
-import * as Constant from '../../constants/index.constant'
-import {ephemeralResponse} from "../../utils/common";
-import {DeployCommands} from "../../utils/deployCommands";
+import * as Constant from '@/core/constants/index.constant'
+import {ephemeralResponse} from "@/core/utils/common.util";
+import {DeployCommands} from "@/core/utils/deploy-commands.util";
 
 export const handleSelectMenu = async (interaction: any, client: Client) => {
     try {

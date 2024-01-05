@@ -1,4 +1,4 @@
-import {BuilderID} from "../../../constants/index.constant";
+import {BuilderID} from "@/core/constants/index.constant";
 import {Client} from "discord.js";
 import leaveCommand from "../../command/music/leave.command";
 

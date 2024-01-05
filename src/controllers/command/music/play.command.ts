@@ -1,11 +1,11 @@
 import {SlashCommandBuilder} from "@discordjs/builders";
 import {Client} from "discord.js";
-import {InputType} from "../../../types/InputType";
-import {YoutubeService} from "../../../services/music/youtube.service";
+import {InputType} from "@/core/types/input-type.type";
+import {YoutubeService} from "@/core/services/music/youtube.service";
 import {YouTubeVideo} from "play-dl";
-import {limitString} from "../../../utils/common";
-import {PlayerService} from "../../../services/music/player-service.service";
-import {Messages, MusicCommands} from "../../../constants/index.constant";
+import {limitString} from "@/core/utils/common.util";
+import {PlayerService} from "@/core/services/music/player-service.service";
+import {Messages, MusicCommands} from "@/core/constants/index.constant";
 
 export default {
     hasAutoComplete: true,

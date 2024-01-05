@@ -1,6 +1,6 @@
 import {SlashCommandBuilder} from "@discordjs/builders";
 
-import {ExpCommands} from "@/constants/music-commands.constant";
+import {ExpCommands} from "@/core/constants/music-commands.constant";
 import {Client, TextChannel} from "discord.js";
 
 
