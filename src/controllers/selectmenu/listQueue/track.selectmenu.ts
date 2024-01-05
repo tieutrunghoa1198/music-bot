@@ -1,8 +1,8 @@
 import {Player} from "../../../models/player";
-import * as Constant from '../../../constants'
+import * as Constant from '../../../constants/index.constant'
 import {Client} from "discord.js";
 import {InteractionNotification} from "../../../services/noti/InteractionNotification";
-import {players, QueueItem} from "../../../models/abstractPlayer";
+import {players, QueueItem} from "../../../models/abstract-player.model";
 
 export default {
     customId: Constant.BuilderID.trackSelectMenu,

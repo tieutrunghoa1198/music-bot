@@ -2,8 +2,8 @@ import {SlashCommandBuilder} from "@discordjs/builders";
 import {AudioPlayerStatus} from "@discordjs/voice";
 import {NotificationService} from "../../../services/noti/notification";
 import {Client} from "discord.js";
-import {players} from "../../../models/abstractPlayer";
-import {Messages, MusicCommands} from "../../../constants";
+import {players} from "../../../models/abstract-player.model";
+import {Messages, MusicCommands} from "../../../constants/index.constant";
 
 export default {
     data: new SlashCommandBuilder()

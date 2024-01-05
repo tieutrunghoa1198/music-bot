@@ -1,5 +1,6 @@
 import {EmbedFieldData, MessageEmbed} from "discord.js";
-import * as Constant from '../../constants';
+import * as Constant from '../../constants/index.constant';
+
 export const createPlayMessage = (payload: {
     requester: string;
     thumbnail: string;

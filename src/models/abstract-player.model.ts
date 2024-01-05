@@ -1,5 +1,5 @@
 import {AudioPlayer, VoiceConnection} from "@discordjs/voice";
-import {Song} from "../types/song";
+import {Song} from "@/types/song";
 import {Snowflake} from "discord-api-types/globals";
 import {Player} from "./player";
 

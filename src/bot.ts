@@ -6,9 +6,10 @@ import {MusicAreas} from "./mongodb/music-area.model";
 import MongoDB from "./utils/mongodb";
 import mongoose from "mongoose";
 import {HandleInteraction} from "./controllers/command/handleInteraction";
-import {Messages, MusicCommands} from "./constants";
+import {Messages, MusicCommands} from "./constants/index.constant";
 import {InteractionCreate, MessageCreate} from "./controllers";
-import {players} from "./models/abstractPlayer";
+import {players} from "./models/abstract-player.model";
+
 config()
 export class Bot {
     private readonly client: Client;

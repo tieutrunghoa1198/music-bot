@@ -1,9 +1,10 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import {Player} from "../../../models/player";
-import * as Constant from '../../../constants'
-import {MusicAreas} from "../../../mongodb/music-area.model";
+import {SlashCommandBuilder} from "@discordjs/builders";
+import {Player} from "@/models/player";
+import * as Constant from '@/constants/index.constant'
+import {MusicAreas} from "@/mongodb/music-area.model";
 import {Client} from "discord.js";
-import {players} from "../../../models/abstractPlayer";
+import {players} from "@/models/abstract-player.model";
+
 export default {
     data: new SlashCommandBuilder()
         .setName(Constant.ExpCommands.setMusicArea.name)

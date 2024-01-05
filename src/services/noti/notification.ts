@@ -1,7 +1,8 @@
 import {createPlayMessage} from "../../views/embedMessages/play.embed";
 import {Player} from "../../models/player";
 import {formatSeconds} from "../../utils/formatTime";
-import {QueueItem} from "../../models/abstractPlayer";
+import {QueueItem} from "../../models/abstract-player.model";
+
 export class NotificationService {
     public static async nowPlaying(player: Player, interaction: any) {
         if (interaction === undefined || null) {

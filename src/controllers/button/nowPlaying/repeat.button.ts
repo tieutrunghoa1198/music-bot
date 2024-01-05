@@ -1,6 +1,7 @@
 import {Client} from "discord.js";
-import {players} from "../../../models/abstractPlayer";
-import {BuilderID, Messages} from "../../../constants";
+import {players} from "../../../models/abstract-player.model";
+import {BuilderID, Messages} from "../../../constants/index.constant";
+
 export default {
     customId: BuilderID.repeatSong,
     execute: async (interaction: any, client: Client) => {

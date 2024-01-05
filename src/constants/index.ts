@@ -1,6 +1,0 @@
-export * from './messages'
-export * from './common'
-export * from './link'
-export * from './musicCommands'
-export * from './playerQueue'
-export * from './regex'

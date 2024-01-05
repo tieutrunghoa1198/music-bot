@@ -1,6 +1,6 @@
-import {BuilderID, Messages} from "../../../constants";
+import {BuilderID, Messages} from "../../../constants/index.constant";
 import {Client} from "discord.js";
-import {players} from "../../../models/abstractPlayer";
+import {players} from "../../../models/abstract-player.model";
 import {AudioPlayerStatus} from "@discordjs/voice";
 
 export default {

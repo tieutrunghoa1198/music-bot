@@ -1,15 +1,13 @@
-import {INotification} from "../interface/INotification";
-import {Player} from "../../models/player";
-import {formatSeconds} from "../../utils/formatTime";
+import {INotification} from "../interface/notification.interface";
+import {Player} from "@/models/player";
+import {formatSeconds} from "@/utils/formatTime";
 import {AudioPlayerStatus} from "@discordjs/voice";
-import {createPlayMessage} from "../../views/embedMessages/play.embed";
-import {paginationMsg} from "../../views/embedMessages/queue.embed";
-import {createSelectedTracks, numberOfPageSelectMenu} from "../../views/selectMenu/selectMenu";
-import * as Constant from '../../constants/index'
-import {players, QueueItem} from "../../models/abstractPlayer";
-import {generateButton} from "../../views/buttons";
-import {AudioPlayerComponent} from "../../views/group/audioPlayer.component";
-import {Song} from "../../types/song";
+import {createPlayMessage} from "@/views/embedMessages/play.embed";
+import {paginationMsg} from "@/views/embedMessages/queue.embed";
+import * as Constant from '@/constants/index.constant'
+import {QueueItem} from "@/models/abstract-player.model";
+import {AudioPlayerComponent} from "@/views/group/audioPlayer.component";
+import {Song} from "@/types/song";
 
 export class InteractionNotification implements INotification
 {

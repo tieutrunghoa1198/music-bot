@@ -1,5 +1,5 @@
 import {Client} from "discord.js";
-import * as Constant from '../../constants'
+import * as Constant from '../../constants/index.constant'
 import {ephemeralResponse} from "../../utils/common";
 import {DeployCommands} from "../../utils/deployCommands";
 

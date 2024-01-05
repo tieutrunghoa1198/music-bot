@@ -1,12 +1,7 @@
 import {Platform, Song} from "@/types/song";
-import {soundCloudPlaylistRegex, soundCloudTrackRegex} from "@/constants";
-import { SoundCloud } from 'scdl-core';
+import {soundCloudPlaylistRegex, soundCloudTrackRegex} from "@/constants/index.constant";
+import {SoundCloud} from 'scdl-core';
 import {Playlist} from "@/types/playlist";
-import puppeteer, {HTTPRequest, Puppeteer} from "puppeteer";
-
-import play from "play-dl";
-import PuppeteerIntercept from "@/services/others/puppeteer-intercept";
-import {soundCloudUrl} from "scdl-core/dist/constants/configs";
 
 export class SoundCloudService {
     public static async download(url: string, highWaterMark: number) {

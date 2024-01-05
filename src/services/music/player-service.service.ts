@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {Player, QueueItem} from "../../models/player";
+import {Player, QueueItem} from "@/models/player";
 import {Client, GuildMember} from "discord.js";
 import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus} from "@discordjs/voice";
-import * as Constant from "../../constants";
-import {SoundCloudService} from "./soundcloud";
+import * as Constant from "@/constants/index.constant";
+import {SoundCloudService} from "./soundcloud.service";
 import play from "play-dl";
-import {InputType} from "../../types/InputType";
-import {YoutubeService} from "./youtube";
-import {Song} from "../../types/song";
+import {InputType} from "@/types/InputType";
+import {YoutubeService} from "./youtube.service";
+import {Song} from "@/types/song";
 import {NotificationFactory} from "../noti/NotificationFactory";
-import {SpotifyService} from "./spotify";
-import {players} from "../../models/abstractPlayer";
+import {SpotifyService} from "./spotify.service";
+import {players} from "@/models/abstract-player.model";
 
 export class PlayerService {
     private readonly player: Player;
@@ -49,11 +49,11 @@ export class PlayerService {
 
     private async handlePlaylist(tracks: Song[], player: Player, username: string): Promise<QueueItem[]>{
         const queueItems: QueueItem[] = [];
-        await tracks.forEach(song => {
+        tracks.forEach(song => {
             queueItems.push({
                 song,
                 requester: username as string
-            })
+            });
         });
         await player?.addSong(queueItems);
         return queueItems;

@@ -1,12 +1,13 @@
 import {createSelectedTracks, numberOfPageSelectMenu} from "../selectMenu/selectMenu";
-import {PlayerQueue} from "../../constants";
+import {PlayerQueue} from "../../constants/index.constant";
 import {MessageActionRow} from "discord.js";
 import {Player} from "../../models/player";
 import {
     clearQueueComponent,
     nextSongComponent,
     pauseResumeComponent,
-    prevSongComponent, removeAudioComponent,
+    prevSongComponent,
+    removeAudioComponent,
     repeatComponent
 } from "../buttons";
 

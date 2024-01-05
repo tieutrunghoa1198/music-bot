@@ -2,8 +2,8 @@ import {Client} from "discord.js";
 import {Player} from "../../../models/player";
 import {paginationMsg} from "../../../views/embedMessages/queue.embed";
 import {createSelectedTracks, numberOfPageSelectMenu} from "../../../views/selectMenu/selectMenu";
-import {players} from "../../../models/abstractPlayer";
-import {Messages, PlayerQueue} from "../../../constants";
+import {players} from "../../../models/abstract-player.model";
+import {Messages, PlayerQueue} from "../../../constants/index.constant";
 import {generateButton} from "../../../views/buttons";
 
 

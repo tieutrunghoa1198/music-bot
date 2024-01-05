@@ -12,7 +12,7 @@ import {
 } from "@discordjs/voice";
 import play from 'play-dl';
 import {Client} from "discord.js";
-import {AbstractPlayer, players, QueueItem} from "./abstractPlayer";
+import {AbstractPlayer, players, QueueItem} from "./abstract-player.model";
 
 export class Player implements AbstractPlayer{
     public guildId: string;

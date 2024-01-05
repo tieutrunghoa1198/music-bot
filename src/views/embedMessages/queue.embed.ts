@@ -1,8 +1,9 @@
 import {EmbedFieldData, MessageEmbed} from "discord.js";
 import {Player} from "../../models/player";
 import {boldText, codeBlockText, formatSeconds} from "../../utils/formatTime";
-import * as Constant from '../../constants'
-import {QueueItem} from "../../models/abstractPlayer";
+import * as Constant from '../../constants/index.constant'
+import {QueueItem} from "../../models/abstract-player.model";
+
 export const paginationMsg = async (player: Player, currentPage: number): Promise<any> => {
     const {MAX_PER_PAGE} = Constant.PlayerQueue;
     const queueLength = player.queue.length;

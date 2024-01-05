@@ -1,7 +1,7 @@
 import {Client} from "discord.js";
 import {HandleInteraction} from "./command/handleInteraction";
 import {handleSelectMenu} from "./selectmenu/handleSelectMenu";
-import {handleButton} from "./button/handleButton";
+import {handleButton} from "./button/handle-button";
 
 export const InteractionCreate = async (client: Client) => {
     client.on('interactionCreate', async (interaction: any) => {

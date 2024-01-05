@@ -1,5 +1,5 @@
 import {MessageButtonStyles} from "discord.js/typings/enums";
-import {BuilderID} from "../../constants";
+import {BuilderID} from "../../constants/index.constant";
 import {MessageButton} from "discord.js";
 
 export const repeatComponent = () => {

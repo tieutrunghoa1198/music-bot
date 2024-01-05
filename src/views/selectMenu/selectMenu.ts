@@ -1,6 +1,7 @@
 import {MessageActionRow, MessageSelectMenu} from "discord.js";
-import {QueueItem} from "../../models/abstractPlayer";
-import {BuilderID, GlobalConstants, Messages, PlayerQueue} from "../../constants";
+import {QueueItem} from "@/models/abstract-player.model";
+import {BuilderID, GlobalConstants, Messages, PlayerQueue} from "../../constants/index.constant";
+
 export const createSelectedTracks = async (queueItems: QueueItem[]) => {
     const trackToDisplay: any[] = [];
     for (const songInQueue of queueItems) {

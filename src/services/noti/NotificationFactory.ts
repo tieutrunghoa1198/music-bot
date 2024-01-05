@@ -1,7 +1,7 @@
 import {InputType} from "../../types/InputType";
 import {MessageNotification} from "./MessageNotification";
 import {InteractionNotification} from "./InteractionNotification";
-import {INotification} from "../interface/INotification";
+import {INotification} from "../interface/notification.interface";
 
 export class NotificationFactory {
     public static Notifier(type: String): INotification {

@@ -1,5 +1,5 @@
 // Playlist.ts
-import { Song } from './song';
+import {Song} from './song';
 
 export interface Playlist {
     title: string;

@@ -1,8 +1,8 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
-import * as Constant from '../../../constants'
+import {SlashCommandBuilder} from "@discordjs/builders";
+import * as Constant from '@/constants/index.constant'
 import {Client} from "discord.js";
 import {ChannelType} from "discord-api-types/v9";
-import {RestrictChannel} from "../../../mongodb/restrict.model";
+import {RestrictChannel} from "@/mongodb/restrict.model";
 
 export default {
     data: new SlashCommandBuilder()

@@ -1,5 +1,5 @@
 import {MessageButton} from "discord.js";
-import {BuilderID} from "../../constants";
+import {BuilderID} from "@/constants/index.constant";
 import {MessageButtonStyles} from "discord.js/typings/enums";
 
 export const removeAudioComponent = () => {

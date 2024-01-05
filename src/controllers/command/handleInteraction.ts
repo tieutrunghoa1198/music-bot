@@ -1,10 +1,10 @@
 import {Client} from "discord.js";
 import path from "node:path";
 import fs from "node:fs";
-import {DeployCommands} from "../../utils/deployCommands";
+import {DeployCommands} from "@/utils/deployCommands";
 import {REST} from "@discordjs/rest";
 import {Routes} from "discord-api-types/v9";
-import {Messages} from "../../constants";
+import {Messages} from "@/constants/messages.constant";
 
 export class HandleInteraction {
 

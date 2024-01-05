@@ -1,5 +1,6 @@
 import {EmbedFieldData, MessageEmbed} from "discord.js";
-import {Messages} from "../../constants";
+import {Messages} from "../../constants/index.constant";
+
 export const AddSongMessage = (payload: any) => {
     const author: EmbedFieldData = {
         name: Messages.platform,

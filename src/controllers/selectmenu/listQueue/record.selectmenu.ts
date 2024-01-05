@@ -1,10 +1,8 @@
 import {Player} from "../../../models/player";
-import * as Constant from '../../../constants'
+import * as Constant from '../../../constants/index.constant'
 import {Client} from "discord.js";
-import {createSelectedTracks, numberOfPageSelectMenu} from "../../../views/selectMenu/selectMenu";
 import {paginationMsg} from "../../../views/embedMessages/queue.embed";
-import {players} from "../../../models/abstractPlayer";
-import {generateButton} from "../../../views/buttons";
+import {players} from "../../../models/abstract-player.model";
 import {AudioPlayerComponent} from "../../../views/group/audioPlayer.component";
 
 export default {

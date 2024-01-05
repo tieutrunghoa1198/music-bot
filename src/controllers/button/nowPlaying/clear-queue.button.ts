@@ -1,6 +1,6 @@
-import {BuilderID} from "../../../constants";
+import {BuilderID} from "@/constants/music-commands.constant";
 import {Client} from "discord.js";
-import clearQueueCommand from "../../command/music/clearQueue.command";
+import clearQueueCommand from "../../command/music/clear-queue.command";
 
 export default {
     customId: BuilderID.clearQueue,
