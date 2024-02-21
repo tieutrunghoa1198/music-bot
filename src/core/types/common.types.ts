@@ -1,3 +1,4 @@
+import * as Constant from "@/core/constants/index.constant";
 /**
  *  This general type is mainly used to create type from constant object.
  */
@@ -29,3 +30,6 @@ export type GetReadonlyArrayNonEmptyObjectType<T> = T extends ReadonlyArrayNonEm
 
 //  Return the properties value of a constant
 export type ExtractPropertiesFromObjectKeys<T> = keyof T[keyof T];
+
+// ----------------
+export type tLink = Constant.Link;

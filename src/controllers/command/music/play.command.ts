@@ -25,7 +25,7 @@ export default {
         }
 
         try {
-            const playService = new PlayerService(interaction, client, InputType.INTERACTION);
+            const playService = new PlayerService(interaction, client);
             await playService.startPlay(input)
         } catch (e) {
             console.log(e);

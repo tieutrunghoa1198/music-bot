@@ -1,7 +1,6 @@
 import {Client, Message} from "discord.js";
 import {MusicAreas} from '@/core/mongodb/music-area.model'
 import * as Constant from '@/core/constants/index.constant'
-import {InputType} from "@/core/types/input-type.type";
 import {PlayerService} from "@/core/services/music/player-service.service";
 
 const handleYoutubeLink = async (msg: Message, client: Client) => {
@@ -12,8 +11,7 @@ const handleYoutubeLink = async (msg: Message, client: Client) => {
     const input = msg.content;
     const processingMsg = await msg.channel.send(Constant.Messages.processing);
     try {
-        const playService = new PlayerService(msg, client, InputType.MESSAGE);
-        await playService.startPlay(input);
+        await new PlayerService(msg, client).startPlay(input);
     } catch (e) {
         console.log(e);
         await msg.channel.send(Constant.Messages.error);

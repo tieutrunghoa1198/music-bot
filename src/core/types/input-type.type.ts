@@ -1,4 +1,5 @@
 export enum InputType {
-    INTERACTION = 'interaction',
-    MESSAGE = 'message'
+    INTERACTION = 'APPLICATION_COMMAND',
+    MESSAGE_COMPONENT = 'MESSAGE_COMPONENT',
+    DEFAULT = 'DEFAULT',
 }

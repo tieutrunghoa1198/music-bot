@@ -1,7 +1,7 @@
 import {Player} from "@/core/models/player";
 import * as Constant from '@/core/constants/index.constant'
 import {Client} from "discord.js";
-import {InteractionNotification} from "@/core/services/noti/InteractionNotification";
+import {InteractionNotification} from "@/core/services/noti/interaction-notification";
 import {players, QueueItem} from "@/core/models/abstract-player.model";
 
 export default {

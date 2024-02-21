@@ -1,7 +1,7 @@
 import {SlashCommandBuilder} from "@discordjs/builders";
 import {Player} from "@/core/models/player";
 import {Client} from "discord.js";
-import {InteractionNotification} from "@/core/services/noti/InteractionNotification";
+import {InteractionNotification} from "@/core/services/noti/interaction-notification";
 import {players} from "@/core/models/abstract-player.model";
 import {Messages, MusicCommands} from "@/core/constants/index.constant";
 

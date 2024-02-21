@@ -106,7 +106,7 @@ export class Bot {
             const {textChannelId} = musicAreaChannel;
             if (textChannelId !== '' &&
                 textChannelId) {
-                const textChannel = await this.client.channels.cache.get(textChannelId) as TextChannel;
+                const textChannel = this.client.channels.cache.get(textChannelId) as TextChannel;
                 await textChannel.send(Messages.skippedSong({
                     title: payload.nextSong.song.title,
                     requester: payload.nextSong.requester
