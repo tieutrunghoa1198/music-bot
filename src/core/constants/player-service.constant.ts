@@ -1,6 +1,6 @@
 import * as Constant from '@/core/constants/index.constant';
-import {Song} from '@/core/types/song.type';
-import {YoutubeService} from '@/core/services/music/youtube.service';
+import { Song } from '@/core/types/song.type';
+import { YoutubeService } from '@/core/services/music/youtube.service';
 
 export const MAP_LINK_TYPE = new Map<
   Constant.Link,

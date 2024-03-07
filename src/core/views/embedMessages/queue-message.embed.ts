@@ -1,7 +1,7 @@
-import {MessageEmbed} from 'discord.js';
-import {formatSeconds} from '@/core/utils/format-time.util';
-import {Messages} from '@/core/constants/index.constant';
-import {QueueItem} from '@/core/models/abstract-player.model';
+import { MessageEmbed } from 'discord.js';
+import { formatSeconds } from '@/core/utils/format-time.util';
+import { Messages } from '@/core/constants/index.constant';
+import { QueueItem } from '@/core/interfaces/player.interface';
 
 const MAX_SONGS_PER_PAGE = 10;
 const generatePageMessage = (items: QueueItem[], start: number) => {

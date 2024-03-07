@@ -1,4 +1,4 @@
-import {Client, Message} from 'discord.js';
+import { Client, Message } from 'discord.js';
 import MessageMusicController from '@/features/audio-player/cmd-message/play.msg';
 import MessageRestrictController from './moderating-message/cmd-message/restrict.msg';
 

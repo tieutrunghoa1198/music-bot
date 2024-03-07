@@ -1,4 +1,4 @@
-import {EmbedFieldData, MessageEmbed} from 'discord.js';
+import { EmbedFieldData, MessageEmbed } from 'discord.js';
 import * as Constant from '@/core/constants/index.constant';
 
 export const createPlayMessage = (payload: {

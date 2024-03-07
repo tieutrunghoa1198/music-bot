@@ -1,7 +1,6 @@
-import {BuilderID, Messages} from '@/core/constants/index.constant';
-import {Client} from 'discord.js';
-import {players} from '@/core/models/abstract-player.model';
-import {AudioPlayerStatus} from '@discordjs/voice';
+import { BuilderID, Messages, players } from '@/core/constants/index.constant';
+import { Client } from 'discord.js';
+import { AudioPlayerStatus } from '@discordjs/voice';
 
 export default {
   customId: BuilderID.pauseResume,

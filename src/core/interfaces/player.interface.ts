@@ -1,9 +1,7 @@
-import {AudioPlayer, VoiceConnection} from '@discordjs/voice';
-import {Song} from '@/core/types/song.type';
-import {Snowflake} from 'discord-api-types/globals';
-import {Player} from './player';
+import { AudioPlayer, VoiceConnection } from '@discordjs/voice';
+import { Song } from '@/core/types/song.type';
 
-export interface AbstractPlayer {
+export interface IPlayer {
   guildId: string;
   playing?: QueueItem;
   queue: QueueItem[];
@@ -25,6 +23,3 @@ export interface QueueItem {
   song: Song;
   requester: string;
 }
-
-// Map các server mà bot đang trong kênh thoại
-export const players = new Map<Snowflake, Player>();

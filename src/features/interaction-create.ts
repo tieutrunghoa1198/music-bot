@@ -1,8 +1,8 @@
-import {Client} from 'discord.js';
-import {HandleAudioInteraction} from './audio-player/handle-audio-interaction';
-import {handleAudioSelectmenu} from './audio-player/handle-audio-selectmenu';
-import {handleAudioButtons} from './audio-player/handle-audio-buttons';
-import {HandleModeratingMessageInteraction} from '@/features/moderating-message/handle-moderating-message-interaction';
+import { Client } from 'discord.js';
+import { HandleAudioInteraction } from './audio-player/handle-audio-interaction';
+import { handleAudioSelectmenu } from './audio-player/handle-audio-selectmenu';
+import { handleAudioButtons } from './audio-player/handle-audio-buttons';
+import { HandleModeratingMessageInteraction } from '@/features/moderating-message/handle-moderating-message-interaction';
 
 export const InteractionCreate = async (client: Client) => {
   client.on('interactionCreate', async (interaction: any) => {

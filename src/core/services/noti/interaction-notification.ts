@@ -1,12 +1,12 @@
-import {INotification} from '../../interfaces/notification.interface';
-import {Player} from '@/core/models/player';
-import {formatSeconds} from '@/core/utils/format-time.util';
-import {AudioPlayerStatus} from '@discordjs/voice';
-import {createPlayMessage} from '@/core/views/embedMessages/play.embed';
-import {paginationMsg} from '@/core/views/embedMessages/queue.embed';
+import { INotification } from '../../interfaces/notification.interface';
+import { Player } from '@/core/models/player.model';
+import { formatSeconds } from '@/core/utils/format-time.util';
+import { AudioPlayerStatus } from '@discordjs/voice';
+import { createPlayMessage } from '@/core/views/embedMessages/play.embed';
+import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
 import * as Constant from '@/core/constants/index.constant';
-import {AudioPlayerComponent} from '@/core/views/group/audio-player.component';
-import {Song} from '@/core/types/song.type';
+import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
+import { Song } from '@/core/types/song.type';
 
 export class InteractionNotification implements INotification {
   private static instance: InteractionNotification;

@@ -1,7 +1,11 @@
-import {MessageActionRow, MessageButton, MessageButtonStyleResolvable,} from 'discord.js';
+import {
+  MessageActionRow,
+  MessageButton,
+  MessageButtonStyleResolvable,
+} from 'discord.js';
 import PreviousButton from '@/features/audio-player/buttons/previous.button';
 import NextButton from '@/features/audio-player/buttons/next.button';
-import {MessageButtonStyles} from 'discord.js/typings/enums';
+import { MessageButtonStyles } from 'discord.js/typings/enums';
 
 export const generateButton = (
   currentPage: number,

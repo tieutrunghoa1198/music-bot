@@ -1,7 +1,7 @@
-import {SlashCommandBuilder} from '@discordjs/builders';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-import {ExpCommands} from '@/core/constants/music-commands.constant';
-import {Client, TextChannel} from 'discord.js';
+import { ExpCommands } from '@/core/constants/music-commands.constant';
+import { Client, TextChannel } from 'discord.js';
 
 export default {
   data: new SlashCommandBuilder()

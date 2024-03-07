@@ -1,4 +1,4 @@
-import {Player} from '@/core/models/player';
+import { Player } from '@/core/models/player.model';
 
 export interface INotification {
   showNowPlaying(player: Player, userInteraction: any): void;

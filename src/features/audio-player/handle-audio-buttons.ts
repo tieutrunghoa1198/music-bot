@@ -1,8 +1,8 @@
-import {Client} from 'discord.js';
-import {ephemeralResponse} from '@/core/utils/common.util';
-import {DeployCommands} from '@/core/utils/deploy-commands.util';
-import {Messages} from '@/core/constants/messages.constant';
-import {FOLDER_FEATURE_NAME} from '@/features/audio-player/constants/common.constant';
+import { Client } from 'discord.js';
+import { ephemeralResponse } from '@/core/utils/common.util';
+import { DeployCommands } from '@/core/utils/deploy-commands.util';
+import { Messages } from '@/core/constants/messages.constant';
+import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
 
 export const handleAudioButtons = async (interaction: any, client: Client) => {
   try {

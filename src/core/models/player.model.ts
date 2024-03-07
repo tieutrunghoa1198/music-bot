@@ -1,20 +1,21 @@
 import {
-    AudioPlayer,
-    AudioPlayerState,
-    AudioPlayerStatus,
-    createAudioPlayer,
-    createAudioResource,
-    entersState,
-    VoiceConnection,
-    VoiceConnectionDisconnectReason,
-    VoiceConnectionState,
-    VoiceConnectionStatus,
+  AudioPlayer,
+  AudioPlayerState,
+  AudioPlayerStatus,
+  createAudioPlayer,
+  createAudioResource,
+  entersState,
+  VoiceConnection,
+  VoiceConnectionDisconnectReason,
+  VoiceConnectionState,
+  VoiceConnectionStatus,
 } from '@discordjs/voice';
 import play from 'play-dl';
-import {Client} from 'discord.js';
-import {AbstractPlayer, players, QueueItem} from './abstract-player.model';
+import { Client } from 'discord.js';
+import { IPlayer, QueueItem } from '@/core/interfaces/player.interface';
+import { players } from '@/core/constants/common.constant';
 
-export class Player implements AbstractPlayer {
+export class Player implements IPlayer {
   public guildId: string;
   public playing?: QueueItem;
   public queue: QueueItem[];
@@ -246,7 +247,7 @@ export class Player implements AbstractPlayer {
       }
     } catch (e: any) {
       // If there is any problem with player, then play the next song in queue
-      console.log(e.message, 'Error: player.ts');
+      console.log(e.message, 'Error: player.model.ts');
       await this.play();
     }
   }

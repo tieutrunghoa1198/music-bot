@@ -1,6 +1,6 @@
-import {InputType} from '@/core/types/input-type.type';
+import { InputType } from '@/core/types/input-type.type';
 import * as Constant from '@/core/constants/index.constant';
-import {SoundCloudService} from '@/core/services/music/soundcloud.service';
+import { SoundCloudService } from '@/core/services/music/soundcloud.service';
 
 export const exactMatch = (a: any, b: any) => {
   a = a.split(' ');

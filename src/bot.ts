@@ -1,15 +1,13 @@
-import {Client, Intents, TextChannel} from 'discord.js';
-import {SoundCloud} from 'scdl-core';
-import {config} from 'dotenv';
-import {MusicAreas} from '@/core/mongodb/music-area.model';
+import { Client, Intents, TextChannel } from 'discord.js';
+import { SoundCloud } from 'scdl-core';
+import { config } from 'dotenv';
+import { MusicAreas } from '@/core/mongodb/music-area.model';
 import MongoDB from '@/core/utils/mongodb.util';
 import mongoose from 'mongoose';
-import {HandleAudioInteraction} from '@/features/audio-player/handle-audio-interaction';
-import {Messages} from '@/core/constants/index.constant';
-
-import {players} from '@/core/models/abstract-player.model';
-import {InteractionCreate} from '@/features/interaction-create';
-import {MessageCreate} from '@/features/message-create';
+import { HandleAudioInteraction } from '@/features/audio-player/handle-audio-interaction';
+import { Messages, players } from '@/core/constants/index.constant';
+import { InteractionCreate } from '@/features/interaction-create';
+import { MessageCreate } from '@/features/message-create';
 
 config();
 export class Bot {

@@ -1,5 +1,5 @@
 // Playlist.ts
-import {Song} from './song.type';
+import { Song } from './song.type';
 
 export interface Playlist {
   title: string;

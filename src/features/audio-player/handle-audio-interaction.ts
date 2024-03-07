@@ -1,11 +1,11 @@
-import {Client} from 'discord.js';
+import { Client } from 'discord.js';
 import path from 'node:path';
 import fs from 'node:fs';
-import {DeployCommands} from '@/core/utils/deploy-commands.util';
-import {REST} from '@discordjs/rest';
-import {Routes} from 'discord-api-types/v9';
-import {Messages} from '@/core/constants/messages.constant';
-import {FOLDER_FEATURE_NAME} from '@/features/audio-player/constants/common.constant';
+import { DeployCommands } from '@/core/utils/deploy-commands.util';
+import { REST } from '@discordjs/rest';
+import { Routes } from 'discord-api-types/v9';
+import { Messages } from '@/core/constants/messages.constant';
+import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
 
 export class HandleAudioInteraction {
   public static registerGlobalCommand = async () => {

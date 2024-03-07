@@ -1,9 +1,12 @@
-import {SlashCommandBuilder} from '@discordjs/builders';
-import {Player} from '@/core/models/player';
-import {Client} from 'discord.js';
-import {InteractionNotification} from '@/core/services/noti/interaction-notification';
-import {players} from '@/core/models/abstract-player.model';
-import {Messages, MusicCommands} from '@/core/constants/index.constant';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { Player } from '@/core/models/player.model';
+import { Client } from 'discord.js';
+import { InteractionNotification } from '@/core/services/noti/interaction-notification';
+import {
+  Messages,
+  MusicCommands,
+  players,
+} from '@/core/constants/index.constant';
 
 export default {
   data: new SlashCommandBuilder()

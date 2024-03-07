@@ -1,7 +1,7 @@
-import {Client} from 'discord.js';
-import {DeployCommands} from '@/core/utils/deploy-commands.util';
-import {FOLDER_FEATURE_NAME} from '@/features/audio-player/constants/common.constant';
-import {logger} from '@/core/utils/logger.util';
+import { Client } from 'discord.js';
+import { DeployCommands } from '@/core/utils/deploy-commands.util';
+import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
+import { logger } from '@/core/utils/logger.util';
 
 export class HandleModeratingMessageInteraction {
   public static async slashCommand(interaction: any, client: Client) {

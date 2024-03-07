@@ -1,5 +1,5 @@
-import {BuilderID} from '@/core/constants/index.constant';
-import {Client} from 'discord.js';
+import { BuilderID } from '@/core/constants/index.constant';
+import { Client } from 'discord.js';
 import leaveCommand from '@/features/audio-player/cmd-slash/leave.command';
 
 export default {

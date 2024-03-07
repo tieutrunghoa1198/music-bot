@@ -1,5 +1,5 @@
-import {SlashCommandBuilder} from '@discordjs/builders';
-import {Client} from 'discord.js';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { Client } from 'discord.js';
 import PuppeteerIntercept from '@/core/services/others/puppeteer-intercept';
 
 export default {

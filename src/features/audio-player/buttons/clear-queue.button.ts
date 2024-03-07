@@ -1,5 +1,5 @@
-import {BuilderID} from '@/core/constants/music-commands.constant';
-import {Client} from 'discord.js';
+import { BuilderID } from '@/core/constants/music-commands.constant';
+import { Client } from 'discord.js';
 import clearQueueCommand from '@/features/audio-player/cmd-slash/clear-queue.command';
 
 export default {

@@ -1,5 +1,5 @@
-import {EmbedFieldData, MessageEmbed} from 'discord.js';
-import {Messages} from '@/core/constants/messages.constant';
+import { EmbedFieldData, MessageEmbed } from 'discord.js';
+import { Messages } from '@/core/constants/messages.constant';
 
 export const AddSongMessage = (payload: any) => {
   const author: EmbedFieldData = {

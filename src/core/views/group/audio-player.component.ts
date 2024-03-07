@@ -1,14 +1,17 @@
-import {createSelectedTracks, numberOfPageSelectMenu,} from '../selectMenu/selectMenu';
-import {PlayerQueue} from '@/core/constants/index.constant';
-import {MessageActionRow} from 'discord.js';
-import {Player} from '@/core/models/player';
 import {
-    clearQueueComponent,
-    nextSongComponent,
-    pauseResumeComponent,
-    prevSongComponent,
-    removeAudioComponent,
-    repeatComponent,
+  createSelectedTracks,
+  numberOfPageSelectMenu,
+} from '../selectMenu/selectMenu';
+import { PlayerQueue } from '@/core/constants/index.constant';
+import { MessageActionRow } from 'discord.js';
+import { Player } from '@/core/models/player.model';
+import {
+  clearQueueComponent,
+  nextSongComponent,
+  pauseResumeComponent,
+  prevSongComponent,
+  removeAudioComponent,
+  repeatComponent,
 } from '../buttons';
 
 export const AudioPlayerComponent = async (

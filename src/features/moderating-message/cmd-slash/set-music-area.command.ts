@@ -1,9 +1,9 @@
-import {SlashCommandBuilder} from '@discordjs/builders';
-import {Player} from '@/core/models/player';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
-import {MusicAreas} from '@/core/mongodb/music-area.model';
-import {Client} from 'discord.js';
-import {players} from '@/core/models/abstract-player.model';
+import { players } from '@/core/constants/index.constant';
+import { MusicAreas } from '@/core/mongodb/music-area.model';
+import { Client } from 'discord.js';
 
 export default {
   data: new SlashCommandBuilder()

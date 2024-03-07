@@ -1,8 +1,8 @@
-import {Client} from 'discord.js';
+import { Client } from 'discord.js';
 import * as Constant from '@/core/constants/index.constant';
-import {ephemeralResponse} from '@/core/utils/common.util';
-import {DeployCommands} from '@/core/utils/deploy-commands.util';
-import {FOLDER_FEATURE_NAME} from '@/features/audio-player/constants/common.constant';
+import { ephemeralResponse } from '@/core/utils/common.util';
+import { DeployCommands } from '@/core/utils/deploy-commands.util';
+import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
 
 export const handleAudioSelectmenu = async (
   interaction: any,

@@ -1,9 +1,9 @@
-import {Player} from '@/core/models/player';
+import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
-import {Client} from 'discord.js';
-import {paginationMsg} from '@/core/views/embedMessages/queue.embed';
-import {players} from '@/core/models/abstract-player.model';
-import {AudioPlayerComponent} from '@/core/views/group/audio-player.component';
+import { players } from '@/core/constants/index.constant';
+import { Client } from 'discord.js';
+import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
+import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
 
 export default {
   customId: Constant.BuilderID.pageSelectMenu,

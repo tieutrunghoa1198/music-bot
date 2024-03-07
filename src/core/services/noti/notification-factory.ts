@@ -1,7 +1,7 @@
-import {InputType} from '@/core/types/input-type.type';
-import {INotification} from '../../interfaces/notification.interface';
-import {MessageNotification} from '@/core/services/noti/message-notification';
-import {InteractionNotification} from '@/core/services/noti/interaction-notification';
+import { InputType } from '@/core/types/input-type.type';
+import { INotification } from '../../interfaces/notification.interface';
+import { MessageNotification } from '@/core/services/noti/message-notification';
+import { InteractionNotification } from '@/core/services/noti/interaction-notification';
 
 export class NotificationFactory {
   public static notifier(type: InputType): INotification {
