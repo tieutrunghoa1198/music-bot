@@ -1,15 +1,18 @@
-import {InputType} from "@/core/types/input-type.type";
-import {INotification} from "../../interfaces/notification.interface";
-import {MAP_INPUT_TYPE} from "@/core/types/notification.type";
+import { InputType } from '@/core/types/input-type.type';
+import { INotification } from '../../interfaces/notification.interface';
+import { MAP_INPUT_TYPE } from '@/core/types/notification.type';
+import {MessageNotification} from '@/core/services/noti/message-notification';
+import {InteractionNotification} from '@/core/services/noti/interaction-notification';
 
 export class NotificationFactory {
-    public static Notifier(type: String): INotification | undefined {
-        const notificationType = MAP_INPUT_TYPE.get(type as InputType);
-
-        if (notificationType === undefined) return;
-
-        return notificationType;
+  public static notifier(type: InputType): INotification {
+    switch (type) {
+      case InputType.DEFAULT:
+        return MessageNotification.getInstance();
+      case InputType.INTERACTION:
+        return InteractionNotification.getInstance();
+      case InputType.MESSAGE_COMPONENT:
+        return MessageNotification.getInstance();
     }
+  }
 }
-
-
