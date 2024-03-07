@@ -1,5 +1,5 @@
-import puppeteer, { Browser, HTTPRequest, Page } from 'puppeteer';
-import { soundCloudUrl } from 'scdl-core/dist/constants/configs';
+import puppeteer, {Browser, HTTPRequest, Page} from 'puppeteer';
+import {soundCloudUrl} from 'scdl-core/dist/constants/configs';
 import play from 'play-dl';
 
 export default class PuppeteerIntercept {

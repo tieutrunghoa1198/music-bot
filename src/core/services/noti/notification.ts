@@ -1,7 +1,7 @@
-import { createPlayMessage } from '@/core/views/embedMessages/play.embed';
-import { Player } from '@/core/models/player';
-import { formatSeconds } from '@/core/utils/format-time.util';
-import { QueueItem } from '@/core/models/abstract-player.model';
+import {createPlayMessage} from '@/core/views/embedMessages/play.embed';
+import {Player} from '@/core/models/player';
+import {formatSeconds} from '@/core/utils/format-time.util';
+import {QueueItem} from '@/core/models/abstract-player.model';
 
 export class NotificationService {
   public static async nowPlaying(player: Player, interaction: any) {

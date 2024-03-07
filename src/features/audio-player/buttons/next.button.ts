@@ -1,13 +1,10 @@
-import { Client } from 'discord.js';
-import { Player } from '@/core/models/player';
-import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
-import {
-  createSelectedTracks,
-  numberOfPageSelectMenu,
-} from '@/core/views/selectMenu/selectMenu';
-import { players } from '@/core/models/abstract-player.model';
-import { Messages, PlayerQueue } from '@/core/constants/index.constant';
-import { generateButton } from '@/core/views/buttons';
+import {Client} from 'discord.js';
+import {Player} from '@/core/models/player';
+import {paginationMsg} from '@/core/views/embedMessages/queue.embed';
+import {createSelectedTracks, numberOfPageSelectMenu,} from '@/core/views/selectMenu/selectMenu';
+import {players} from '@/core/models/abstract-player.model';
+import {Messages, PlayerQueue} from '@/core/constants/index.constant';
+import {generateButton} from '@/core/views/buttons';
 
 export default {
   customId: 'next',

@@ -1,8 +1,7 @@
-import { EmbedFieldData, MessageEmbed } from 'discord.js';
+import {EmbedFieldData, MessageEmbed} from 'discord.js';
 import * as Constant from '@/core/constants/index.constant';
 
 export const createPlayMessage = (payload: {
-  requester: string;
   thumbnail: string;
   author: string;
   length: string;
@@ -31,7 +30,7 @@ export const createPlayMessage = (payload: {
 
   const requestedBy: EmbedFieldData = {
     name: Constant.Messages.requestedBy,
-    value: payload.requester,
+    value: 'Unknown',
   };
 
   return new MessageEmbed()

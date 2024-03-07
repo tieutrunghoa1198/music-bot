@@ -1,8 +1,8 @@
-import { Player } from '@/core/models/player';
+import {Player} from '@/core/models/player';
 import * as Constant from '@/core/constants/index.constant';
-import { Client } from 'discord.js';
-import { InteractionNotification } from '@/core/services/noti/interaction-notification';
-import { players, QueueItem } from '@/core/models/abstract-player.model';
+import {Client} from 'discord.js';
+import {InteractionNotification} from '@/core/services/noti/interaction-notification';
+import {players, QueueItem} from '@/core/models/abstract-player.model';
 
 export default {
   customId: Constant.BuilderID.trackSelectMenu,
@@ -27,7 +27,6 @@ export default {
         await InteractionNotification.getInstance().showNowPlaying(
           player,
           interaction,
-          nowPlaying,
         );
         return;
       }
@@ -41,7 +40,6 @@ export default {
       await InteractionNotification.getInstance().showNowPlaying(
         player,
         interaction,
-        nowPlaying,
       );
     } else {
       await interaction.followUp(Constant.Messages.emptyQueue);

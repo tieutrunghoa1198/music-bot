@@ -1,7 +1,7 @@
-import { Client, Message } from 'discord.js';
-import { MusicAreas } from '@/core/mongodb/music-area.model';
+import {Client, Message} from 'discord.js';
+import {MusicAreas} from '@/core/mongodb/music-area.model';
 import * as Constant from '@/core/constants/index.constant';
-import { PlayerService } from '@/core/services/music/player-service.service';
+import {PlayerService} from '@/core/services/music/player-service.service';
 
 const handleYoutubeLink = async (msg: Message, client: Client) => {
   const query = MusicAreas.where({ textChannelId: msg.channel.id });

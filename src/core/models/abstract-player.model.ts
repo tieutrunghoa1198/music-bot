@@ -1,7 +1,7 @@
-import { AudioPlayer, VoiceConnection } from '@discordjs/voice';
-import { Song } from '@/core/types/song.type';
-import { Snowflake } from 'discord-api-types/globals';
-import { Player } from './player';
+import {AudioPlayer, VoiceConnection} from '@discordjs/voice';
+import {Song} from '@/core/types/song.type';
+import {Snowflake} from 'discord-api-types/globals';
+import {Player} from './player';
 
 export interface AbstractPlayer {
   guildId: string;

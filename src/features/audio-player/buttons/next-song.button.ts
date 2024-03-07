@@ -1,6 +1,6 @@
-import { Client } from 'discord.js';
+import {Client} from 'discord.js';
 import skipCommand from '@/features/audio-player/cmd-slash/skip.command';
-import { BuilderID } from '@/core/constants/music-commands.constant';
+import {BuilderID} from '@/core/constants/music-commands.constant';
 
 export default {
   customId: BuilderID.nextSong,

@@ -1,12 +1,8 @@
-import { EmbedFieldData, MessageEmbed } from 'discord.js';
-import { Player } from '@/core/models/player';
-import {
-  boldText,
-  codeBlockText,
-  formatSeconds,
-} from '@/core/utils/format-time.util';
+import {EmbedFieldData, MessageEmbed} from 'discord.js';
+import {Player} from '@/core/models/player';
+import {boldText, codeBlockText, formatSeconds,} from '@/core/utils/format-time.util';
 import * as Constant from '@/core/constants/index.constant';
-import { QueueItem } from '@/core/models/abstract-player.model';
+import {QueueItem} from '@/core/models/abstract-player.model';
 
 export const paginationMsg = async (
   player: Player,

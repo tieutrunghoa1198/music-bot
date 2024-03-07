@@ -1,11 +1,6 @@
-import play, {
-  SoundCloudTrack,
-  SpotifyPlaylist,
-  SpotifyTrack,
-  YouTubeVideo,
-} from 'play-dl';
-import { Platform, Song } from '@/core/types/song.type';
-import { exactMatch } from '@/core/utils/common.util';
+import play, {SoundCloudTrack, SpotifyPlaylist, SpotifyTrack, YouTubeVideo,} from 'play-dl';
+import {Platform, Song} from '@/core/types/song.type';
+import {exactMatch} from '@/core/utils/common.util';
 
 export class SpotifyService {
   public static async getTrack(url: string) {

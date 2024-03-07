@@ -1,6 +1,5 @@
-import { InputType } from '@/core/types/input-type.type';
-import { INotification } from '../../interfaces/notification.interface';
-import { MAP_INPUT_TYPE } from '@/core/types/notification.type';
+import {InputType} from '@/core/types/input-type.type';
+import {INotification} from '../../interfaces/notification.interface';
 import {MessageNotification} from '@/core/services/noti/message-notification';
 import {InteractionNotification} from '@/core/services/noti/interaction-notification';
 

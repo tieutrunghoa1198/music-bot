@@ -1,16 +1,15 @@
-import { Client, Intents, TextChannel } from 'discord.js';
-import { SoundCloud } from 'scdl-core';
-import { config } from 'dotenv';
-import { ActivityTypes } from 'discord.js/typings/enums';
-import { MusicAreas } from '@/core/mongodb/music-area.model';
+import {Client, Intents, TextChannel} from 'discord.js';
+import {SoundCloud} from 'scdl-core';
+import {config} from 'dotenv';
+import {MusicAreas} from '@/core/mongodb/music-area.model';
 import MongoDB from '@/core/utils/mongodb.util';
 import mongoose from 'mongoose';
-import { HandleAudioInteraction } from '@/features/audio-player/handle-audio-interaction';
-import { Messages, MusicCommands } from '@/core/constants/index.constant';
+import {HandleAudioInteraction} from '@/features/audio-player/handle-audio-interaction';
+import {Messages} from '@/core/constants/index.constant';
 
-import { players } from '@/core/models/abstract-player.model';
-import { InteractionCreate } from '@/features/interaction-create';
-import { MessageCreate } from '@/features/message-create';
+import {players} from '@/core/models/abstract-player.model';
+import {InteractionCreate} from '@/features/interaction-create';
+import {MessageCreate} from '@/features/message-create';
 
 config();
 export class Bot {
@@ -45,9 +44,6 @@ export class Bot {
     });
 
     this.client.on('ready', async () => {
-      this.client?.user?.setActivity(`with /${MusicCommands.play.name}`, {
-        type: ActivityTypes.PLAYING,
-      });
       await this.loadMongoDb();
       await this.loadCommand();
       await this.loadMessage();

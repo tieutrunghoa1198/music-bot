@@ -1,7 +1,7 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { Client } from 'discord.js';
+import {SlashCommandBuilder} from '@discordjs/builders';
+import {Client} from 'discord.js';
 import * as Constant from '@/core/constants/index.constant';
-import { players } from '@/core/models/abstract-player.model';
+import {players} from '@/core/models/abstract-player.model';
 
 export default {
   data: new SlashCommandBuilder()

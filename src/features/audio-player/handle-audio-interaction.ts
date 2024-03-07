@@ -1,11 +1,11 @@
-import { Client } from 'discord.js';
+import {Client} from 'discord.js';
 import path from 'node:path';
 import fs from 'node:fs';
-import { DeployCommands } from '@/core/utils/deploy-commands.util';
-import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
-import { Messages } from '@/core/constants/messages.constant';
-import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
+import {DeployCommands} from '@/core/utils/deploy-commands.util';
+import {REST} from '@discordjs/rest';
+import {Routes} from 'discord-api-types/v9';
+import {Messages} from '@/core/constants/messages.constant';
+import {FOLDER_FEATURE_NAME} from '@/features/audio-player/constants/common.constant';
 
 export class HandleAudioInteraction {
   public static registerGlobalCommand = async () => {
@@ -19,7 +19,7 @@ export class HandleAudioInteraction {
   private static getAllCommands = (): any[] => {
     const commands: any = [];
     const myCmd = DeployCommands.extractCommands(__dirname, '.command', [
-      FOLDER_FEATURE_NAME.CMD_AUDIO_SLASH,
+      FOLDER_FEATURE_NAME.CMD_SLASH,
     ]);
     if (!myCmd.length) {
       console.log('command array is empty -> cannot read');
@@ -31,7 +31,6 @@ export class HandleAudioInteraction {
   };
 
   public static async slashCommand(interaction: any, client: Client) {
-    await interaction.deferReply();
     const condition = await this.isUserInvoiceChannel(interaction);
     // require user has to be in a voice channel before using a slash command
     if (!condition) {
@@ -42,7 +41,7 @@ export class HandleAudioInteraction {
     }
     try {
       const myCommand = DeployCommands.extractCommands(__dirname, '.command', [
-        FOLDER_FEATURE_NAME.CMD_AUDIO_SLASH,
+        FOLDER_FEATURE_NAME.CMD_SLASH,
       ]);
       if (!myCommand.length) throw new Error();
       for (const command of myCommand) {
@@ -61,7 +60,7 @@ export class HandleAudioInteraction {
   public static async autoComplete(interaction: any, client: Client) {
     try {
       const myCommand = DeployCommands.extractCommands(__dirname, '.command', [
-        FOLDER_FEATURE_NAME.CMD_AUDIO_SLASH,
+        FOLDER_FEATURE_NAME.CMD_SLASH,
       ]);
       if (!myCommand.length) throw new Error();
       for (const command of myCommand) {
@@ -84,7 +83,7 @@ export class HandleAudioInteraction {
     interaction: any,
   ): Promise<boolean> {
     const voiceChannel = interaction.member?.voice.channel;
-    const folderName = FOLDER_FEATURE_NAME.CMD_AUDIO_SLASH;
+    const folderName = FOLDER_FEATURE_NAME.CMD_SLASH;
     const folderPath = path.join(__dirname, folderName);
     const files = fs.readdirSync(folderPath);
     let result = true;

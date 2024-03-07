@@ -1,4 +1,5 @@
 import * as Constant from '@/core/constants/index.constant';
+
 /**
  *  This general type is mainly used to create type from constant object.
  */

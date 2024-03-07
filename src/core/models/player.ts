@@ -1,19 +1,18 @@
 import {
-  AudioPlayer,
-  AudioPlayerState,
-  AudioPlayerStatus,
-  createAudioPlayer,
-  createAudioResource,
-  entersState,
-  VoiceConnection,
-  VoiceConnectionDisconnectReason,
-  VoiceConnectionState,
-  VoiceConnectionStatus,
+    AudioPlayer,
+    AudioPlayerState,
+    AudioPlayerStatus,
+    createAudioPlayer,
+    createAudioResource,
+    entersState,
+    VoiceConnection,
+    VoiceConnectionDisconnectReason,
+    VoiceConnectionState,
+    VoiceConnectionStatus,
 } from '@discordjs/voice';
 import play from 'play-dl';
-import { Client } from 'discord.js';
-import { AbstractPlayer, players, QueueItem } from './abstract-player.model';
-import { logger } from '@/core/utils/logger.util';
+import {Client} from 'discord.js';
+import {AbstractPlayer, players, QueueItem} from './abstract-player.model';
 
 export class Player implements AbstractPlayer {
   public guildId: string;

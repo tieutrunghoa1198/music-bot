@@ -1,13 +1,12 @@
-import { INotification } from '../../interfaces/notification.interface';
-import { Player } from '@/core/models/player';
-import { formatSeconds } from '@/core/utils/format-time.util';
-import { AudioPlayerStatus } from '@discordjs/voice';
-import { createPlayMessage } from '@/core/views/embedMessages/play.embed';
-import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
+import {INotification} from '../../interfaces/notification.interface';
+import {Player} from '@/core/models/player';
+import {formatSeconds} from '@/core/utils/format-time.util';
+import {AudioPlayerStatus} from '@discordjs/voice';
+import {createPlayMessage} from '@/core/views/embedMessages/play.embed';
+import {paginationMsg} from '@/core/views/embedMessages/queue.embed';
 import * as Constant from '@/core/constants/index.constant';
-import { QueueItem } from '@/core/models/abstract-player.model';
-import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
-import { Song } from '@/core/types/song.type';
+import {AudioPlayerComponent} from '@/core/views/group/audio-player.component';
+import {Song} from '@/core/types/song.type';
 
 export class InteractionNotification implements INotification {
   private static instance: InteractionNotification;
@@ -20,19 +19,15 @@ export class InteractionNotification implements INotification {
     return InteractionNotification.instance;
   }
 
-  public async showNowPlaying(
-    player: Player,
-    userInteraction: any,
-    queueItem: QueueItem,
-  ) {
+  public async showNowPlaying(player: Player, userInteraction: any) {
     if (userInteraction === undefined || null) {
       console.log('wrong here =========');
       return;
     }
     const guildName = userInteraction.member.guild.name;
     const icon = userInteraction.member.guild.iconURL();
-    const song = queueItem.song;
-    const payload = this.getNowPlayingPayload(song, guildName, queueItem, icon);
+    const song = player.queue[0].song;
+    const payload = this.getNowPlayingPayload(song, guildName, icon);
     const message = await userInteraction.fetchReply();
 
     if (!message) {
@@ -49,22 +44,17 @@ export class InteractionNotification implements INotification {
     }
 
     await userInteraction.followUp({
-      embeds: [await createPlayMessage(payload)],
+      embeds: [createPlayMessage(payload)],
     });
   }
 
-  public async showQueue(userInteraction: any, player: Player) {
+  public async showQueue(player: Player, userInteraction: any) {
     const msg = await paginationMsg(player, 1);
     const audioComponent = await AudioPlayerComponent(msg, player, 1);
     const guildName = userInteraction.member.guild.name;
     const icon = userInteraction.member.guild.iconURL();
     const song = player.playing?.song as Song;
-    const payload = this.getNowPlayingPayload(
-      song,
-      guildName,
-      player.playing as QueueItem,
-      icon,
-    );
+    const payload = this.getNowPlayingPayload(song, guildName, icon);
     player.replaceMessage().then();
     const response = await userInteraction.followUp({
       embeds: [createPlayMessage(payload)],
@@ -81,7 +71,6 @@ export class InteractionNotification implements INotification {
   private getNowPlayingPayload = (
     song: Song,
     guildName: string,
-    queueItem: QueueItem,
     icon: string,
   ) => {
     console.log(song?.thumbnail);
@@ -92,7 +81,7 @@ export class InteractionNotification implements INotification {
       length: formatSeconds(song?.length) || 'Unknown',
       platform: song?.platform || 'Unknown',
       guildName,
-      requester: queueItem?.requester || 'Unknown',
+      requester: 'Unknown',
       icon,
     };
   };

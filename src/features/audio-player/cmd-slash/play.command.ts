@@ -1,11 +1,10 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { Client } from 'discord.js';
-import { InputType } from '@/core/types/input-type.type';
-import { YoutubeService } from '@/core/services/music/youtube.service';
-import { YouTubeVideo } from 'play-dl';
-import { limitString } from '@/core/utils/common.util';
-import { PlayerService } from '@/core/services/music/player-service.service';
-import { Messages, MusicCommands } from '@/core/constants/index.constant';
+import {SlashCommandBuilder} from '@discordjs/builders';
+import {Client} from 'discord.js';
+import {YoutubeService} from '@/core/services/music/youtube.service';
+import {YouTubeVideo} from 'play-dl';
+import {limitString} from '@/core/utils/common.util';
+import {PlayerService} from '@/core/services/music/player-service.service';
+import {Messages, MusicCommands} from '@/core/constants/index.constant';
 
 export default {
   hasAutoComplete: true,
@@ -21,6 +20,8 @@ export default {
         .setAutocomplete(true),
     ),
   async execute(interaction: any, client: Client) {
+    await interaction.deferReply();
+
     const input = interaction.options.getString('input');
     if (input === null) {
       await interaction.followUp(Messages.error);
@@ -34,9 +35,7 @@ export default {
       console.log(e);
       await interaction.followUp(Messages.error);
     } finally {
-      if (interaction.deletable) {
-        await interaction.deleteReply();
-      }
+      interaction.deletable && (await interaction.deleteReply());
     }
   },
   async autocomplete(interaction: any, client: Client) {

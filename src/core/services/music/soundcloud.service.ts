@@ -1,10 +1,7 @@
-import { Platform, Song } from '@/core/types/song.type';
-import {
-  soundCloudPlaylistRegex,
-  soundCloudTrackRegex,
-} from '@/core/constants/index.constant';
-import { SoundCloud } from 'scdl-core';
-import { Playlist } from '@/core/types/playlist.type';
+import {Platform, Song} from '@/core/types/song.type';
+import {soundCloudPlaylistRegex, soundCloudTrackRegex,} from '@/core/constants/index.constant';
+import {SoundCloud} from 'scdl-core';
+import {Playlist} from '@/core/types/playlist.type';
 
 export class SoundCloudService {
   public static async download(url: string, highWaterMark: number) {
