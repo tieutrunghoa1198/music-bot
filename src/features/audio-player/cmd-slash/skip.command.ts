@@ -1,10 +1,5 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { Client } from 'discord.js';
-import {
-  Messages,
-  MusicCommands,
-  players,
-} from '@/core/constants/index.constant';
+import { Messages, players } from '@/core/constants/index.constant';
 import { COMMAND_MUSIC } from '@/core/commands/music.command';
 
 export default {

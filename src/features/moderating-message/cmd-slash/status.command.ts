@@ -13,6 +13,7 @@ export default {
       await interaction.followUp(Constant.Messages.error);
       return;
     }
-    console.log(player);
+
+    await interaction.followUp(JSON.stringify(player.toJSON()));
   },
 };

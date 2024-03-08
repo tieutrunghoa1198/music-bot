@@ -22,9 +22,8 @@ export class Player implements IPlayer {
   public queue: QueueItem[];
   public readonly voiceConnection: VoiceConnection;
   public readonly audioPlayer: AudioPlayer;
-  private isReady: boolean = false;
   private client: Client;
-  private _isReplay?: boolean;
+  private _isReplay: boolean = false;
 
   // -----------------------------
 
@@ -54,6 +53,7 @@ export class Player implements IPlayer {
 
   // -----------------------------
 
+  // todo: it's your challenge to understand this then convert to a simpler version
   private voiceStateChange() {
     this.voiceConnection.on(
       'stateChange',
@@ -64,7 +64,8 @@ export class Player implements IPlayer {
         if (
           oldState.status === VoiceConnectionStatus.Ready &&
           newState.status === VoiceConnectionStatus.Connecting
-        ) this.voiceConnection.configureNetworking();
+        )
+          this.voiceConnection.configureNetworking();
 
         if (newState.status === VoiceConnectionStatus.Disconnected) {
           /*
@@ -78,46 +79,50 @@ export class Player implements IPlayer {
               VoiceConnectionDisconnectReason.WebSocketClose &&
             newState.closeCode === 4014
           ) {
-            try {
-              await entersState(
-                this.voiceConnection,
-                VoiceConnectionStatus.Connecting,
-                5_000,
-              );
-            } catch (e) {
-              this.leave();
-            }
+            await this.enterState(
+              VoiceConnectionStatus.Connecting,
+              5_000,
+              (error) => {
+                this.leave();
+                logger.error(
+                  'VoiceConnectionDisconnectReason.WebSocketClose at voiceStateChange() error',
+                  error,
+                );
+              },
+            );
           }
-          if (this.voiceConnection.rejoinAttempts < 5) this.voiceConnection.rejoin();
+          if (this.voiceConnection.rejoinAttempts < 5)
+            this.voiceConnection.rejoin();
           if (this.voiceConnection.rejoinAttempts >= 5) this.leave();
         }
 
         if (newState.status === VoiceConnectionStatus.Destroyed) this.leave();
 
         if (
-          !this.isReady &&
-          (newState.status === VoiceConnectionStatus.Connecting ||
-            newState.status === VoiceConnectionStatus.Signalling)
+          newState.status === VoiceConnectionStatus.Connecting ||
+          newState.status === VoiceConnectionStatus.Signalling
         ) {
-          this.isReady = true;
-          try {
-            await entersState(
-              this.voiceConnection,
-              VoiceConnectionStatus.Ready,
-              20_000,
-            );
-          } catch {
-            if (
-              this.voiceConnection.state.status !==
-              VoiceConnectionStatus.Destroyed
-            )
-              this.voiceConnection.destroy();
-          } finally {
-            this.isReady = false;
-          }
+          await this.enterState(
+            VoiceConnectionStatus.Ready,
+            20_000,
+            (error) => {
+              if (
+                this.voiceConnection.state.status !==
+                VoiceConnectionStatus.Destroyed
+              )
+                this.voiceConnection.destroy();
+
+              logger.error(
+                'VoiceConnectionStatus.Signalling at voiceStateChange() error',
+                error,
+              );
+            },
+          );
         }
+
       },
     );
+
   }
 
   private audioStateChange() {
@@ -128,7 +133,7 @@ export class Player implements IPlayer {
           newState.status === AudioPlayerStatus.Idle &&
           oldState.status !== AudioPlayerStatus.Idle
         ) {
-          await this.play();
+          await this.play(); // if stay here means play next song
           this.client.emit('nextSong', {
             nextSong: this.playing as QueueItem,
             guildId: this.guildId,
@@ -136,6 +141,18 @@ export class Player implements IPlayer {
         }
       },
     );
+  }
+
+  private async enterState(
+    status: VoiceConnectionStatus,
+    timeout: AbortSignal | number,
+    callBack: (error: any) => void,
+  ) {
+    try {
+      await entersState(this.voiceConnection, status, timeout);
+    } catch (e) {
+      callBack(e);
+    }
   }
 
   // -----------------------------
@@ -169,19 +186,14 @@ export class Player implements IPlayer {
   }
 
   public async skipByTitle(title: string) {
-    try {
-      this.playing = this.queue.filter((e) => e.song.title.includes(title))[0];
-      const source = await play.stream(this.playing?.song.url);
-      this.audioPlayer.play(
-        createAudioResource(source.stream, {
-          inputType: source.type,
-        }),
-      );
-      return this.playing;
-    } catch (err) {
-      logger.error('player.skipByTitle at player.model.ts', err);
+    this.playing = this.queue.filter((e) => e.song.title.includes(title))[0];
+
+    if (this.playing === undefined) {
       return null;
     }
+
+    await this.startAudio(this.playing.song.url);
+    return this.playing;
   }
 
   public pause(): void {
@@ -193,20 +205,34 @@ export class Player implements IPlayer {
   }
 
   public async play(): Promise<void> {
+    if (this._isReplay) {
+      await this.startAudio(this.playing?.song.url as string);
+      return; // avoid checking 2 options below
+    }
+
+    if (this.queue.length > 0) {
+      this.playing = this.queue.shift() as QueueItem;
+      await this.startAudio(this.playing?.song.url as string);
+      return; // because this.queue.shift() so the queue is empty, this will cause this.queue.length === 0
+    }
+
+    if (this.queue.length === 0) {
+      this.playing = undefined;
+      this.audioPlayer.stop();
+      return;
+    }
+  }
+
+  // ===============================================
+
+  private async startAudio(songUrl: string): Promise<void> {
     try {
-      if (this?._isReplay === true) {
-        const songUrl = this.playing?.song.url as string;
-        await this.startAudio(this.audioPlayer, songUrl);
-        return;
-      }
-      if (this.queue.length > 0) {
-        this.playing = this.queue.shift() as QueueItem;
-        const songUrl = this.playing?.song.url as string;
-        await this.startAudio(this.audioPlayer, songUrl);
-      } else {
-        this.playing = undefined;
-        this.audioPlayer.stop();
-      }
+      const source = await play.stream(songUrl);
+      this.audioPlayer.play(
+        createAudioResource(source.stream, {
+          inputType: source.type,
+        }),
+      );
     } catch (e: any) {
       // If there is any problem with player, then play the next song in queue
       logger.error('Error: player.model.ts', e);
@@ -214,14 +240,12 @@ export class Player implements IPlayer {
     }
   }
 
-  private async startAudio(
-    audioPlayer: AudioPlayer,
-    songUrl: string,
-  ): Promise<void> {
-    const source = await play.stream(songUrl);
-    const audioResource = createAudioResource(source.stream, {
-      inputType: source.type,
-    });
-    audioPlayer.play(audioResource);
+  public toJSON() {
+    return {
+      guildId: this.guildId,
+      playing: this.playing,
+      queue: this.queue,
+      isReplay: this._isReplay,
+    };
   }
 }

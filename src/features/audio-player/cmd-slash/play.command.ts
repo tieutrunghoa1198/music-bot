@@ -1,10 +1,9 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import { Client } from 'discord.js';
 import { YoutubeService } from '@/core/services/music/youtube.service';
 import { YouTubeVideo } from 'play-dl';
 import { limitString } from '@/core/utils/common.util';
 import { PlayerService } from '@/core/services/music/player-service.service';
-import { Messages, MusicCommands } from '@/core/constants/index.constant';
+import { Messages } from '@/core/constants/index.constant';
 import { COMMAND_MUSIC } from '@/core/commands/music.command';
 
 export default {
