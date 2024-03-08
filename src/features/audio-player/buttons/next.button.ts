@@ -1,10 +1,10 @@
 import { Client } from 'discord.js';
 import { Player } from '@/core/models/player.model';
-import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
+import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import {
   createSelectedTracks,
   numberOfPageSelectMenu,
-} from '@/core/views/selectMenu/selectMenu';
+} from '@/core/views/select-menu/selectMenu';
 import { generateButton } from '@/core/views/buttons';
 import { players } from '@/core/constants/common.constant';
 import { Messages } from '@/core/constants/messages.constant';
@@ -13,6 +13,8 @@ import { PlayerQueue } from '@/core/constants/player-queue.constant';
 export default {
   customId: 'next',
   execute: async (interaction: any, client: Client) => {
+    await interaction.deferReply();
+
     const player = players.get(interaction.guildId as string) as Player;
     if (!player) {
       await interaction.followUp(Messages.joinVoiceChannel);

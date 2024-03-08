@@ -7,12 +7,10 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
+import { COMMAND_MUSIC } from '@/core/commands/music.command';
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName(MusicCommands.nowPlaying.name)
-    .setDescription(MusicCommands.nowPlaying.description)
-    .setDMPermission(false),
+  data: COMMAND_MUSIC.nowPlaying.data,
   async execute(interaction: any, client: Client) {
     const player = players.get(interaction.guildId as string);
     if (!player) {

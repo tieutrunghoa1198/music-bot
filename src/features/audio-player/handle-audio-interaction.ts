@@ -8,28 +8,6 @@ import { Messages } from '@/core/constants/messages.constant';
 import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
 
 export class HandleAudioInteraction {
-  public static registerGlobalCommand = async () => {
-    const token: any = process.env.TOKEN;
-    const clientId: any = process.env.clientId;
-    const commands = this.getAllCommands();
-    const rest = new REST({ version: '9' }).setToken(token);
-    await rest.put(Routes.applicationCommands(clientId), { body: commands });
-  };
-
-  private static getAllCommands = (): any[] => {
-    const commands: any = [];
-    const myCmd = DeployCommands.extractCommands(__dirname, '.command', [
-      FOLDER_FEATURE_NAME.CMD_SLASH,
-    ]);
-    if (!myCmd.length) {
-      console.log('command array is empty -> cannot read');
-    }
-    myCmd.forEach((command) => {
-      commands.push(command.data.toJSON());
-    });
-    return commands;
-  };
-
   public static async slashCommand(interaction: any, client: Client) {
     const condition = await this.isUserInvoiceChannel(interaction);
     // require user has to be in a voice channel before using a slash command

@@ -14,18 +14,20 @@ import play from 'play-dl';
 import { Client } from 'discord.js';
 import { IPlayer, QueueItem } from '@/core/interfaces/player.interface';
 import { players } from '@/core/constants/common.constant';
+import { logger } from '@/core/utils/logger.util';
 
 export class Player implements IPlayer {
   public guildId: string;
-  public playing?: QueueItem;
+  public playing: QueueItem | undefined;
   public queue: QueueItem[];
   public readonly voiceConnection: VoiceConnection;
   public readonly audioPlayer: AudioPlayer;
-  private isReady = false;
+  private isReady: boolean = false;
   private client: Client;
   private _isReplay?: boolean;
-  private _message: any;
-  private _textChannel: any;
+
+  // -----------------------------
+
   constructor(
     voiceConnection: VoiceConnection,
     guildId: string,
@@ -42,22 +44,6 @@ export class Player implements IPlayer {
     voiceConnection.subscribe(this.audioPlayer);
   }
 
-  public get message() {
-    return this._message;
-  }
-
-  public set message(value) {
-    this._message = value;
-  }
-
-  public get textChannel() {
-    return this._textChannel;
-  }
-
-  public set textChannel(value) {
-    this._textChannel = value;
-  }
-
   get isReplay(): boolean {
     return <boolean>this._isReplay;
   }
@@ -66,34 +52,20 @@ export class Player implements IPlayer {
     this._isReplay = value;
   }
 
-  // todo: what is this replace for
-  public async replaceMessage() {
-    if (!this._message && !this._textChannel) return;
-    try {
-      const channel = await this.client.channels.fetch(this._textChannel);
-      if (!channel?.isText()) {
-        console.error('Channel is not a text channel.');
-        return;
-      }
-
-      const fetchedMessage = await channel.messages.fetch(this._message);
-      console.log('==========', fetchedMessage);
-      console.log('==========', fetchedMessage.deletable);
-    } catch (error) {
-      console.error('Error fetching message:', error);
-    }
-  }
+  // -----------------------------
 
   private voiceStateChange() {
     this.voiceConnection.on(
       'stateChange',
-      async (_: VoiceConnectionState, newState: VoiceConnectionState) => {
+      async (
+        oldState: VoiceConnectionState,
+        newState: VoiceConnectionState,
+      ) => {
         if (
-          _.status === VoiceConnectionStatus.Ready &&
+          oldState.status === VoiceConnectionStatus.Ready &&
           newState.status === VoiceConnectionStatus.Connecting
-        ) {
-          this.voiceConnection.configureNetworking();
-        }
+        ) this.voiceConnection.configureNetworking();
+
         if (newState.status === VoiceConnectionStatus.Disconnected) {
           /*
                   Nếu websocket đã bị đóng với mã 4014 có 2 khả năng:
@@ -115,14 +87,14 @@ export class Player implements IPlayer {
             } catch (e) {
               this.leave();
             }
-          } else if (this.voiceConnection.rejoinAttempts < 5) {
-            this.voiceConnection.rejoin();
-          } else {
-            this.leave();
           }
-        } else if (newState.status === VoiceConnectionStatus.Destroyed) {
-          this.leave();
-        } else if (
+          if (this.voiceConnection.rejoinAttempts < 5) this.voiceConnection.rejoin();
+          if (this.voiceConnection.rejoinAttempts >= 5) this.leave();
+        }
+
+        if (newState.status === VoiceConnectionStatus.Destroyed) this.leave();
+
+        if (
           !this.isReady &&
           (newState.status === VoiceConnectionStatus.Connecting ||
             newState.status === VoiceConnectionStatus.Signalling)
@@ -147,6 +119,7 @@ export class Player implements IPlayer {
       },
     );
   }
+
   private audioStateChange() {
     this.audioPlayer.on(
       'stateChange',
@@ -164,6 +137,9 @@ export class Player implements IPlayer {
       },
     );
   }
+
+  // -----------------------------
+
   public async addSong(queueItems: QueueItem[]) {
     this.queue = this.queue.concat(queueItems);
     if (!this.playing) {
@@ -189,25 +165,21 @@ export class Player implements IPlayer {
   }
 
   public skip(): void {
-    console.log(this.queue.length, ' Queue');
     this.play();
   }
 
   public async skipByTitle(title: string) {
     try {
-      const selectedSong = this.queue.filter((e) =>
-        e.song.title.includes(title),
+      this.playing = this.queue.filter((e) => e.song.title.includes(title))[0];
+      const source = await play.stream(this.playing?.song.url);
+      this.audioPlayer.play(
+        createAudioResource(source.stream, {
+          inputType: source.type,
+        }),
       );
-      this.playing = selectedSong[0];
-      const songUrl = this.playing?.song.url;
-      const source = await play.stream(songUrl);
-      const audioResource = createAudioResource(source.stream, {
-        inputType: source.type,
-      });
-      this.audioPlayer.play(audioResource);
       return this.playing;
     } catch (err) {
-      console.log(err);
+      logger.error('player.skipByTitle at player.model.ts', err);
       return null;
     }
   }
@@ -218,16 +190,6 @@ export class Player implements IPlayer {
 
   public resume() {
     this.audioPlayer.unpause();
-  }
-
-  public async jump(position: number): Promise<QueueItem> {
-    const target = this.queue[position - 1];
-    this.queue = this.queue
-      .splice(0, position - 1)
-      .concat(this.queue.splice(position, this.queue.length - 1));
-    this.queue.unshift(target);
-    await this.play();
-    return target;
   }
 
   public async play(): Promise<void> {
@@ -247,7 +209,7 @@ export class Player implements IPlayer {
       }
     } catch (e: any) {
       // If there is any problem with player, then play the next song in queue
-      console.log(e.message, 'Error: player.model.ts');
+      logger.error('Error: player.model.ts', e);
       await this.play();
     }
   }

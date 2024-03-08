@@ -5,13 +5,13 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
+import { COMMAND_MUSIC } from '@/core/commands/music.command';
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName(MusicCommands.skip.name)
-    .setDescription(MusicCommands.skip.description)
-    .setDMPermission(false),
+  data: COMMAND_MUSIC.skip.data,
   async execute(interaction: any, client: Client) {
+    await interaction.deferReply();
+
     try {
       const player = players.get(interaction.guildId as string);
       if (!player) {

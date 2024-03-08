@@ -5,7 +5,7 @@ import { BuilderID } from '@/core/constants/music-commands.constant';
 import { Messages } from '@/core/constants/messages.constant';
 import { PlayerQueue } from '@/core/constants/player-queue.constant';
 
-export const createSelectedTracks = async (queueItems: QueueItem[]) => {
+export const createSelectedTracks = (queueItems: QueueItem[]) => {
   const trackToDisplay: any[] = [];
   for (const songInQueue of queueItems) {
     if (trackToDisplay.length > 24) {
@@ -51,7 +51,7 @@ export const createSelectedTracks = async (queueItems: QueueItem[]) => {
   return new MessageActionRow().addComponents(trackSelectMenu);
 };
 
-export const numberOfPageSelectMenu = async (
+export const numberOfPageSelectMenu = (
   rawSize: number,
   currentPage: number,
 ) => {

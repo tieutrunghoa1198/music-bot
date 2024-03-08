@@ -6,12 +6,10 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
+import { COMMAND_MUSIC } from '@/core/commands/music.command';
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName(MusicCommands.pause.name)
-    .setDescription(MusicCommands.pause.description)
-    .setDMPermission(false),
+  data: COMMAND_MUSIC.pause.data,
   async execute(interaction: any, client: Client) {
     const player = players.get(interaction.guildId as string);
     if (!player?.voiceConnection) {

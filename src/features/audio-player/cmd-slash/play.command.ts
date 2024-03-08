@@ -5,20 +5,11 @@ import { YouTubeVideo } from 'play-dl';
 import { limitString } from '@/core/utils/common.util';
 import { PlayerService } from '@/core/services/music/player-service.service';
 import { Messages, MusicCommands } from '@/core/constants/index.constant';
+import { COMMAND_MUSIC } from '@/core/commands/music.command';
 
 export default {
-  hasAutoComplete: true,
-  data: new SlashCommandBuilder()
-    .setName(MusicCommands.play.name)
-    .setDescription(MusicCommands.play.description)
-    .setDMPermission(false)
-    .addStringOption((option) =>
-      option
-        .setName('input')
-        .setDescription('Link to be played')
-        .setRequired(true)
-        .setAutocomplete(true),
-    ),
+  hasAutoComplete: COMMAND_MUSIC.play.hasAutoComplete,
+  data: COMMAND_MUSIC.play.data,
   async execute(interaction: any, client: Client) {
     await interaction.deferReply();
 

@@ -5,6 +5,8 @@ import { AudioPlayerStatus } from '@discordjs/voice';
 export default {
   customId: BuilderID.pauseResume,
   execute: async (interaction: any, client: Client) => {
+    await interaction.deferReply();
+
     const player = players.get(interaction.guildId as string);
     if (!player) {
       await interaction.followUp(Messages.joinVoiceChannel);

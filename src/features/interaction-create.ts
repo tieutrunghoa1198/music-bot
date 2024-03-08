@@ -20,7 +20,7 @@ export const InteractionCreate = async (client: Client) => {
     }
 
     if (interaction.isButton()) {
-      await interaction.deferUpdate();
+      // await interaction.deferUpdate();
       await handleAudioButtons(interaction, client);
     }
 

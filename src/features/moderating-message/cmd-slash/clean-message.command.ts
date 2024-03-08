@@ -1,14 +1,11 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-
-import { ExpCommands } from '@/core/constants/music-commands.constant';
 import { Client, TextChannel } from 'discord.js';
+import { COMMAND_MODERATING_MESSAGE } from '@/core/commands/moderating-message.command';
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName(ExpCommands.cleanMessage.name)
-    .setDescription(ExpCommands.cleanMessage.description)
-    .setDMPermission(false),
+  data: COMMAND_MODERATING_MESSAGE.cleanMessage.data,
   execute: async function (interaction: any, client: Client) {
+    await interaction.deferReply();
+
     const textChannelId = interaction.channelId;
     const textChannel: TextChannel = client.channels.cache.get(
       textChannelId,

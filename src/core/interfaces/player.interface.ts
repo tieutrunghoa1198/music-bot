@@ -5,8 +5,6 @@ export interface IPlayer {
   guildId: string;
   playing?: QueueItem;
   queue: QueueItem[];
-  message: any;
-  textChannel: any;
   readonly voiceConnection: VoiceConnection;
   readonly audioPlayer: AudioPlayer;
   addSong(queueItems: QueueItem[]): void;
@@ -17,7 +15,6 @@ export interface IPlayer {
   pause(): void;
   resume(): void;
   play(): void;
-  jump(position: number): Promise<QueueItem>;
 }
 export interface QueueItem {
   song: Song;

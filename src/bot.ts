@@ -8,6 +8,8 @@ import { HandleAudioInteraction } from '@/features/audio-player/handle-audio-int
 import { Messages, players } from '@/core/constants/index.constant';
 import { InteractionCreate } from '@/features/interaction-create';
 import { MessageCreate } from '@/features/message-create';
+import { deployCommandUtil } from '@/core/utils/deploy-command.util';
+import { logger } from '@/core/utils/logger.util';
 
 config();
 export class Bot {
@@ -38,7 +40,7 @@ export class Bot {
   start() {
     this.client.login(process.env.TOKEN).then(async () => {
       await SoundCloud.connect();
-      await this.deployCommand();
+      deployCommandUtil();
     });
 
     this.client.on('ready', async () => {
@@ -65,15 +67,7 @@ export class Bot {
     try {
       await MessageCreate(this.client);
     } catch (e) {
-      console.log(e);
-    }
-  }
-
-  async deployCommand() {
-    try {
-      await HandleAudioInteraction.registerGlobalCommand();
-    } catch (e) {
-      console.log(e);
+      logger.error(e);
     }
   }
 
@@ -87,12 +81,7 @@ export class Bot {
 
   async onNextSong(payload: any) {
     const guildId = payload.guildId;
-    const player = players.get(guildId as string);
-    if (!payload.nextSong?.song) {
-      console.log('Out of Queue');
-      if (player) player.replaceMessage().then();
-      return;
-    }
+    if (!payload.nextSong?.song) return;
 
     try {
       const query = MusicAreas.where({ guildId: guildId });

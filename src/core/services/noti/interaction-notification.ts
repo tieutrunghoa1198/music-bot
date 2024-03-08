@@ -2,8 +2,8 @@ import { INotification } from '../../interfaces/notification.interface';
 import { Player } from '@/core/models/player.model';
 import { formatSeconds } from '@/core/utils/format-time.util';
 import { AudioPlayerStatus } from '@discordjs/voice';
-import { createPlayMessage } from '@/core/views/embedMessages/play.embed';
-import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
+import { createPlayMessage } from '@/core/views/embed-messages/play.embed';
+import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import * as Constant from '@/core/constants/index.constant';
 import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
 import { Song } from '@/core/types/song.type';
@@ -49,19 +49,22 @@ export class InteractionNotification implements INotification {
   }
 
   public async showQueue(player: Player, userInteraction: any) {
-    const msg = await paginationMsg(player, 1);
-    const audioComponent = await AudioPlayerComponent(msg, player, 1);
-    const guildName = userInteraction.member.guild.name;
-    const icon = userInteraction.member.guild.iconURL();
-    const song = player.playing?.song as Song;
-    const payload = this.getNowPlayingPayload(song, guildName, icon);
-    player.replaceMessage().then();
-    const response = await userInteraction.followUp({
-      embeds: [createPlayMessage(payload)],
-      components: audioComponent.components,
+    await userInteraction.followUp({
+      embeds: [
+        createPlayMessage(
+          this.getNowPlayingPayload(
+            player.playing?.song as Song,
+            userInteraction.member.guild.name,
+            userInteraction.member.guild.iconURL(),
+          ),
+        ),
+      ],
+      components: AudioPlayerComponent(
+        await paginationMsg(player, 1),
+        player,
+        1,
+      ).components,
     });
-    player.message = response.id;
-    player.textChannel = response.channelId;
   }
 
   public async defaultError(userInteraction: any) {

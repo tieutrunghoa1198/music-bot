@@ -1,10 +1,10 @@
 import { Client } from 'discord.js';
 import { Player } from '@/core/models/player.model';
-import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
+import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import {
   createSelectedTracks,
   numberOfPageSelectMenu,
-} from '@/core/views/selectMenu/selectMenu';
+} from '@/core/views/select-menu/selectMenu';
 import { generateButton } from '@/core/views/buttons';
 import {
   Messages,

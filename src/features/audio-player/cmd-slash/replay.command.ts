@@ -5,22 +5,10 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
+import { COMMAND_MUSIC } from '@/core/commands/music.command';
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName(MusicCommands.replay.name)
-    .setDescription(MusicCommands.replay.description)
-    .setDMPermission(false)
-    .addStringOption((option) =>
-      option
-        .setName('replay')
-        .setDescription('on/off')
-        .setRequired(true)
-        .addChoices(
-          { name: 'Bật', value: 'true' },
-          { name: 'Tắt', value: 'false' },
-        ),
-    ),
+  data: COMMAND_MUSIC.replay.data,
   async execute(interaction: any, client: Client) {
     const isReplay = JSON.parse(
       interaction.options.getString('replay'),

@@ -13,8 +13,6 @@ export class HandleModeratingMessageInteraction {
       if (!myCommand.length) throw new Error('command length = 0');
 
       for (const command of myCommand) {
-        command.data.name === interaction.commandName &&
-          (await command.execute(interaction, client));
         if (command.data.name === interaction.commandName) {
           await command.execute(interaction, client);
         }
@@ -22,6 +20,7 @@ export class HandleModeratingMessageInteraction {
     } catch (e: any) {
       logger.error(
         'handle moderating message HandleModeratingMessageInteraction.slashCommand(_, _) - command error',
+        e,
       );
       if (interaction.deletable) {
         await interaction.followUp(e.toString());

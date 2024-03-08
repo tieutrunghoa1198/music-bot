@@ -1,4 +1,4 @@
-import { createPlayMessage } from '@/core/views/embedMessages/play.embed';
+import { createPlayMessage } from '@/core/views/embed-messages/play.embed';
 import { Player } from '@/core/models/player.model';
 import { formatSeconds } from '@/core/utils/format-time.util';
 import { QueueItem } from '@/core/interfaces/player.interface';

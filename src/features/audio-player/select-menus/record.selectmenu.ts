@@ -2,7 +2,7 @@ import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
 import { Client } from 'discord.js';
-import { paginationMsg } from '@/core/views/embedMessages/queue.embed';
+import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
 
 export default {
@@ -22,15 +22,9 @@ export default {
       if (player.queue.length > 0) {
         const result = await interaction.values[0];
         const msg = await paginationMsg(player, parseInt(result));
-        const { components } = await AudioPlayerComponent(
-          msg,
-          player,
-          parseInt(result),
-        );
         const message = await interaction.channel.messages.fetch(
           interaction.message.id,
         );
-        player.replaceMessage().then();
         message.delete().catch((error: any) => {
           // Only log the error if it is not an Unknown Message error
           if (error) {
@@ -38,12 +32,11 @@ export default {
             return;
           }
         });
-        const response = await interaction.followUp({
+        await interaction.followUp({
           embeds: [msg?.embedMessage],
-          components: components,
+          components: AudioPlayerComponent(msg, player, parseInt(result))
+            .components,
         });
-        player.message = response.id;
-        player.textChannel = response.channelId;
       } else {
         interaction.followUp(Constant.Messages.emptyQueue);
       }

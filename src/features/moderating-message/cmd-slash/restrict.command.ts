@@ -1,25 +1,13 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
 import * as Constant from '@/core/constants/index.constant';
 import { Client } from 'discord.js';
-import { ChannelType } from 'discord-api-types/v9';
 import { RestrictChannel } from '@/core/mongodb/restrict.model';
+import { COMMAND_MODERATING_MESSAGE } from '@/core/commands/moderating-message.command';
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName(Constant.ExpCommands.restrict.name)
-    .setDescription(Constant.ExpCommands.restrict.description)
-    .setDMPermission(false)
-    .addChannelOption((option) =>
-      option
-        .setName('channels')
-        .addChannelTypes(ChannelType.GuildText)
-        .setDescription('Kênh riêng tư')
-        .setRequired(true),
-    )
-    .addRoleOption((option) =>
-      option.setName('roles').setDescription('Role riêng tư').setRequired(true),
-    ),
+  data: COMMAND_MODERATING_MESSAGE.restrict.data,
   async execute(interaction: any, client: Client) {
+    await interaction.deferReply();
+
     const selectedChannel = interaction.options;
     console.log(selectedChannel);
 

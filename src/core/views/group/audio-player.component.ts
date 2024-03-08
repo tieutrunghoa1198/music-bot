@@ -1,7 +1,7 @@
 import {
   createSelectedTracks,
   numberOfPageSelectMenu,
-} from '../selectMenu/selectMenu';
+} from '@/core/views/select-menu/selectMenu';
 import { PlayerQueue } from '@/core/constants/index.constant';
 import { MessageActionRow } from 'discord.js';
 import { Player } from '@/core/models/player.model';
@@ -14,15 +14,15 @@ import {
   repeatComponent,
 } from '../buttons';
 
-export const AudioPlayerComponent = async (
+export const AudioPlayerComponent = (
   msg: any,
   player: Player,
   currentPage: number,
 ) => {
   return {
     components: [
-      await createSelectedTracks(msg.tracks),
-      await numberOfPageSelectMenu(
+      createSelectedTracks(msg.tracks),
+      numberOfPageSelectMenu(
         player.queue.length / PlayerQueue.MAX_PER_PAGE,
         currentPage,
       ),
