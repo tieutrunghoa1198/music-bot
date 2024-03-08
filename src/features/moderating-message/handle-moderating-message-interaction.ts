@@ -1,7 +1,7 @@
 import { DeployCommands } from '@/core/utils/deploy-commands.util';
 import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
 import { logger } from '@/core/utils/logger.util';
-import { botClient } from '@/botClient';
+import { botClient } from '@/bot-client';
 
 export class HandleModeratingMessageInteraction {
   public static async slashCommand(interaction: any) {

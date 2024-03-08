@@ -7,7 +7,7 @@ import {
 } from '@discordjs/voice';
 import { logger } from '@/core/utils/logger.util';
 import { players } from '@/core/constants/common.constant';
-import { botClient } from '@/botClient';
+import { botClient } from '@/bot-client';
 
 export const enterReadyState = async (player: Player) => {
   try {

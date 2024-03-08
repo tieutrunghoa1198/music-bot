@@ -2,7 +2,7 @@ import { HandleAudioInteraction } from './audio-player/handle-audio-interaction'
 import { handleAudioSelectMenu } from './audio-player/handle-audio-select-menu';
 import { handleAudioButtons } from './audio-player/handle-audio-buttons';
 import { HandleModeratingMessageInteraction } from '@/features/moderating-message/handle-moderating-message-interaction';
-import { botClient } from '@/botClient';
+import { botClient } from '@/bot-client';
 
 export const InteractionCreate = async () => {
   botClient.on('interactionCreate', async (interaction: any) => {

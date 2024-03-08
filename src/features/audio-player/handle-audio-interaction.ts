@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import { DeployCommands } from '@/core/utils/deploy-commands.util';
 import { Messages } from '@/core/constants/messages.constant';
 import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
-import { botClient } from '@/botClient';
+import { botClient } from '@/bot-client';
 
 export class HandleAudioInteraction {
   public static async slashCommand(interaction: any) {

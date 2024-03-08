@@ -2,7 +2,7 @@ import * as Constant from '@/core/constants/index.constant';
 import { ephemeralResponse } from '@/core/utils/common.util';
 import { DeployCommands } from '@/core/utils/deploy-commands.util';
 import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
-import { botClient } from '@/botClient';
+import { botClient } from '@/bot-client';
 
 export const handleAudioSelectMenu = async (interaction: any) => {
   try {
