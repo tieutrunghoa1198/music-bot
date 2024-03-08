@@ -1,14 +1,12 @@
-import { Client } from 'discord.js';
 import path from 'node:path';
 import fs from 'node:fs';
 import { DeployCommands } from '@/core/utils/deploy-commands.util';
-import { REST } from '@discordjs/rest';
-import { Routes } from 'discord-api-types/v9';
 import { Messages } from '@/core/constants/messages.constant';
 import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
+import { botClient } from '@/botClient';
 
 export class HandleAudioInteraction {
-  public static async slashCommand(interaction: any, client: Client) {
+  public static async slashCommand(interaction: any) {
     const condition = await this.isUserInvoiceChannel(interaction);
     // require user has to be in a voice channel before using a slash command
     if (!condition) {
@@ -24,7 +22,7 @@ export class HandleAudioInteraction {
       if (!myCommand.length) throw new Error();
       for (const command of myCommand) {
         if (command.data.name === interaction.commandName) {
-          await command.execute(interaction, client);
+          await command.execute(interaction, botClient);
         }
       }
     } catch (e: any) {
@@ -35,7 +33,7 @@ export class HandleAudioInteraction {
     }
   }
 
-  public static async autoComplete(interaction: any, client: Client) {
+  public static async autoComplete(interaction: any) {
     try {
       const myCommand = DeployCommands.extractCommands(__dirname, '.command', [
         FOLDER_FEATURE_NAME.CMD_SLASH,
@@ -46,7 +44,7 @@ export class HandleAudioInteraction {
           command.data.name === interaction.commandName &&
           command?.hasAutoComplete
         ) {
-          await command.autocomplete(interaction, client);
+          await command.autocomplete(interaction, botClient);
         }
       }
     } catch (e: any) {

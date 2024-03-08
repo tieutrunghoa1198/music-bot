@@ -2,12 +2,11 @@ import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
-import { Client } from 'discord.js';
 import { COMMAND_MODERATING_MESSAGE } from '@/core/commands/moderating-message.command';
 
 export default {
   data: COMMAND_MODERATING_MESSAGE.musicArea.data,
-  async execute(interaction: any, client: Client) {
+  async execute(interaction: any) {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string) as Player;

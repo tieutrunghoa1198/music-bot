@@ -6,8 +6,8 @@
     "start": "NODE_ENV=production node dist/index.js",
     "build": "rm -rf dist && tsc",
     "dev": "nodemon",
-    "prettier": "prettier --write src/**/*.{js,ts,tsx,scss}",
-    "prettier:check": "prettier --list-different src/**/*.{js,ts,tsx,scss}",
+    "prettier": "prettier --write 'src/**/*.{js,ts,tsx,scss}'",
+    "prettier:check": "prettier --list-different 'src/**/*.{js,ts,tsx,scss}'",
     "eslint": "eslint src",
     "go": "npm run build && npm run start"
   },

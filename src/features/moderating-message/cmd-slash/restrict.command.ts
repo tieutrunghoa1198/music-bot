@@ -1,11 +1,10 @@
 import * as Constant from '@/core/constants/index.constant';
-import { Client } from 'discord.js';
 import { RestrictChannel } from '@/core/mongodb/restrict.model';
 import { COMMAND_MODERATING_MESSAGE } from '@/core/commands/moderating-message.command';
 
 export default {
   data: COMMAND_MODERATING_MESSAGE.restrict.data,
-  async execute(interaction: any, client: Client) {
+  async execute(interaction: any) {
     await interaction.deferReply();
 
     const selectedChannel = interaction.options;

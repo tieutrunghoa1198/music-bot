@@ -1,4 +1,3 @@
-import { Client } from 'discord.js';
 import { YoutubeService } from '@/core/services/music/youtube.service';
 import { YouTubeVideo } from 'play-dl';
 import { limitString } from '@/core/utils/common.util';
@@ -9,7 +8,7 @@ import { COMMAND_MUSIC } from '@/core/commands/music.command';
 export default {
   hasAutoComplete: COMMAND_MUSIC.play.hasAutoComplete,
   data: COMMAND_MUSIC.play.data,
-  async execute(interaction: any, client: Client) {
+  async execute(interaction: any) {
     await interaction.deferReply();
 
     const input = interaction.options.getString('input');
@@ -19,7 +18,7 @@ export default {
     }
 
     try {
-      await new PlayerService(interaction, client).startPlay(input);
+      await new PlayerService(interaction).startPlay(input);
     } catch (e) {
       console.log(e);
       await interaction.followUp(Messages.error);
@@ -27,7 +26,7 @@ export default {
       interaction.deletable && (await interaction.deleteReply());
     }
   },
-  async autocomplete(interaction: any, client: Client) {
+  async autocomplete(interaction: any) {
     try {
       const input = interaction.options.getString('input');
       const results = await YoutubeService.search(input);

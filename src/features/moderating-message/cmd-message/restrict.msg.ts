@@ -1,7 +1,7 @@
-import { Client, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import { RestrictChannel } from '@/core/mongodb/restrict.model';
 
-const restrict = async (msg: Message, client: Client) => {
+const restrict = async (msg: Message) => {
   const query = RestrictChannel.where({ guildId: msg.guildId });
   const guild = await query.findOne();
   if (!guild) return;

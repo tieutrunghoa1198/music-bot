@@ -1,10 +1,10 @@
-import { Client } from 'discord.js';
 import { DeployCommands } from '@/core/utils/deploy-commands.util';
 import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
 import { logger } from '@/core/utils/logger.util';
+import { botClient } from '@/botClient';
 
 export class HandleModeratingMessageInteraction {
-  public static async slashCommand(interaction: any, client: Client) {
+  public static async slashCommand(interaction: any) {
     try {
       const myCommand = DeployCommands.extractCommands(__dirname, '.command', [
         FOLDER_FEATURE_NAME.CMD_SLASH,
@@ -14,7 +14,7 @@ export class HandleModeratingMessageInteraction {
 
       for (const command of myCommand) {
         if (command.data.name === interaction.commandName) {
-          await command.execute(interaction, client);
+          await command.execute(interaction, botClient);
         }
       }
     } catch (e: any) {

@@ -1,10 +1,9 @@
 import { BuilderID } from '@/core/constants/index.constant';
-import { Client } from 'discord.js';
 import leaveCommand from '@/features/audio-player/cmd-slash/leave.command';
 
 export default {
   customId: BuilderID.removeAudio,
-  execute: async (interaction: any, client: Client) => {
+  execute: async (interaction: any) => {
     const message = await interaction.channel.messages.fetch(
       interaction.message.id,
     );
@@ -15,6 +14,6 @@ export default {
         return;
       }
     });
-    await leaveCommand.execute(interaction, client);
+    await leaveCommand.execute(interaction);
   },
 };

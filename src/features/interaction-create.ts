@@ -1,31 +1,28 @@
-import { Client } from 'discord.js';
 import { HandleAudioInteraction } from './audio-player/handle-audio-interaction';
-import { handleAudioSelectmenu } from './audio-player/handle-audio-selectmenu';
+import { handleAudioSelectMenu } from './audio-player/handle-audio-select-menu';
 import { handleAudioButtons } from './audio-player/handle-audio-buttons';
 import { HandleModeratingMessageInteraction } from '@/features/moderating-message/handle-moderating-message-interaction';
+import { botClient } from '@/botClient';
 
-export const InteractionCreate = async (client: Client) => {
-  client.on('interactionCreate', async (interaction: any) => {
+export const InteractionCreate = async () => {
+  botClient.on('interactionCreate', async (interaction: any) => {
     if (interaction.isCommand()) {
-      await HandleAudioInteraction.slashCommand(interaction, client);
-      await HandleModeratingMessageInteraction.slashCommand(
-        interaction,
-        client,
-      );
+      await HandleAudioInteraction.slashCommand(interaction);
+      await HandleModeratingMessageInteraction.slashCommand(interaction);
     }
 
     if (interaction.isSelectMenu()) {
       await interaction.deferUpdate();
-      await handleAudioSelectmenu(interaction, client);
+      await handleAudioSelectMenu(interaction);
     }
 
     if (interaction.isButton()) {
       // await interaction.deferUpdate();
-      await handleAudioButtons(interaction, client);
+      await handleAudioButtons(interaction);
     }
 
     if (interaction.isAutocomplete()) {
-      await HandleAudioInteraction.autoComplete(interaction, client);
+      await HandleAudioInteraction.autoComplete(interaction);
     }
   });
 };

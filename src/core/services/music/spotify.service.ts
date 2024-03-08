@@ -71,8 +71,4 @@ export class SpotifyService {
         return songs;
     }
   }
-
-  private static handleTrack() {}
-
-  private static handlePlaylist() {}
 }

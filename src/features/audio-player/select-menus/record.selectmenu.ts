@@ -1,13 +1,12 @@
 import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
-import { Client } from 'discord.js';
 import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
 
 export default {
   customId: Constant.BuilderID.pageSelectMenu,
-  execute: async (interaction: any, client: Client) => {
+  execute: async (interaction: any) => {
     if (interaction.customId !== Constant.BuilderID.pageSelectMenu) {
       return;
     }

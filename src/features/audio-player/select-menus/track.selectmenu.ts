@@ -1,13 +1,12 @@
 import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
-import { Client } from 'discord.js';
 import { InteractionNotification } from '@/core/services/noti/interaction-notification';
 import { QueueItem } from '@/core/interfaces/player.interface';
 
 export default {
   customId: Constant.BuilderID.trackSelectMenu,
-  execute: async (interaction: any, client: Client) => {
+  execute: async (interaction: any) => {
     const player = players.get(interaction.guildId) as Player;
     if (!player) {
       await interaction.followUp(Constant.Messages.joinVoiceChannel);

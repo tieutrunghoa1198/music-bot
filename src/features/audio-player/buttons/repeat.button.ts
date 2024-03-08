@@ -1,9 +1,8 @@
-import { Client } from 'discord.js';
 import { BuilderID, Messages, players } from '@/core/constants/index.constant';
 
 export default {
   customId: BuilderID.repeatSong,
-  execute: async (interaction: any, client: Client) => {
+  execute: async (interaction: any) => {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string);

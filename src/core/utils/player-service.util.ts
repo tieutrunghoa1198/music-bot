@@ -1,4 +1,3 @@
-import { Client } from 'discord.js';
 import { Player } from '@/core/models/player.model';
 import {
   entersState,
@@ -8,6 +7,7 @@ import {
 } from '@discordjs/voice';
 import { logger } from '@/core/utils/logger.util';
 import { players } from '@/core/constants/common.constant';
+import { botClient } from '@/botClient';
 
 export const enterReadyState = async (player: Player) => {
   try {
@@ -21,7 +21,7 @@ export const enterReadyState = async (player: Player) => {
   }
 };
 
-export const createPlayer = (interactObj: any, client: Client) => {
+export const createPlayer = (interactObj: any) => {
   let player = players.get(interactObj.guildId as string) as Player;
 
   if (player) return player;
@@ -34,7 +34,7 @@ export const createPlayer = (interactObj: any, client: Client) => {
       adapterCreator: channel.guild.voiceAdapterCreator,
     }),
     interactObj.guildId as string,
-    client,
+    botClient,
   );
   players.set(interactObj.guildId as string, player);
 

@@ -67,7 +67,9 @@ export class MessageNotification implements INotification {
   }
 
   public async defaultError(userInteraction: any) {
-    await userInteraction.channel.send('asd');
+    await userInteraction.channel.send(
+      'Token might be expired, or cannot get song.',
+    );
   }
 
   private getNowPlayingPayload(song: Song, guildName: string, icon: string) {

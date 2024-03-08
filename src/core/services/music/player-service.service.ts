@@ -1,5 +1,4 @@
 import { Player } from '@/core/models/player.model';
-import { Client } from 'discord.js';
 import { InputType } from '@/core/types/input-type.type';
 import { NotificationFactory } from '../noti/notification-factory';
 import {
@@ -21,10 +20,10 @@ export class PlayerService {
 
   // -----------------------------
 
-  constructor(interactionObj: any, client: Client) {
+  constructor(interactionObj: any) {
     this.interactionObj = interactionObj;
     this.userInputType = classifyInteraction(interactionObj);
-    this.player = createPlayer(interactionObj, client);
+    this.player = createPlayer(interactionObj);
   }
 
   // ============================

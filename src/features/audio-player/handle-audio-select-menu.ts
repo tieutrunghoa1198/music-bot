@@ -1,13 +1,10 @@
-import { Client } from 'discord.js';
 import * as Constant from '@/core/constants/index.constant';
 import { ephemeralResponse } from '@/core/utils/common.util';
 import { DeployCommands } from '@/core/utils/deploy-commands.util';
 import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
+import { botClient } from '@/botClient';
 
-export const handleAudioSelectmenu = async (
-  interaction: any,
-  client: Client,
-) => {
+export const handleAudioSelectMenu = async (interaction: any) => {
   try {
     const condition = interaction.member.voice.channel;
     if (!condition) {
@@ -25,7 +22,7 @@ export const handleAudioSelectmenu = async (
     if (!mySelectMenus.length) throw new Error();
     for (const selectMenu of mySelectMenus) {
       if (selectMenu.customId === interaction.customId) {
-        await selectMenu.execute(interaction, client);
+        await selectMenu.execute(interaction, botClient);
       }
     }
   } catch (e) {

@@ -4,8 +4,7 @@ import { config } from 'dotenv';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import MongoDB from '@/core/utils/mongodb.util';
 import mongoose from 'mongoose';
-import { HandleAudioInteraction } from '@/features/audio-player/handle-audio-interaction';
-import { Messages, players } from '@/core/constants/index.constant';
+import { Messages } from '@/core/constants/index.constant';
 import { InteractionCreate } from '@/features/interaction-create';
 import { MessageCreate } from '@/features/message-create';
 import { deployCommandUtil } from '@/core/utils/deploy-command.util';
@@ -19,14 +18,7 @@ export class Bot {
   //-------------------------------------------
 
   private constructor() {
-    this.client = new Client({
-      intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_VOICE_STATES,
-        Intents.FLAGS.GUILD_INTEGRATIONS,
-      ],
-    });
+    this.client = botClient;
   }
 
   public static getInstance(): Bot {
@@ -57,7 +49,7 @@ export class Bot {
 
   async loadCommand() {
     try {
-      await InteractionCreate(this.client);
+      await InteractionCreate();
     } catch (e) {
       console.log(e);
     }
@@ -65,7 +57,7 @@ export class Bot {
 
   async loadMessage() {
     try {
-      await MessageCreate(this.client);
+      await MessageCreate();
     } catch (e) {
       logger.error(e);
     }
@@ -107,3 +99,12 @@ export class Bot {
     }
   }
 }
+
+export const botClient = new Client({
+  intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_VOICE_STATES,
+    Intents.FLAGS.GUILD_INTEGRATIONS,
+  ],
+});

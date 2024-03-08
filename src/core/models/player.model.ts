@@ -119,10 +119,8 @@ export class Player implements IPlayer {
             },
           );
         }
-
       },
     );
-
   }
 
   private audioStateChange() {

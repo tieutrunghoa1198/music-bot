@@ -1,9 +1,9 @@
-import { Client, Message } from 'discord.js';
+import { Message } from 'discord.js';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import * as Constant from '@/core/constants/index.constant';
 import { PlayerService } from '@/core/services/music/player-service.service';
 
-const handleYoutubeLink = async (msg: Message, client: Client) => {
+const handleYoutubeLink = async (msg: Message) => {
   const query = MusicAreas.where({ textChannelId: msg.channel.id });
   const musicAreaChannel = await query.findOne();
 
@@ -11,7 +11,7 @@ const handleYoutubeLink = async (msg: Message, client: Client) => {
   const input = msg.content;
   const processingMsg = await msg.channel.send(Constant.Messages.processing);
   try {
-    await new PlayerService(msg, client).startPlay(input);
+    await new PlayerService(msg).startPlay(input);
   } catch (e) {
     console.log(e);
     await msg.channel.send(Constant.Messages.error);

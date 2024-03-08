@@ -1,10 +1,9 @@
 import { BuilderID, Messages, players } from '@/core/constants/index.constant';
-import { Client } from 'discord.js';
 import { AudioPlayerStatus } from '@discordjs/voice';
 
 export default {
   customId: BuilderID.pauseResume,
-  execute: async (interaction: any, client: Client) => {
+  execute: async (interaction: any) => {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string);

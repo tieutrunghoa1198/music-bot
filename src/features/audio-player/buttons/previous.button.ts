@@ -1,4 +1,3 @@
-import { Client } from 'discord.js';
 import { Player } from '@/core/models/player.model';
 import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import {
@@ -14,7 +13,7 @@ import {
 
 export default {
   customId: 'prev',
-  execute: async (interaction: any, client: Client) => {
+  execute: async (interaction: any) => {
     const player = players.get(interaction.guildId as string) as Player;
 
     if (!player) {

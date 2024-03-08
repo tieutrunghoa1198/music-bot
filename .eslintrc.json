@@ -21,12 +21,11 @@
     "no-unsafe-optional-chaining": 1,
     "@typescript-eslint/no-empty-function": 1,
     "@typescript-eslint/no-unused-vars": 1,
-    "@typescript-eslint/no-explicit-any": 1,
+    "@typescript-eslint/no-explicit-any": 0,
     "no-useless-escape": 0,
     "no-case-declarations": 1
   },
   "env": {
-    "browser": true,
     "node": true
   }
 }
