@@ -1,8 +1,8 @@
-import { Player } from '@/core/models/player.model';
 import { formatSeconds } from '@/core/utils/format-time.util';
 import { AudioPlayerStatus } from '@discordjs/voice';
 import { createPlayMessage } from '@/core/views/embed-messages/play.embed';
 import * as Constant from '@/core/constants/index.constant';
+import { Messages, players } from '@/core/constants/index.constant';
 import { INotification } from '../../interfaces/notification.interface';
 import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
@@ -18,19 +18,18 @@ export class MessageNotification implements INotification {
     return MessageNotification.instance;
   }
 
-  public async showNowPlaying(player: Player, userInteraction: any) {
-    const song = player.playing?.song;
-    const guildName = userInteraction.member?.guild.name as string;
-    const icon = userInteraction.member?.guild.iconURL() as string;
-    const payload = {
-      title: song?.title || '',
-      author: song?.author || '',
-      thumbnail: song?.thumbnail || '',
-      length: formatSeconds(song?.length || 0),
-      platform: song?.platform || '',
-      guildName,
-      icon,
-    };
+  public async showNowPlaying(userInteraction: any) {
+    const player = players.get(userInteraction.guildId as string);
+    if (!player) {
+      await userInteraction.followUp(Messages.playerNotCreated);
+      return;
+    }
+
+    const payload = this.getNowPlayingPayload(
+      player.playing?.song,
+      userInteraction.member?.guild.name as string,
+      userInteraction.member?.guild.iconURL() as string,
+    );
 
     if (
       player?.audioPlayer.state.status === AudioPlayerStatus.Playing &&
@@ -47,7 +46,13 @@ export class MessageNotification implements INotification {
     });
   }
 
-  public async showQueue(player: Player, userInteraction: any) {
+  public async showQueue(userInteraction: any) {
+    const player = players.get(userInteraction.guildId as string);
+    if (!player) {
+      await userInteraction.followUp(Messages.playerNotCreated);
+      return;
+    }
+
     await userInteraction.channel.send({
       embeds: [
         createPlayMessage(
@@ -72,12 +77,16 @@ export class MessageNotification implements INotification {
     );
   }
 
-  private getNowPlayingPayload(song: Song, guildName: string, icon: string) {
+  private getNowPlayingPayload(
+    song: Song | undefined,
+    guildName: string,
+    icon: string,
+  ) {
     return {
       title: song?.title || 'Unknown',
       author: song?.author || 'Unknown',
       thumbnail: song?.thumbnail || 'Unknown',
-      length: formatSeconds(song?.length) || 'Unknown',
+      length: formatSeconds(song?.length || 0) || 'Unknown',
       platform: song?.platform || 'Unknown',
       guildName,
       requester: 'Unknown',

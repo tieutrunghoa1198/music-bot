@@ -2,12 +2,23 @@ import { YoutubeService } from '@/core/services/music/youtube.service';
 import { YouTubeVideo } from 'play-dl';
 import { limitString } from '@/core/utils/common.util';
 import { PlayerService } from '@/core/services/music/player-service.service';
-import { Messages } from '@/core/constants/index.constant';
-import { COMMAND_MUSIC } from '@/core/commands/music.command';
+import { Messages, MusicCommands } from '@/core/constants/index.constant';
+import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export default {
-  hasAutoComplete: COMMAND_MUSIC.play.hasAutoComplete,
-  data: COMMAND_MUSIC.play.data,
+export const playCommand: ICommand = {
+  hasAutoComplete: true,
+  data: new SlashCommandBuilder()
+    .setName(MusicCommands.play.name)
+    .setDescription(MusicCommands.play.description)
+    .setDMPermission(false)
+    .addStringOption((option) =>
+      option
+        .setName('input')
+        .setDescription('Link to be played')
+        .setRequired(true)
+        .setAutocomplete(true),
+    ),
   async execute(interaction: any) {
     await interaction.deferReply();
 

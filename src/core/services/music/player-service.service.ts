@@ -72,11 +72,9 @@ export class PlayerService {
 
     listSong.length === 1
       ? NotificationFactory.notifier(this.userInputType).showNowPlaying(
-          this.player,
           this.interactionObj,
         )
       : NotificationFactory.notifier(this.userInputType).showQueue(
-          this.player,
           this.interactionObj,
         );
   }

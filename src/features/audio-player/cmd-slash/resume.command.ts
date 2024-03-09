@@ -1,9 +1,17 @@
 import { AudioPlayerStatus } from '@discordjs/voice';
-import { Messages, players } from '@/core/constants/index.constant';
-import { COMMAND_MUSIC } from '@/core/commands/music.command';
+import {
+  Messages,
+  MusicCommands,
+  players,
+} from '@/core/constants/index.constant';
+import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export default {
-  data: COMMAND_MUSIC.resume.data,
+export const resumeCommand: ICommand = {
+  data: new SlashCommandBuilder()
+    .setName(MusicCommands.resume.name)
+    .setDescription(MusicCommands.resume.description)
+    .setDMPermission(false),
   async execute(interaction: any) {
     await interaction.deferReply();
 

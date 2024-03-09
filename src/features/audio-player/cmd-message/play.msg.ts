@@ -23,6 +23,7 @@ const handleYoutubeLink = async (msg: Message) => {
     }
   }
 };
+
 const voiceCondition = async (
   msg: any,
   musicAreaChannel: any,

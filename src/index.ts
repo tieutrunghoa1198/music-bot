@@ -1,5 +1,5 @@
 require('module-alias/register');
-import { Bot } from './bot-client';
+import { Bot } from './bot-application';
 
 Bot.getInstance().start();
 process.on('uncaughtException', function (err) {

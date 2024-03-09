@@ -11,10 +11,12 @@ import {
   VoiceConnectionStatus,
 } from '@discordjs/voice';
 import play from 'play-dl';
-import { Client } from 'discord.js';
+import { Client, TextChannel } from 'discord.js';
 import { IPlayer, QueueItem } from '@/core/interfaces/player.interface';
 import { players } from '@/core/constants/common.constant';
 import { logger } from '@/core/utils/logger.util';
+import { MusicAreas } from '@/core/mongodb/music-area.model';
+import { Messages } from '@/core/constants/messages.constant';
 
 export class Player implements IPlayer {
   public guildId: string;
@@ -132,7 +134,7 @@ export class Player implements IPlayer {
           oldState.status !== AudioPlayerStatus.Idle
         ) {
           await this.play(); // if stay here means play next song
-          this.client.emit('nextSong', {
+          await this.onNextSong({
             nextSong: this.playing as QueueItem,
             guildId: this.guildId,
           });
@@ -154,6 +156,34 @@ export class Player implements IPlayer {
   }
 
   // -----------------------------
+
+  async onNextSong(payload: any) {
+    const guildId = payload.guildId;
+    if (!payload.nextSong?.song) return;
+
+    try {
+      const query = MusicAreas.where({ guildId: guildId });
+      const musicAreaChannel = await query.findOne();
+      if (musicAreaChannel === null || musicAreaChannel === undefined) {
+        console.log('not found music area in this guild');
+        return;
+      }
+      const { textChannelId } = musicAreaChannel;
+      if (textChannelId !== '' && textChannelId) {
+        const textChannel = this.client.channels.cache.get(
+          textChannelId,
+        ) as TextChannel;
+        await textChannel.send(
+          Messages.skippedSong({
+            title: payload.nextSong.song.title,
+            requester: payload.nextSong.requester,
+          }),
+        );
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   public async addSong(queueItems: QueueItem[]) {
     this.queue = this.queue.concat(queueItems);

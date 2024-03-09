@@ -1,10 +1,18 @@
 import { AudioPlayerStatus } from '@discordjs/voice';
 import { NotificationService } from '@/core/services/noti/notification';
-import { Messages, players } from '@/core/constants/index.constant';
-import { COMMAND_MUSIC } from '@/core/commands/music.command';
+import {
+  Messages,
+  MusicCommands,
+  players,
+} from '@/core/constants/index.constant';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { ICommand } from '@/features/audio-player/interfaces/command.interface';
 
-export default {
-  data: COMMAND_MUSIC.nowPlaying.data,
+export const nowPlayingCommand: ICommand = {
+  data: new SlashCommandBuilder()
+    .setName(MusicCommands.nowPlaying.name)
+    .setDescription(MusicCommands.nowPlaying.description)
+    .setDMPermission(false),
   async execute(interaction: any) {
     await interaction.deferReply();
 

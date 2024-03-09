@@ -1,5 +1,5 @@
 import { BuilderID } from '@/core/constants/index.constant';
-import leaveCommand from '@/features/audio-player/cmd-slash/leave.command';
+import { leaveCommand } from '@/features/audio-player/cmd-slash/leave.command';
 
 export default {
   customId: BuilderID.removeAudio,

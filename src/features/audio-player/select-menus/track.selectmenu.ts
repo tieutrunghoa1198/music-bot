@@ -1,12 +1,14 @@
-import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
-import { InteractionNotification } from '@/core/services/noti/interaction-notification';
+import { Player } from '@/core/models/player.model';
 import { QueueItem } from '@/core/interfaces/player.interface';
+import { InteractionNotification } from '@/core/services/noti/interaction-notification';
 
-export default {
+export const trackSelectMenu = {
   customId: Constant.BuilderID.trackSelectMenu,
   execute: async (interaction: any) => {
+    await interaction.deferReply();
+
     const player = players.get(interaction.guildId) as Player;
     if (!player) {
       await interaction.followUp(Constant.Messages.joinVoiceChannel);
@@ -24,10 +26,7 @@ export default {
           await interaction.followUp(Constant.Messages.cantFindAnyThing);
           return;
         }
-        await InteractionNotification.getInstance().showNowPlaying(
-          player,
-          interaction,
-        );
+        await InteractionNotification.getInstance().showNowPlaying(interaction);
         return;
       }
       const nowPlaying = (await player.skipByTitle(
@@ -37,10 +36,7 @@ export default {
         await interaction.followUp(Constant.Messages.cantFindAnyThing);
         return;
       }
-      await InteractionNotification.getInstance().showNowPlaying(
-        player,
-        interaction,
-      );
+      await InteractionNotification.getInstance().showNowPlaying(interaction);
     } else {
       await interaction.followUp(Constant.Messages.emptyQueue);
     }

@@ -1,6 +1,6 @@
-import skipCommand from '@/features/audio-player/cmd-slash/skip.command';
 import { BuilderID } from '@/core/constants/music-commands.constant';
 import { logger } from '@/core/utils/logger.util';
+import { skipCommand } from '@/features/audio-player/cmd-slash/skip.command';
 
 export default {
   customId: BuilderID.nextSong,

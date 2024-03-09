@@ -1,8 +1,26 @@
-import { Messages, players } from '@/core/constants/index.constant';
-import { COMMAND_MUSIC } from '@/core/commands/music.command';
+import {
+  Messages,
+  MusicCommands,
+  players,
+} from '@/core/constants/index.constant';
+import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export default {
-  data: COMMAND_MUSIC.replay.data,
+export const replayCommand: ICommand = {
+  data: new SlashCommandBuilder()
+    .setName(MusicCommands.replay.name)
+    .setDescription(MusicCommands.replay.description)
+    .setDMPermission(false)
+    .addStringOption((option) =>
+      option
+        .setName('replay')
+        .setDescription('on/off')
+        .setRequired(true)
+        .addChoices(
+          { name: 'Bật', value: 'true' },
+          { name: 'Tắt', value: 'false' },
+        ),
+    ),
   async execute(interaction: any) {
     await interaction.deferReply();
 
