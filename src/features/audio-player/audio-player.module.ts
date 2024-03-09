@@ -1,18 +1,20 @@
 import { botClient } from '@/bot-client';
 import { Message } from 'discord.js';
-import { handleAudioButtons } from '@/features/audio-player/handle-audio-buttons';
 import MessageMusicController from '@/features/audio-player/cmd-message/play.msg';
 import { ephemeralResponse } from '@/core/utils/common.util';
 import * as Constant from '@/core/constants/index.constant';
+import { Messages } from '@/core/constants/index.constant';
 import { SELECT_MENU_AUDIO_PLAYER_MAP } from '@/features/audio-player/constants/map.constant';
 import { MUSIC_COMMAND_MAP } from '@/core/commands/music.command';
+import { DeployCommands } from '@/core/utils/deploy-commands.util';
+import { FOLDER_FEATURE_NAME } from '@/features/audio-player/constants/common.constant';
 
 export const AudioPlayerModule = () => {
   botClient.on('messageCreate', async (message: Message) => {
     await MessageMusicController.handleLink(message);
   });
 
-  // require join voice
+  // require join voice features
   botClient.on('interactionCreate', async (interaction: any) => {
     const isUserInVoiceChannel = interaction.member.voice.channel;
     if (!isUserInVoiceChannel) {
@@ -41,7 +43,22 @@ export const AudioPlayerModule = () => {
         break;
 
       case interaction.isButton():
-        await handleAudioButtons(interaction);
+        try {
+          const myButtons = DeployCommands.extractCommands(
+            __dirname,
+            '.button',
+            [FOLDER_FEATURE_NAME.BUTTONS],
+          );
+          if (!myButtons.length) throw new Error();
+          for (const button of myButtons) {
+            if (button.customId === interaction.customId) {
+              await button.execute(interaction, botClient);
+            }
+          }
+        } catch (e: any) {
+          console.log(e, 'mvc Button error');
+          await interaction.followUp(Messages.error + 'mvc Button error');
+        }
         break;
     }
   });
