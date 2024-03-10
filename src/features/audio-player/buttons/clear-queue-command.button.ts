@@ -6,7 +6,6 @@ import { IButtonCommand } from '@/core/interfaces/command.interface';
 export const clearQueueCommandButton: IButtonCommand = {
   customId: BuilderID.clearQueue,
   execute: async (interaction: any) => {
-    await interaction.deferReply();
     clearQueueCommand
         .execute(interaction)
         .catch(async (e) => {
