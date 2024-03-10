@@ -1,4 +1,3 @@
-import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
@@ -13,7 +12,7 @@ export const statusCommand: ISlashCommand = {
 
     const player = players.get(interaction.guildId as string);
     if (!player) {
-      await interaction.followUp(Constant.Messages.error);
+      await interaction.followUp('Player chưa được khởi tạo');
       return;
     }
 

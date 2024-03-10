@@ -3,6 +3,7 @@ import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ExpCommands } from '@/core/constants/music-commands.constant';
 import { botClient } from '@/bot-client';
+import { logger } from '@/core/utils/logger.util';
 
 export const cleanMessageCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
@@ -30,7 +31,7 @@ export const cleanMessageCommand: ISlashCommand = {
         const twoHoursInMsc = 1000 * 60 * 60 * 2;
         if (currentDate - twoHoursInMsc < message.createdTimestamp) {
           message.delete().catch((err: any) => {
-            console.log('[ERROR] clean unknown msg' + err);
+            logger.error('[ERROR] clean unknown msg' + err);
             return;
           });
         }

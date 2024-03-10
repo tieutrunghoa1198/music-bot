@@ -272,7 +272,6 @@ export class Player implements IPlayer {
     return {
       guildId: this.guildId,
       playing: this.playing,
-      queue: this.queue,
       isReplay: this._isReplay,
     };
   }

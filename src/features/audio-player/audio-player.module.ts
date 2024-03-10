@@ -30,7 +30,8 @@ export const AudioPlayerModule = () => {
     // ----------------------------
 
     const isUserInVoiceChannel = interaction.member.voice.channel;
-    if (!isUserInVoiceChannel) {
+    if (!isUserInVoiceChannel && audioPlayerSlashCommand) {
+      await interaction.deferReply();
       await ephemeralResponse(
         interaction,
         Constant.Messages.userJoinVoiceChannel(interaction.user.toString()),

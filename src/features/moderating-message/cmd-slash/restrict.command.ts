@@ -23,7 +23,6 @@ export const restrictCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const selectedChannel = interaction.options;
-    console.log(selectedChannel);
 
     const foundChannel = await RestrictChannel.findOne({
       guildId: interaction.guildId,

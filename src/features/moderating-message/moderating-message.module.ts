@@ -10,7 +10,12 @@ export const ModeratingMessageModule = () => {
 
   botClient.on('interactionCreate', async (interaction: any) => {
     const command = MODERATING_MESSAGE_COMMAND_MAP.get(interaction.commandName);
-    if (command === undefined) return;
-    await command.execute(interaction);
+
+    switch (true) {
+      case interaction.isCommand():
+        if (command === undefined) return;
+        await command.execute(interaction);
+        break;
+    }
   });
 };
