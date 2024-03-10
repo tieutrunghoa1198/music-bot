@@ -7,6 +7,11 @@ export const clearQueueCommandButton: IButtonCommand = {
   customId: BuilderID.clearQueue,
   execute: async (interaction: any) => {
     await interaction.deferReply();
-    clearQueueCommand.execute(interaction).catch((e) => logger.error(e));
+    clearQueueCommand
+        .execute(interaction)
+        .catch(async (e) => {
+          logger.error('clearQueueCommandButton.execute() | ', e);
+          await interaction.followUp('Tin nhắn cũ, vui lòng thử lại với /dangphat hoặc /danhsach');
+        });
   },
 };
