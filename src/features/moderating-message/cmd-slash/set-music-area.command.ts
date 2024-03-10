@@ -2,10 +2,14 @@ import { Player } from '@/core/models/player.model';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
-import { COMMAND_MODERATING_MESSAGE } from '@/core/commands/moderating-message.command';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export default {
-  data: COMMAND_MODERATING_MESSAGE.musicArea.data,
+export const setMusicAreaCommand: ISlashCommand = {
+  data: new SlashCommandBuilder()
+    .setName(Constant.ExpCommands.setMusicArea.name)
+    .setDescription(Constant.ExpCommands.setMusicArea.description)
+    .setDMPermission(false),
   async execute(interaction: any) {
     await interaction.deferReply();
 

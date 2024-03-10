@@ -3,10 +3,10 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
-import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const clearQueueCommand: ICommand = {
+export const clearQueueCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
     .setName(MusicCommands.clear.name)
     .setDescription(MusicCommands.clear.description)

@@ -3,10 +3,10 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
-import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const replayCommand: ICommand = {
+export const replayCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
     .setName(MusicCommands.replay.name)
     .setDescription(MusicCommands.replay.description)

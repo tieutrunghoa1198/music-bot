@@ -6,9 +6,9 @@ import {
   players,
 } from '@/core/constants/index.constant';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
 
-export const nowPlayingCommand: ICommand = {
+export const nowPlayingCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
     .setName(MusicCommands.nowPlaying.name)
     .setDescription(MusicCommands.nowPlaying.description)

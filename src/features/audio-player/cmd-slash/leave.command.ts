@@ -3,10 +3,10 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
-import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const leaveCommand: ICommand = {
+export const leaveCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
     .setName(MusicCommands.leave.name)
     .setDescription(MusicCommands.leave.description)

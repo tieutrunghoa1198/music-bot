@@ -3,8 +3,9 @@ import { players } from '@/core/constants/index.constant';
 import { Player } from '@/core/models/player.model';
 import { QueueItem } from '@/core/interfaces/player.interface';
 import { InteractionNotification } from '@/core/services/noti/interaction-notification';
+import { ISelectButtonCommand } from '@/core/interfaces/command.interface';
 
-export const trackSelectMenu = {
+export const trackSelectMenu: ISelectButtonCommand = {
   customId: Constant.BuilderID.trackSelectMenu,
   execute: async (interaction: any) => {
     await interaction.deferReply();

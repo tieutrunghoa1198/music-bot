@@ -1,7 +1,8 @@
 import { BuilderID } from '@/core/constants/index.constant';
 import { leaveCommand } from '@/features/audio-player/cmd-slash/leave.command';
+import { IButtonCommand } from '@/core/interfaces/command.interface';
 
-export default {
+export const removeAudioCommandButton: IButtonCommand = {
   customId: BuilderID.removeAudio,
   execute: async (interaction: any) => {
     const message = await interaction.channel.messages.fetch(

@@ -1,9 +1,24 @@
 import * as Constant from '@/core/constants/index.constant';
 import { RestrictChannel } from '@/core/mongodb/restrict.model';
-import { COMMAND_MODERATING_MESSAGE } from '@/core/commands/moderating-message.command';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
+import { SlashCommandBuilder } from '@discordjs/builders';
+import { ChannelType } from 'discord-api-types/v9';
 
-export default {
-  data: COMMAND_MODERATING_MESSAGE.restrict.data,
+export const restrictCommand: ISlashCommand = {
+  data: new SlashCommandBuilder()
+    .setName(Constant.ExpCommands.restrict.name)
+    .setDescription(Constant.ExpCommands.restrict.description)
+    .setDMPermission(false)
+    .addChannelOption((option) =>
+      option
+        .setName('channels')
+        .addChannelTypes(ChannelType.GuildText)
+        .setDescription('Kênh riêng tư')
+        .setRequired(true),
+    )
+    .addRoleOption((option) =>
+      option.setName('roles').setDescription('Role riêng tư').setRequired(true),
+    ),
   async execute(interaction: any) {
     await interaction.deferReply();
 

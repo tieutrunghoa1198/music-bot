@@ -3,10 +3,10 @@ import { YouTubeVideo } from 'play-dl';
 import { limitString } from '@/core/utils/common.util';
 import { PlayerService } from '@/core/services/music/player-service.service';
 import { Messages, MusicCommands } from '@/core/constants/index.constant';
-import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const playCommand: ICommand = {
+export const playCommand: ISlashCommand = {
   hasAutoComplete: true,
   data: new SlashCommandBuilder()
     .setName(MusicCommands.play.name)

@@ -1,8 +1,12 @@
 import PuppeteerIntercept from '@/core/services/others/puppeteer-intercept';
-import { COMMAND_MODERATING_MESSAGE } from '@/core/commands/moderating-message.command';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
+import { SlashCommandBuilder } from '@discordjs/builders';
 
-export default {
-  data: COMMAND_MODERATING_MESSAGE.test.data,
+export const testCommand: ISlashCommand = {
+  data: new SlashCommandBuilder()
+    .setName('test')
+    .setDescription('checking player status')
+    .setDMPermission(false),
   async execute(interaction: any) {
     await interaction.deferReply();
 

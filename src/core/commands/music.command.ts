@@ -21,5 +21,5 @@ export const MusicCommand = {
 };
 
 export const MUSIC_COMMAND_MAP = new Map(
-  Object.entries(MusicCommand).map(([key, value]) => [value.data.name, value]),
+  Object.entries(MusicCommand).map((value) => [value[1].data.name, value[1]]),
 );

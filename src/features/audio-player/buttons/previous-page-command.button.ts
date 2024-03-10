@@ -5,24 +5,28 @@ import {
   numberOfPageSelectMenu,
 } from '@/core/views/select-menu/selectMenu';
 import { generateButton } from '@/core/views/buttons';
-import { players } from '@/core/constants/common.constant';
-import { Messages } from '@/core/constants/messages.constant';
-import { PlayerQueue } from '@/core/constants/player-queue.constant';
+import {
+  Messages,
+  PlayerQueue,
+  players,
+} from '@/core/constants/index.constant';
+import { IButtonCommand } from '@/core/interfaces/command.interface';
 
-export default {
-  customId: 'next',
+export const previousPageCommandButton: IButtonCommand = {
+  customId: 'prev',
   execute: async (interaction: any) => {
-    await interaction.deferReply();
-
     const player = players.get(interaction.guildId as string) as Player;
+
     if (!player) {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
+
     if (!interaction.message.embeds[0].footer) {
       console.log('there is no footer');
       return;
     }
+
     try {
       const footer = interaction.message.embeds[0].footer;
       const currentPage = parseInt(
@@ -33,14 +37,14 @@ export default {
         footer.text.split(':')[1].trim().split('/')[1],
         10,
       );
-      const nextPage = currentPage + 1;
-      const msg = await paginationMsg(player, nextPage);
+      const prevPage = currentPage - 1;
+      const msg = await paginationMsg(player, prevPage);
 
       if (msg?.embedMessage === null || msg?.embedMessage === undefined) {
         return;
       }
 
-      const btn = await generateButton(nextPage, maxPage);
+      const btn = await generateButton(prevPage, maxPage);
       const message = await interaction.channel.messages.fetch(
         interaction.message.id,
       );
@@ -52,19 +56,19 @@ export default {
         }
       });
       interaction.followUp({
-        embeds: [msg.embedMessage],
+        embeds: [msg?.embedMessage],
         components: [
-          await createSelectedTracks(msg?.tracks),
+          await createSelectedTracks(msg.tracks),
           await numberOfPageSelectMenu(
             player.queue.length / PlayerQueue.MAX_PER_PAGE,
-            nextPage,
+            prevPage,
           ),
           btn,
         ],
       });
     } catch (e) {
-      console.log(e, 'next btn error');
-      await interaction.followUp('Max page!');
+      console.log(e, 'prev btn error');
+      await interaction.followUp('End of queue!');
     }
   },
 };

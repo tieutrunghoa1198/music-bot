@@ -1,6 +1,7 @@
 import { BuilderID, Messages, players } from '@/core/constants/index.constant';
+import { IButtonCommand } from '@/core/interfaces/command.interface';
 
-export default {
+export const repeatCommandButton: IButtonCommand = {
   customId: BuilderID.repeatSong,
   execute: async (interaction: any) => {
     await interaction.deferReply();

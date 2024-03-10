@@ -1,59 +1,20 @@
-import { SlashCommandBuilder } from '@discordjs/builders';
-import { ExpCommands } from '@/core/constants/music-commands.constant';
-import * as Constant from '@/core/constants/index.constant';
-import { ChannelType } from 'discord-api-types/v9';
+import { cleanMessageCommand } from '@/features/moderating-message/cmd-slash/clean-message.command';
+import { restrictCommand } from '@/features/moderating-message/cmd-slash/restrict.command';
+import { setMusicAreaCommand } from '@/features/moderating-message/cmd-slash/set-music-area.command';
+import { statusCommand } from '@/features/moderating-message/cmd-slash/status.command';
+import { testCommand } from '@/features/moderating-message/cmd-slash/test.command';
 
-export const COMMAND_MODERATING_MESSAGE = {
-  cleanMessage: {
-    data: new SlashCommandBuilder()
-      .setName(ExpCommands.cleanMessage.name)
-      .setDescription(ExpCommands.cleanMessage.description)
-      .setDMPermission(false)
-      .toJSON(),
-  },
-
-  restrict: {
-    data: new SlashCommandBuilder()
-      .setName(Constant.ExpCommands.restrict.name)
-      .setDescription(Constant.ExpCommands.restrict.description)
-      .setDMPermission(false)
-      .addChannelOption((option) =>
-        option
-          .setName('channels')
-          .addChannelTypes(ChannelType.GuildText)
-          .setDescription('Kênh riêng tư')
-          .setRequired(true),
-      )
-      .addRoleOption((option) =>
-        option
-          .setName('roles')
-          .setDescription('Role riêng tư')
-          .setRequired(true),
-      )
-      .toJSON(),
-  },
-
-  musicArea: {
-    data: new SlashCommandBuilder()
-      .setName(Constant.ExpCommands.setMusicArea.name)
-      .setDescription(Constant.ExpCommands.setMusicArea.description)
-      .setDMPermission(false)
-      .toJSON(),
-  },
-
-  status: {
-    data: new SlashCommandBuilder()
-      .setName('status')
-      .setDescription('checking player status')
-      .setDMPermission(false)
-      .toJSON(),
-  },
-
-  test: {
-    data: new SlashCommandBuilder()
-      .setName('test')
-      .setDescription('checking player status')
-      .setDMPermission(false)
-      .toJSON(),
-  },
+export const ModeratingMessageCommand = {
+  cleanMessageCommand,
+  restrictCommand,
+  setMusicAreaCommand,
+  statusCommand,
+  testCommand,
 };
+
+export const MODERATING_MESSAGE_COMMAND_MAP = new Map(
+  Object.entries(ModeratingMessageCommand).map((value) => [
+    value[1].data.name,
+    value[1],
+  ]),
+);

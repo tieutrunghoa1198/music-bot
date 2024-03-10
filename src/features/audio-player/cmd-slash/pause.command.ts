@@ -4,10 +4,10 @@ import {
   MusicCommands,
   players,
 } from '@/core/constants/index.constant';
-import { ICommand } from '@/features/audio-player/interfaces/command.interface';
+import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-export const pauseCommand: ICommand = {
+export const pauseCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
     .setName(MusicCommands.pause.name)
     .setDescription(MusicCommands.pause.description)

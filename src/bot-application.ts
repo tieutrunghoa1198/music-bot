@@ -13,8 +13,6 @@ export class Bot {
 
   //-------------------------------------------
 
-  private constructor() {}
-
   public static getInstance(): Bot {
     if (!Bot.instance) Bot.instance = new Bot();
 
@@ -36,7 +34,7 @@ export class Bot {
     this.bootstrap();
   }
 
-  bootstrap() {
+  private bootstrap() {
     ModeratingMessageModule();
     AudioPlayerModule();
   }

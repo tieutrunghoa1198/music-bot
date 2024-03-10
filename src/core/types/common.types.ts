@@ -30,8 +30,8 @@ export type GetArrayObjectType<T> = T extends Array<infer U> ? U : never;
 export type GetReadonlyArrayObjectType<T> =
   T extends ReadonlyArray<infer U> ? U : never;
 //  Return the type of NON-EMPTY items in a constant ReadonlyArray
-export type GetReadonlyArrayNonEmptyObjectType<T> =
-  T extends ReadonlyArrayNonEmpty<infer U & { 0: infer X }> ? U : never;
+// export type GetReadonlyArrayNonEmptyObjectType<T> =
+//   T extends ReadonlyArrayNonEmpty<infer U & { 0: infer X }> ? U : never;
 
 //  Return the properties value of a constant
 export type ExtractPropertiesFromObjectKeys<T> = keyof T[keyof T];

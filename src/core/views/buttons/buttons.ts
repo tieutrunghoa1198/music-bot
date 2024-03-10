@@ -3,9 +3,9 @@ import {
   MessageButton,
   MessageButtonStyleResolvable,
 } from 'discord.js';
-import PreviousButton from '@/features/audio-player/buttons/previous.button';
-import NextButton from '@/features/audio-player/buttons/next.button';
 import { MessageButtonStyles } from 'discord.js/typings/enums';
+import { previousPageCommandButton } from '@/features/audio-player/buttons/previous-page-command.button';
+import { nextPageCommandButton } from '@/features/audio-player/buttons/next-page-command.button';
 
 export const generateButton = (
   currentPage: number,
@@ -21,13 +21,13 @@ export const generateButton = (
   }
 
   const prevButton = CreateButton(
-    PreviousButton.customId,
+    previousPageCommandButton.customId,
     '← Trang Trước',
     MessageButtonStyles.PRIMARY,
     isPrevDisable,
   );
   const nextButton = CreateButton(
-    NextButton.customId,
+    nextPageCommandButton.customId,
     'Trang Sau →',
     MessageButtonStyles.PRIMARY,
     isNextDisable,

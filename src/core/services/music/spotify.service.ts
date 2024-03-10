@@ -1,9 +1,4 @@
-import play, {
-  SoundCloudTrack,
-  SpotifyPlaylist,
-  SpotifyTrack,
-  YouTubeVideo,
-} from 'play-dl';
+import play, { SoundCloudTrack, SpotifyTrack, YouTubeVideo } from 'play-dl';
 import { Platform, Song } from '@/core/types/song.type';
 import { exactMatch } from '@/core/utils/common.util';
 
@@ -56,19 +51,5 @@ export class SpotifyService {
           platform: Platform.SOUND_CLOUD,
         };
       });
-  }
-  public static async getUrlInfo(url: string) {
-    let track = await play.spotify(url);
-    switch (track.type) {
-      case 'playlist':
-        track = track as SpotifyPlaylist;
-        const allTracks = await track.all_tracks();
-        const songs: Song[] = [];
-        for (track of allTracks) {
-          const song = await this.getTrackByYT(track.name);
-          songs.push(song);
-        }
-        return songs;
-    }
   }
 }

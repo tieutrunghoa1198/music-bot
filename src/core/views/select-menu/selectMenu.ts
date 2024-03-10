@@ -20,14 +20,12 @@ export const createSelectedTracks = (queueItems: QueueItem[]) => {
       // từ thằng thứ 2 trỏ đi check trùng hay không
       let duplicateTimes = 0;
       let newValue = '';
-      let lastIndex = 0;
       for (let i = 0; i < trackToDisplay.length; i++) {
         const condition = trackToDisplay[i].value.includes(
           songInQueue.song.title,
         );
         if (condition) {
           duplicateTimes++;
-          lastIndex = i;
         }
       }
       if (duplicateTimes == 0) {
