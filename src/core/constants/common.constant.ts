@@ -7,3 +7,6 @@ export const GlobalConstants = {
 } as const;
 
 export const players = new Map<Snowflake, Player>();
+
+export const EMPTY_STRING = '' as const;
+export const EMPTY_HYPHEN = '-' as const;

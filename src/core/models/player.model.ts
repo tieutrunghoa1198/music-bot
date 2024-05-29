@@ -17,7 +17,7 @@ import { players } from '@/core/constants/common.constant';
 import { logger } from '@/core/utils/logger.util';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import { Messages } from '@/core/constants/messages.constant';
-import ytdl from "ytdl-core";
+import ytdl from 'ytdl-core';
 
 export class Player implements IPlayer {
   public guildId: string;
@@ -233,16 +233,18 @@ export class Player implements IPlayer {
     this.audioPlayer.unpause();
   }
 
-  public seek() {
+  public seek(second: number | null) {
     if (!this.playing) return;
-    const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-    const ffmpeg = require('fluent-ffmpeg');
-    ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
-    console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3'));
-    console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100))
-    this.startAudioDirectly(
-        ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100)
-    );
+    if (isNaN(Number(second))) return;
+
+    // const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+    // const ffmpeg = require('fluent-ffmpeg');
+    // ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
+    // console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3'));
+    // console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100))
+    // this.startAudioDirectly(
+    //     ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100)
+    // );
   }
 
   public async play(): Promise<void> {
@@ -268,9 +270,7 @@ export class Player implements IPlayer {
 
   private startAudioDirectly(stream: any) {
     try {
-      this.audioPlayer.play(
-          createAudioResource(stream),
-      );
+      this.audioPlayer.play(createAudioResource(stream));
     } catch (err) {
       logger.error('stream type might not be correct', err);
     }

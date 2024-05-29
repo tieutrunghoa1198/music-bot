@@ -6,11 +6,11 @@ import { IButtonCommand } from '@/core/interfaces/command.interface';
 export const clearQueueCommandButton: IButtonCommand = {
   customId: BuilderID.clearQueue,
   execute: async (interaction: any) => {
-    clearQueueCommand
-        .execute(interaction)
-        .catch(async (e) => {
-          logger.error('clearQueueCommandButton.execute() | ', e);
-          await interaction.followUp('Tin nhắn cũ, vui lòng thử lại với /dangphat hoặc /danhsach');
-        });
+    clearQueueCommand.execute(interaction).catch(async (e) => {
+      logger.error('clearQueueCommandButton.execute() | ', e);
+      await interaction.followUp(
+        'Tin nhắn cũ, vui lòng thử lại với /dangphat hoặc /danhsach',
+      );
+    });
   },
 };

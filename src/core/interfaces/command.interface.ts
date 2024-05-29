@@ -1,4 +1,7 @@
-import { SlashCommandBuilder } from '@discordjs/builders/dist';
+import {
+  SlashCommandBuilder,
+  SlashCommandOptionsOnlyBuilder,
+} from '@discordjs/builders/dist';
 
 /**
  * @desc To handle command with many types of interaction (Interaction, Message,...)
@@ -24,6 +27,7 @@ export interface IComponentCommand extends IDiscordCommand {
  */
 export interface ISlashCommand extends IDiscordCommand {
   data:
+    | SlashCommandOptionsOnlyBuilder
     | SlashCommandBuilder
     | Omit<SlashCommandBuilder, 'addSubcommand' | 'addSubcommandGroup'>;
   hasAutoComplete?: boolean;

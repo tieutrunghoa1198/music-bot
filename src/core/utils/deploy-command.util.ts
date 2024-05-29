@@ -19,7 +19,7 @@ export const deployCommandUtil = () => {
 
   // ---------------------------------------------------
 
-  console.log(listCommand);
+  // console.log(listCommand);
 
   new REST({ version: '9' })
     .setToken(process.env.TOKEN as any)

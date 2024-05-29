@@ -1,6 +1,6 @@
 import { AudioPlayer, VoiceConnection } from '@discordjs/voice';
 import { Song } from '@/core/types/song.type';
-import {SoundCloudStream, YouTubeStream} from "play-dl";
+import { SoundCloudStream, YouTubeStream } from 'play-dl';
 
 export interface IPlayer {
   guildId: string;

@@ -6,11 +6,9 @@ import { IButtonCommand } from '@/core/interfaces/command.interface';
 export const nextSongCommandButton: IButtonCommand = {
   customId: BuilderID.nextSong,
   execute: async (interaction: any) => {
-    skipCommand
-        .execute(interaction)
-        .catch(async (e) => {
-          logger.error('nextSongCommandButton.execute() | ', e);
-          await interaction.followUp('Lỗi next bài');
-        });
+    skipCommand.execute(interaction).catch(async (e) => {
+      logger.error('nextSongCommandButton.execute() | ', e);
+      await interaction.followUp('Lỗi next bài');
+    });
   },
 };
