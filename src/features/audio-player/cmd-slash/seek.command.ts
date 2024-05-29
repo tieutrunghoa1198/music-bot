@@ -4,6 +4,8 @@ import {
   formatTimeInput,
   isValidTimeInput,
 } from '@/core/utils/format-time.util';
+import {players} from "@/core/constants/common.constant";
+import {Messages} from "@/core/constants/messages.constant";
 
 export const seekCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
@@ -22,22 +24,32 @@ export const seekCommand: ISlashCommand = {
 
     const second = formatTimeInput(interaction.options.getString('input'));
 
-    console.log(interaction.options.getString('input'), 'user input');
-    console.log(second, 'converted value');
+    await interaction.followUp(
+        `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
+    );
 
-    console.log(isValidTimeInput(interaction.options.getString('input')));
+    // if (!isValidTimeInput(interaction.options.getString('input'))) {
+    //   await interaction.followUp(
+    //       `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
+    //   );
+    //   return;
+    // }
 
-    // if (isNaN(Number(second))) return;
-    //
     // const player = players.get(interaction.guildId as string);
+    //
     // if (!player) {
     //   await interaction.followUp(Messages.joinVoiceChannel);
     //   return;
     // }
     //
+    // if (!isValidTimeInput(interaction.options.getString('input'))) {
+    //   await interaction.followUp(
+    //       `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
+    //   );
+    //   return;
+    // }
+    //
     // player.seek(formatTimeInput(interaction.options.getString('input')));
-    await interaction.followUp(
-      `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
-    );
+    // await interaction.followUp('cool');
   },
 };

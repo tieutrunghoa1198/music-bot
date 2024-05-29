@@ -32,7 +32,6 @@ export const formatTimeInput = (input: string): number | null => {
 };
 
 export const isValidTimeInput = (input: string): boolean => {
-  // case empty string, undefined, null
   if (!input) return false;
 
   // handle those cases are not include ':'
@@ -41,16 +40,35 @@ export const isValidTimeInput = (input: string): boolean => {
     (isNaN(Number(input)) || // is not a number and not include ':' -> reject
       (!isNaN(Number(input)) && Number(input) > 59) || // is number, not include ':' and greater than 59 seconds -> reject
       !Number.isInteger(input)) // input is not an integer
-  )
-    return false;
+  ) return false;
 
-  // this case make sure all number in dd::HH:mm:ss are all valid number
+  // this case make sure all number in dd::HH:mm:ss are all valid number (is integer number & must be a number)
   const isValidNumberArray = input.split(':').every(
     (item) =>
       !isNaN(Number(item === EMPTY_STRING ? EMPTY_HYPHEN : item)) && // make sure they are all number
       Number.isInteger(item === EMPTY_STRING ? EMPTY_HYPHEN : item), // make sure they are all integer
   );
-  if (input.includes(':') && !isValidNumberArray) return false;
+
+  const isValidTime = input
+      .split(':')
+      .reverse()
+      .every((item, index) => {
+        switch (index) {
+          case 0: // second
+          case 1: { // minute
+            return Number(item) < 60 // less than 60 seconds or minutes
+          }
+          case 2: { // hour
+            return Number(item) < 24 // less than 24 hours
+          }
+          case 3: { // day
+            return Number(item) < 31 // less than 31 days
+          }
+        }
+      })
+  ;
+
+  if (input.includes(':') && !isValidNumberArray && !isValidTime) return false;
 
   return true;
 };
