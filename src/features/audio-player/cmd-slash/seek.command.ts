@@ -35,21 +35,21 @@ export const seekCommand: ISlashCommand = {
     //   return;
     // }
 
-    // const player = players.get(interaction.guildId as string);
-    //
-    // if (!player) {
-    //   await interaction.followUp(Messages.joinVoiceChannel);
-    //   return;
-    // }
-    //
-    // if (!isValidTimeInput(interaction.options.getString('input'))) {
-    //   await interaction.followUp(
-    //       `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
-    //   );
-    //   return;
-    // }
-    //
-    // player.seek(formatTimeInput(interaction.options.getString('input')));
-    // await interaction.followUp('cool');
+    const player = players.get(interaction.guildId as string);
+
+    if (!player) {
+      await interaction.followUp(Messages.joinVoiceChannel);
+      return;
+    }
+
+    if (!isValidTimeInput(interaction.options.getString('input'))) {
+      await interaction.followUp(
+          `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
+      );
+      return;
+    }
+
+    player.seek(formatTimeInput(interaction.options.getString('input')));
+    await interaction.followUp('cool');
   },
 };

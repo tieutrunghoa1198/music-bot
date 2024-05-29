@@ -238,13 +238,22 @@ export class Player implements IPlayer {
     if (isNaN(Number(second))) return;
 
     // const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-    // const ffmpeg = require('fluent-ffmpeg');
-    // ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
-    // console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3'));
-    // console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100))
-    // this.startAudioDirectly(
-    //     ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100)
-    // );
+    const ffmpeg = require('fluent-ffmpeg');
+    ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
+    const newSource = this.playing.stream;
+
+    // todo: problem -> không thể phát nhạc lần t2 do stream object bị lỗi (có thể do buffered property bị null ở đầu sau khi dự đoán -> chưa chắc chắn)
+    // không thể phát đc track dài 1 tiếng (chưa rõ nguyên nhân)
+    // solution -> xác định định dạng file cần sử dụng -> đảm bảo ổn định
+    // nếu có thể convert sang blob object hoặc mp3 sau đó lưu vào biến, (kiểm tra tính khả thi của việc lưu mp3 vào 1 biến và sử dụng lại)
+    console.log(newSource, 'this stream');
+    console.log(this.playing.song.url, 'url');
+    const ytdl = require('ytdl-core');
+    this.startAudioDirectly(
+        ffmpeg({source: ytdl(this.playing.song.url)}).toFormat('mp3').setStartTime(second)
+    );
+
+    console.log(' \n continue here  \n');
   }
 
   public async play(): Promise<void> {
