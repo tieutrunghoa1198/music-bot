@@ -19,6 +19,8 @@ export const deployCommandUtil = () => {
 
   // ---------------------------------------------------
 
+  console.log(listCommand);
+
   new REST({ version: '9' })
     .setToken(process.env.TOKEN as any)
     .put(Routes.applicationCommands(process.env.clientId as any), {

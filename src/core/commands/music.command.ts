@@ -7,6 +7,7 @@ import { replayCommand } from '@/features/audio-player/cmd-slash/replay.command'
 import { resumeCommand } from '@/features/audio-player/cmd-slash/resume.command';
 import { showListCommand } from '@/features/audio-player/cmd-slash/show-list.command';
 import { skipCommand } from '@/features/audio-player/cmd-slash/skip.command';
+import {seekCommand} from "@/features/audio-player/cmd-slash/seek.command";
 
 export const MusicCommand = {
   clearQueueCommand,
@@ -18,6 +19,7 @@ export const MusicCommand = {
   resumeCommand,
   showListCommand,
   skipCommand,
+  seekCommand
 };
 
 export const MUSIC_COMMAND_MAP = new Map(

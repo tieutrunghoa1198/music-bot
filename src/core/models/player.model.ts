@@ -17,6 +17,7 @@ import { players } from '@/core/constants/common.constant';
 import { logger } from '@/core/utils/logger.util';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import { Messages } from '@/core/constants/messages.constant';
+import ytdl from "ytdl-core";
 
 export class Player implements IPlayer {
   public guildId: string;
@@ -232,6 +233,18 @@ export class Player implements IPlayer {
     this.audioPlayer.unpause();
   }
 
+  public seek() {
+    if (!this.playing) return;
+    const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+    const ffmpeg = require('fluent-ffmpeg');
+    ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
+    console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3'));
+    console.log(ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100))
+    this.startAudioDirectly(
+        ffmpeg({source: this.playing.stream}).toFormat('mp3').setStartTime(100)
+    );
+  }
+
   public async play(): Promise<void> {
     if (this._isReplay) {
       await this.startAudio(this.playing?.song.url as string);
@@ -253,9 +266,24 @@ export class Player implements IPlayer {
 
   // ===============================================
 
+  private startAudioDirectly(stream: any) {
+    try {
+      this.audioPlayer.play(
+          createAudioResource(stream),
+      );
+    } catch (err) {
+      logger.error('stream type might not be correct', err);
+    }
+  }
+
   private async startAudio(songUrl: string): Promise<void> {
     try {
       const source = await play.stream(songUrl);
+      // const ytdlStream = ytdl(songUrl);
+      const ytdl = require('ytdl-core');
+      console.log(ytdl(songUrl));
+      if (this.playing) this.playing.stream = ytdl(songUrl);
+
       this.audioPlayer.play(
         createAudioResource(source.stream, {
           inputType: source.type,
