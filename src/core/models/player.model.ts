@@ -17,7 +17,7 @@ import { players } from '@/core/constants/common.constant';
 import { logger } from '@/core/utils/logger.util';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import { Messages } from '@/core/constants/messages.constant';
-import ytdl from 'ytdl-core';
+import PuppeteerIntercept from "@/core/services/others/puppeteer-intercept";
 
 export class Player implements IPlayer {
   public guildId: string;
@@ -25,6 +25,9 @@ export class Player implements IPlayer {
   public queue: QueueItem[];
   public readonly voiceConnection: VoiceConnection;
   public readonly audioPlayer: AudioPlayer;
+
+  private _hasError: boolean = false;
+  private _shiftedSong: any;
   private client: Client;
   private _isReplay: boolean = false;
 
@@ -262,10 +265,16 @@ export class Player implements IPlayer {
       return; // avoid checking 2 options below
     }
 
-    if (this.queue.length > 0) {
+    if (this.queue.length > 0 && !this._hasError) {
       this.playing = this.queue.shift() as QueueItem;
+      this._shiftedSong = this.playing;
       await this.startAudio(this.playing?.song.url as string);
       return; // because this.queue.shift() so the queue is empty, this will cause this.queue.length === 0
+    }
+
+    if (this._shiftedSong && this._hasError) {
+      await this.startAudio(this._shiftedSong.song.url as string);
+      return;
     }
 
     if (this.queue.length === 0) {
@@ -288,11 +297,8 @@ export class Player implements IPlayer {
   private async startAudio(songUrl: string): Promise<void> {
     try {
       const source = await play.stream(songUrl);
-      // const ytdlStream = ytdl(songUrl);
-      const ytdl = require('ytdl-core');
-      console.log(ytdl(songUrl));
-      if (this.playing) this.playing.stream = ytdl(songUrl);
-
+      this._hasError = false;
+      this._shiftedSong = undefined;
       this.audioPlayer.play(
         createAudioResource(source.stream, {
           inputType: source.type,
@@ -300,7 +306,9 @@ export class Player implements IPlayer {
       );
     } catch (e: any) {
       // If there is any problem with player, then play the next song in queue
+      this._hasError = true;
       logger.error('Error: player.model.ts', e);
+      PuppeteerIntercept.setSoundCloudToken().then().catch((err) => console.log(err));
       await this.play();
     }
   }

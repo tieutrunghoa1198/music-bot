@@ -31,7 +31,7 @@
     "mongoose": "7.3.3",
     "numeral": "^2.0.6",
     "play-dl": "^1.9.7",
-    "puppeteer": "^21.0.3",
+    "puppeteer": "20.8.1",
     "puppeteer-interceptor": "^2.2.0",
     "rxjs": "^7.8.1",
     "scdl-core": "^1.1.0",
