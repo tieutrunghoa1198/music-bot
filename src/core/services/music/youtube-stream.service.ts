@@ -12,7 +12,11 @@ export class YoutubeStream implements IStream {
     }
 
     async getStream(url: string) {
-        return ytdl(url, { filter: 'audioonly' });
+        return ytdl(url, {
+            filter: 'audioonly',
+            liveBuffer: 2000,
+            highWaterMark: 1 << 25,
+        });
     }
 
 }
