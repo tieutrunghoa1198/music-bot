@@ -10,7 +10,6 @@ import {
   VoiceConnectionState,
   VoiceConnectionStatus,
 } from '@discordjs/voice';
-import play from 'play-dl';
 import { Client, TextChannel } from 'discord.js';
 import { IPlayer, QueueItem } from '@/core/interfaces/player.interface';
 import { players } from '@/core/constants/common.constant';
@@ -18,6 +17,8 @@ import { logger } from '@/core/utils/logger.util';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import { Messages } from '@/core/constants/messages.constant';
 import PuppeteerIntercept from "@/core/services/others/puppeteer-intercept";
+import {StreamFactory} from "@/core/models/stream-factory.model";
+import {classifyUrl} from "@/core/utils/common.util";
 
 export class Player implements IPlayer {
   public guildId: string;
@@ -296,19 +297,29 @@ export class Player implements IPlayer {
 
   private async startAudio(songUrl: string): Promise<void> {
     try {
-      const source = await play.stream(songUrl);
+      const songType = classifyUrl(songUrl);
+      const sourceStream = new StreamFactory(songType);
+      const audioResource = await sourceStream.stream.getAudioResource(songUrl);
+
       this._hasError = false;
       this._shiftedSong = undefined;
-      this.audioPlayer.play(
-        createAudioResource(source.stream, {
-          inputType: source.type,
-        }),
-      );
+      this.audioPlayer.play(audioResource);
     } catch (e: any) {
       // If there is any problem with player, then play the next song in queue
-      this._hasError = true;
       logger.error('Error: player.model.ts', e);
-      PuppeteerIntercept.setSoundCloudToken().then().catch((err) => console.log(err));
+
+      if (e?.message?.includes('Method not implemented')) {
+        await this.play();
+        return;
+      }
+
+      if (e?.message?.includes('401')) {
+        this._hasError = true;
+        PuppeteerIntercept.setSoundCloudToken().then().catch((err) => console.log(err));
+        await this.play();
+        return;
+      }
+
       await this.play();
     }
   }
