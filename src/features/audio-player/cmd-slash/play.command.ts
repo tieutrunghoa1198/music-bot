@@ -5,6 +5,7 @@ import { PlayerService } from '@/core/services/music/player-service.service';
 import { Messages, MusicCommands } from '@/core/constants/index.constant';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
+import {logger} from "@/core/utils/logger.util";
 
 export const playCommand: ISlashCommand = {
   hasAutoComplete: true,
@@ -31,7 +32,7 @@ export const playCommand: ISlashCommand = {
     try {
       await new PlayerService(interaction).startPlay(input);
     } catch (e) {
-      console.log(e);
+      logger.error(e);
       await interaction.followUp(Messages.error);
     } finally {
       interaction.deletable && (await interaction.deleteReply());

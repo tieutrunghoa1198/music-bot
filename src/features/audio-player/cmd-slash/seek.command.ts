@@ -4,8 +4,8 @@ import {
   formatTimeInput,
   isValidTimeInput,
 } from '@/core/utils/format-time.util';
-import {players} from "@/core/constants/common.constant";
-import {Messages} from "@/core/constants/messages.constant";
+import { players } from '@/core/constants/common.constant';
+import { Messages } from '@/core/constants/messages.constant';
 
 export const seekCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
@@ -25,15 +25,8 @@ export const seekCommand: ISlashCommand = {
     const second = formatTimeInput(interaction.options.getString('input'));
 
     await interaction.followUp(
-        `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
+      `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
     );
-
-    // if (!isValidTimeInput(interaction.options.getString('input'))) {
-    //   await interaction.followUp(
-    //       `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
-    //   );
-    //   return;
-    // }
 
     const player = players.get(interaction.guildId as string);
 
@@ -42,14 +35,7 @@ export const seekCommand: ISlashCommand = {
       return;
     }
 
-    if (!isValidTimeInput(interaction.options.getString('input'))) {
-      await interaction.followUp(
-          `Raw: ${interaction.options.getString('input')} | Converted: ${second} | Result: ${isValidTimeInput(interaction.options.getString('input'))}`,
-      );
-      return;
-    }
-
-    player.seek(formatTimeInput(interaction.options.getString('input')));
+    await player.seek(formatTimeInput(interaction.options.getString('input')));
     await interaction.followUp('cool');
   },
 };

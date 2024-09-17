@@ -40,7 +40,8 @@ export const isValidTimeInput = (input: string): boolean => {
     (isNaN(Number(input)) || // is not a number and not include ':' -> reject
       (!isNaN(Number(input)) && Number(input) > 59) || // is number, not include ':' and greater than 59 seconds -> reject
       !Number.isInteger(input)) // input is not an integer
-  ) return false;
+  )
+    return false;
 
   // this case make sure all number in dd::HH:mm:ss are all valid number (is integer number & must be a number)
   const isValidNumberArray = input.split(':').every(
@@ -50,25 +51,25 @@ export const isValidTimeInput = (input: string): boolean => {
   );
 
   const isValidTime = input
-      .split(':')
-      .reverse()
-      .every((item, index) => {
-        switch (index) {
-          case 0: // second
-          case 1: { // minute
-            return Number(item) < 60 // less than 60 seconds or minutes
-          }
-          case 2: { // hour
-            return Number(item) < 24 // less than 24 hours
-          }
-          case 3: { // day
-            return Number(item) < 31 // less than 31 days
-          }
+    .split(':')
+    .reverse()
+    .every((item, index) => {
+      switch (index) {
+        case 0: // second
+        case 1: {
+          // minute
+          return Number(item) < 60; // less than 60 seconds or minutes
         }
-      })
-  ;
+        case 2: {
+          // hour
+          return Number(item) < 24; // less than 24 hours
+        }
+        case 3: {
+          // day
+          return Number(item) < 31; // less than 31 days
+        }
+      }
+    });
 
-  if (input.includes(':') && !isValidNumberArray && !isValidTime) return false;
-
-  return true;
+  return !(input.includes(':') && !isValidNumberArray && !isValidTime);
 };

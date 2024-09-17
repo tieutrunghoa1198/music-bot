@@ -16,9 +16,10 @@ import { players } from '@/core/constants/common.constant';
 import { logger } from '@/core/utils/logger.util';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import { Messages } from '@/core/constants/messages.constant';
-import PuppeteerIntercept from "@/core/services/others/puppeteer-intercept";
-import {StreamFactory} from "@/core/models/stream-factory.model";
-import {classifyUrl} from "@/core/utils/common.util";
+import PuppeteerIntercept from '@/core/services/others/puppeteer-intercept';
+import { StreamFactory } from '@/core/models/stream-factory.model';
+import { classifyUrl } from '@/core/utils/common.util';
+import {createFFmpegStream} from "@/core/utils/prism-media.util";
 
 export class Player implements IPlayer {
   public guildId: string;
@@ -237,27 +238,20 @@ export class Player implements IPlayer {
     this.audioPlayer.unpause();
   }
 
-  public seek(second: number | null) {
+  public async seek(second: number | null) {
     if (!this.playing) return;
+    if (!second) return;
     if (isNaN(Number(second))) return;
 
-    // const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-    const ffmpeg = require('fluent-ffmpeg');
-    ffmpeg.setFfmpegPath('/usr/local/bin/ffmpeg');
-    const newSource = this.playing.stream;
-
-    // todo: problem -> không thể phát nhạc lần t2 do stream object bị lỗi (có thể do buffered property bị null ở đầu sau khi dự đoán -> chưa chắc chắn)
-    // không thể phát đc track dài 1 tiếng (chưa rõ nguyên nhân)
-    // solution -> xác định định dạng file cần sử dụng -> đảm bảo ổn định
-    // nếu có thể convert sang blob object hoặc mp3 sau đó lưu vào biến, (kiểm tra tính khả thi của việc lưu mp3 vào 1 biến và sử dụng lại)
-    console.log(newSource, 'this stream');
-    console.log(this.playing.song.url, 'url');
-    const ytdl = require('ytdl-core');
-    this.startAudioDirectly(
-        ffmpeg({source: ytdl(this.playing.song.url)}).toFormat('mp3').setStartTime(second)
+    const songType = classifyUrl(this.playing.song.url);
+    const sourceStream = new StreamFactory(songType);
+    const audioResource = await sourceStream.stream.getStream(this.playing.song.url);
+    const seekedStream = createFFmpegStream(
+        audioResource,
+        second,
     );
 
-    console.log(' \n continue here  \n');
+    this.startAudioDirectly(seekedStream);
   }
 
   public async play(): Promise<void> {
@@ -315,7 +309,9 @@ export class Player implements IPlayer {
 
       if (e?.message?.includes('401')) {
         this._hasError = true;
-        PuppeteerIntercept.setSoundCloudToken().then().catch((err) => console.log(err));
+        PuppeteerIntercept.setSoundCloudToken()
+          .then()
+          .catch((err) => console.log(err));
         await this.play();
         return;
       }

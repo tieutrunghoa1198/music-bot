@@ -1,4 +1,4 @@
-import puppeteer, {HTTPRequest} from 'puppeteer';
+import puppeteer, { HTTPRequest } from 'puppeteer';
 import play from 'play-dl';
 
 export default class PuppeteerIntercept {
@@ -25,7 +25,7 @@ export default class PuppeteerIntercept {
     });
     await page.goto('https://soundcloud.com', {
       waitUntil: ['domcontentloaded', 'networkidle2'],
-      timeout: 3000000
+      timeout: 3000000,
     });
     await browser.close();
   }

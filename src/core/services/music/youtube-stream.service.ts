@@ -1,22 +1,27 @@
-import {IStream} from "@/core/interfaces/stream.interface";
+import { IStream } from '@/core/interfaces/stream.interface';
 import ytdl from '@distube/ytdl-core';
-import {AudioResource} from "@discordjs/voice/dist";
-import {createAudioResource} from "@discordjs/voice";
+import { AudioResource } from '@discordjs/voice/dist';
+import { createAudioResource } from '@discordjs/voice';
 
 export class YoutubeStream implements IStream {
+  async getAudioResource(url: string): Promise<AudioResource> {
+    const streamResource = await this.getStream(url);
 
-    async getAudioResource(url: string): Promise<AudioResource> {
-        const streamResource = await this.getStream(url);
+    return createAudioResource(streamResource);
+  }
 
-        return createAudioResource(streamResource);
-    }
-
-    async getStream(url: string) {
-        return ytdl(url, {
-            filter: 'audioonly',
-            liveBuffer: 2000,
-            highWaterMark: 1 << 25,
-        });
-    }
-
+  async getStream(url: string) {
+    return ytdl(url, {
+      filter: function (format) {
+        return format.audioBitrate && format.audioBitrate > 128
+          ? format.audioQuality === 'AUDIO_QUALITY_MEDIUM' &&
+              format.codecs === 'opus' &&
+              format.audioBitrate > 128
+          : format.audioQuality === 'AUDIO_QUALITY_MEDIUM' &&
+              format.codecs === 'opus';
+      },
+      liveBuffer: 2000,
+      highWaterMark: 1 << 25,
+    });
+  }
 }
