@@ -10,16 +10,17 @@ import {
   VoiceConnectionState,
   VoiceConnectionStatus,
 } from '@discordjs/voice';
-import { Client, TextChannel } from 'discord.js';
-import { IPlayer, QueueItem } from '@/core/interfaces/player.interface';
-import { players } from '@/core/constants/common.constant';
-import { logger } from '@/core/utils/logger.util';
-import { MusicAreas } from '@/core/mongodb/music-area.model';
-import { Messages } from '@/core/constants/messages.constant';
+import {Client, TextChannel} from 'discord.js';
+import {IPlayer, QueueItem} from '@/core/interfaces/player.interface';
+import {players} from '@/core/constants/common.constant';
+import {logger} from '@/core/utils/logger.util';
+import {MusicAreas} from '@/core/mongodb/music-area.model';
+import {Messages} from '@/core/constants/messages.constant';
 import PuppeteerIntercept from '@/core/services/others/puppeteer-intercept';
-import { StreamFactory } from '@/core/models/stream-factory.model';
-import { classifyUrl } from '@/core/utils/common.util';
+import {StreamFactory} from '@/core/models/stream-factory.model';
+import {classifyUrl} from '@/core/utils/common.util';
 import {createFFmpegStream} from "@/core/utils/prism-media.util";
+import {Platform} from "@/core/types/song.type";
 
 export class Player implements IPlayer {
   public guildId: string;
@@ -245,6 +246,7 @@ export class Player implements IPlayer {
     if (!second) return;
     if (isNaN(Number(second))) return;
     if (songLength < second) return;
+    if (this.playing.song.platform === Platform.SOUND_CLOUD || this.playing.song.platform === Platform.SPOTIFY) return;
 
     const songType = classifyUrl(this.playing.song.url);
     const sourceStream = new StreamFactory(songType);
