@@ -239,9 +239,12 @@ export class Player implements IPlayer {
   }
 
   public async seek(second: number | null) {
+    const songLength = this.playing?.song.length ?? 0;
+
     if (!this.playing) return;
     if (!second) return;
     if (isNaN(Number(second))) return;
+    if (songLength < second) return;
 
     const songType = classifyUrl(this.playing.song.url);
     const sourceStream = new StreamFactory(songType);
