@@ -1,59 +1,43 @@
-import { Platform, Song } from '@/core/types/song.type';
-import {
-  soundCloudPlaylistRegex,
-  soundCloudTrackRegex,
-} from '@/core/constants/index.constant';
-import { SoundCloud } from 'scdl-core';
-import { Playlist } from '@/core/types/playlist.type';
+import {Song} from '@/core/types/song.type';
+import {soundCloudPlaylistRegex, soundCloudTrackRegex,} from '@/core/constants/index.constant';
+import {SoundCloud} from 'scdl-core';
+import {Playlist} from '@/core/types/playlist.type';
+import {SongDAO} from "@/core/dao/song.dao";
 
 export class SoundCloudService {
-  public static async download(url: string, highWaterMark: number) {
-    return await SoundCloud.download(url, { highWaterMark });
-  }
 
   public static async getTrackDetail(content: string): Promise<Song> {
-    let url = '';
     const paths = content.match(soundCloudTrackRegex);
-    if (!paths) {
-      url = await this.searchTrack(content);
-    } else {
-      url = paths[0];
+    const songUrl = paths?.[0] || await this.searchTrack(content);
+
+    if (!songUrl) {
+      throw new Error('No valid SoundCloud track URL found.');
     }
 
-    if (!url) throw new Error();
-    const track = await SoundCloud.tracks.getTrack(url);
-    if (track) {
-      return {
-        title: track.title,
-        length: track.duration / 1000,
-        author: track.user.username,
-        thumbnail: track.artwork_url ? track.artwork_url : '',
-        url,
-        platform: Platform.SOUND_CLOUD,
-      };
+    const track = await SoundCloud.tracks.getTrack(songUrl);
+
+    if (!track) {
+      throw new Error('Track not found on SoundCloud.');
     }
-    throw new Error();
+
+    return SongDAO.getDetailSC(track, songUrl);
   }
 
   public static async getPlaylist(url: string): Promise<Playlist> {
     const playlist = await SoundCloud.playlists.getPlaylist(url);
-    if (!playlist) if (!url) throw new Error();
-    const songs: Song[] = [];
-    playlist.tracks.forEach((track) => {
-      songs.push({
-        title: track.title,
-        thumbnail: track.artwork_url ? track.artwork_url : '',
-        author: track.user.username,
-        url: track.permalink_url,
-        length: track.duration / 1000,
-        platform: Platform.SOUND_CLOUD,
-      });
-    });
+
+    if (!url || !playlist) {
+      throw new Error('Invalid URL or playlist not found.');
+    }
+
+    const songs: Song[] = playlist.tracks.map((track) =>
+        SongDAO.getDetailSC(track, track.permalink_url)
+    );
 
     return {
       title: `SoundCloud set ${playlist.id}`,
-      thumbnail: playlist.artwork_url ? playlist.artwork_url : '',
-      author: `${playlist.user.first_name} ${playlist.user.last_name}`,
+      thumbnail: playlist.artwork_url ?? '',
+      author: `${playlist.user?.first_name || ''} ${playlist.user?.last_name || ''}`.trim(),
       songs,
     };
   }

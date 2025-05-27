@@ -1,5 +1,6 @@
-import puppeteer, { HTTPRequest } from 'puppeteer';
+import puppeteer from 'puppeteer';
 import play from 'play-dl';
+import {logger} from "@/core/utils/logger.util";
 
 export default class PuppeteerIntercept {
 
@@ -8,25 +9,36 @@ export default class PuppeteerIntercept {
   }
 
   private static async initialize() {
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
+
     await page.setRequestInterception(true);
-    page.on('request', (interceptedRequest: HTTPRequest) => {
-      const url = interceptedRequest.url();
 
-      if (interceptedRequest.isInterceptResolutionHandled()) return;
-      if (url.includes('/oauth/session?client_id=')) {
-        const token = url.split('/oauth/session?client_id=')[1];
-        this.updateToken(token);
-        return;
+    const handler = async (req: any) => {
+      try {
+        const url = req.url();
+
+        req.continue();
+
+        if (url.includes('/oauth/session?client_id=')) {
+
+          const token = url.split('/oauth/session?client_id=')[1];
+          this.updateToken(token);
+
+          logger.info('🎯 Found the request. Removing handler.');
+          page.off('request', handler);          // stop listening
+
+          await page.setRequestInterception(false);
+
+        }
+      } catch (e) {
+        logger.error('Error on close connection.Z');
       }
+    };
 
-      interceptedRequest.continue();
-    });
-    await page.goto('https://soundcloud.com', {
-      waitUntil: ['domcontentloaded', 'networkidle2'],
-      timeout: 3000000,
-    });
+    page.on('request', handler);
+
+    await page.goto('https://soundcloud.com');
     await browser.close();
   }
 

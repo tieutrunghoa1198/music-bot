@@ -3,6 +3,7 @@ export enum Platform {
   YOUTUBE = 'Youtube',
   SOUND_CLOUD = 'SoundCloud',
   SPOTIFY = 'Spotify',
+  UNKNOWN = 'Unknown',
 }
 
 export interface Song {

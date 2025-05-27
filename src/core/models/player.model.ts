@@ -16,7 +16,6 @@ import {players} from '@/core/constants/common.constant';
 import {logger} from '@/core/utils/logger.util';
 import {MusicAreas} from '@/core/mongodb/music-area.model';
 import {Messages} from '@/core/constants/messages.constant';
-import PuppeteerIntercept from '@/core/services/others/puppeteer-intercept';
 import {StreamFactory} from '@/core/models/stream-factory.model';
 import {classifyUrl} from '@/core/utils/common.util';
 import {createFFmpegStream} from "@/core/utils/prism-media.util";
@@ -300,6 +299,10 @@ export class Player implements IPlayer {
       const sourceStream = new StreamFactory(songType);
       const audioResource = await sourceStream.stream.getAudioResource(songUrl);
 
+      if (audioResource === null) {
+        return;
+      }
+
       this._hasError = false;
       this._shiftedSong = undefined;
       this.audioPlayer.play(audioResource);
@@ -308,15 +311,6 @@ export class Player implements IPlayer {
       logger.error('Error: player.model.ts', e);
 
       if (e?.message?.includes('Method not implemented')) {
-        await this.play();
-        return;
-      }
-
-      if (e?.message?.includes('401')) {
-        this._hasError = true;
-        PuppeteerIntercept.setSoundCloudToken()
-          .then()
-          .catch((err) => console.log(err));
         await this.play();
         return;
       }

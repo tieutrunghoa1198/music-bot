@@ -1,5 +1,6 @@
-import { Platform, Song } from '@/core/types/song.type';
+import {Platform, Song} from '@/core/types/song.type';
 import play from 'play-dl';
+import {SongDAO} from "@/core/dao/song.dao";
 
 export class YoutubeService {
   private static mixPlaylist = require('yt-mix-playlist');
@@ -16,14 +17,7 @@ export class YoutubeService {
   public static async getVideoDetail(content: string): Promise<Song> {
     const video = await play.video_info(content);
     const vid_info = video.video_details;
-    return {
-      title: vid_info.title as string,
-      length: vid_info.durationInSec,
-      author: vid_info.channel?.name as string,
-      thumbnail: vid_info.thumbnails[0].url,
-      url: vid_info.url,
-      platform: Platform.YOUTUBE,
-    } as Song;
+    return SongDAO.getDetailYT(vid_info);
   }
 
   public static async getRandomList(url: string) {
@@ -35,9 +29,9 @@ export class YoutubeService {
     await result.items.forEach((track: any) => {
       const rawDuration = track.duration.split(':');
       let hours = 0;
-      let minutes = 0;
-      let seconds = 0;
-      let result = 0;
+      let minutes: number;
+      let seconds: number;
+      let result: number;
       if (rawDuration.length === 3) {
         hours = parseInt(rawDuration[0]);
         minutes = parseInt(rawDuration[1]);
@@ -69,7 +63,6 @@ export class YoutubeService {
 
   private static extractId(url: string) {
     const extractWatchUrl = url.split('watch?v=')[1];
-    const videoId = extractWatchUrl.split('&list=RD')[0];
-    return videoId;
+    return extractWatchUrl.split('&list=RD')[0];
   }
 }
