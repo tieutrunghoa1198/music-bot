@@ -171,7 +171,7 @@ export class Player implements IPlayer {
       const query = MusicAreas.where({ guildId: guildId });
       const musicAreaChannel = await query.findOne();
       if (musicAreaChannel === null || musicAreaChannel === undefined) {
-        console.log('not found music area in this guild');
+        logger.error('not found music area in this guild, at player.model.ts');
         return;
       }
       const { textChannelId } = musicAreaChannel;
@@ -187,7 +187,7 @@ export class Player implements IPlayer {
         );
       }
     } catch (e) {
-      console.log(e);
+      logger.error(e + ' | at player.model | onNextSong()');
     }
   }
 

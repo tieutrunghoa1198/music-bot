@@ -5,6 +5,7 @@ import {
 } from '@/core/constants/index.constant';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
+import {logger} from "@/core/utils/logger.util";
 
 export const skipCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
@@ -34,7 +35,7 @@ export const skipCommand: ISlashCommand = {
         );
       }
     } catch (e) {
-      console.log(e);
+      logger.error(e);
       await interaction.followUp('erro');
     }
   },

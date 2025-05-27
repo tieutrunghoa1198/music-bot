@@ -1,3 +1,5 @@
+import {logger} from "@/core/utils/logger.util";
+
 require('dotenv').config();
 const uri = process.env.uri;
 const dbConnect = (mongoose: any) => {
@@ -5,10 +7,10 @@ const dbConnect = (mongoose: any) => {
     mongoose.set('strictQuery', true);
     mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     mongoose.connection.on('error', (err: any) => {
-      console.log(err);
+      logger.error(err + '| dbConnect at mongodb.util');
     });
   } catch (e) {
-    console.log(e);
+    logger.error(e + '| dbConnect at mongodb.util');
   }
 };
 

@@ -21,7 +21,6 @@ export class InteractionNotification implements INotification {
 
   public async showNowPlaying(userInteraction: any) {
     if (userInteraction === undefined || null) {
-      console.log('wrong here =========');
       return;
     }
 

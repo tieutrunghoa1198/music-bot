@@ -19,7 +19,7 @@ export const cleanMessageCommand: ISlashCommand = {
     ) as TextChannel;
     const recentMessages = await textChannel.messages.fetch({ limit: 90 });
     if (!recentMessages) {
-      console.log('cannot get recent message');
+      logger.info('cannot get recent message');
       return;
     }
     recentMessages.forEach((message: any) => {

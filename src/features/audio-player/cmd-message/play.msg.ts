@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import * as Constant from '@/core/constants/index.constant';
 import { PlayerService } from '@/core/services/music/player-service.service';
+import {logger} from "@/core/utils/logger.util";
 
 const handleYoutubeLink = async (msg: Message) => {
   const query = MusicAreas.where({ textChannelId: msg.channel.id });
@@ -13,12 +14,12 @@ const handleYoutubeLink = async (msg: Message) => {
   try {
     await new PlayerService(msg).startPlay(input);
   } catch (e) {
-    console.log(e);
+    logger.error(e);
     await msg.channel.send(Constant.Messages.error);
   } finally {
     if (processingMsg.deletable) {
       await processingMsg.delete().catch((err: any) => {
-        console.log(err);
+        logger.error(err);
       });
     }
   }
@@ -34,7 +35,7 @@ const voiceCondition = async (
     return false;
   }
   if (musicAreaChannel === null || musicAreaChannel === undefined) {
-    console.log('not found music area in this guild');
+    logger.error('not found music area in this guild, at play.msg.ts');
     return false;
   }
 

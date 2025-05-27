@@ -6,7 +6,6 @@ import { QueueItem } from '@/core/interfaces/player.interface';
 export class NotificationService {
   public static async nowPlaying(player: Player, interaction: any) {
     if (interaction === undefined || null) {
-      console.log('wrong here =========');
       return;
     }
     const queueItem: QueueItem = player.playing as QueueItem;
