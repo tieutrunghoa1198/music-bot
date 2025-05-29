@@ -40,7 +40,7 @@ pipeline {
             -e CLIENT_ID=${CLIENT_ID} \
             -e GUILD_ID=${GUILD_ID} \
             -e NODE_ENV=production \
-            -e MONGO_URI=mongodb://172.17.0.1:27017/discord-music-app \
+            -e MONGO_URI=${MONGO_URI} \
             ${CONTAINER_NAME}:latest
         """
       }
