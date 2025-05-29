@@ -4,7 +4,7 @@
 FROM node:18.14.2-slim
 
 # Puppeteer & Chrome dependencies
-RUN apt-get update && apt-get install -y \
+RUN apt update && apt install -y \
   ca-certificates \
   fonts-liberation \
   libappindicator3-1 \
