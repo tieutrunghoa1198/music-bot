@@ -1,4 +1,4 @@
-#docker build . -t tieutrunghoa1198/music-bot
+#docker build . -t music-bot
 
 # Use slim image for smaller footprint
 FROM node:18.14.2-slim
@@ -10,7 +10,7 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Install only production dependencies
-RUN npm ci --omit=dev
+RUN npm ci
 
 # Define environment variables (use defaults only if needed)
 #ENV clientId=977523393060560967
@@ -25,5 +25,4 @@ COPY . .
 # EXPOSE 3000
 
 # Run the app
-CMD ["npm", "run", "build"]
 CMD ["node", "dist/index.js"]
