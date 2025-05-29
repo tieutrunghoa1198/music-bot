@@ -13,12 +13,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        deleteDir()
-        sh '''
-          eval `ssh-agent -s`
-          ssh-add ~/.ssh/id_rsa
-          git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git .
-        '''
+        git url: 'git@github.com:tieutrunghoa1198/music-bot.git', branch: 'dev', credentialsId: 'your-cred-id'
       }
     }
 
