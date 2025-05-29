@@ -1,19 +1,28 @@
-FROM node:16.14.0
+#docker build . -t tieutrunghoa1198/music-bot
 
-WORKDIR usr/src/app
+# Use slim image for smaller footprint
+FROM node:18.14.2-slim
 
-COPY package.json ./
+# Set working directory (make sure it's an absolute path)
+WORKDIR /usr/src/app
 
-RUN npm install
+# Copy package files first to leverage Docker cache
+COPY package*.json ./
 
-ENV clientId=977523393060560967
-ENV guildId=882155251313037332
-ENV NODE_ENV=production
-ENV uri=mongodb://172.17.0.3:27017/discord-music-app
+# Install only production dependencies
+RUN npm ci --omit=dev
 
+# Define environment variables (use defaults only if needed)
+#ENV clientId=977523393060560967
+#ENV guildId=882155251313037332
+#ENV NODE_ENV=production
+#ENV uri=mongodb://host.docker.internal:27017/discord-music-app
+
+# Copy the rest of the code
 COPY . .
 
-CMD node dist/index.js
+# Optional: Expose the app port if you're using Express
+# EXPOSE 3000
 
-
-#docker build . -t tieutrunghoa1198/music-bot
+# Run the app
+CMD ["node", "dist/index.js"]
