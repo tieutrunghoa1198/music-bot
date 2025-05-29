@@ -3,7 +3,6 @@ pipeline {
 
   environment {
     APP_NAME = 'music-bot'
-    # These vars come from Jenkins Credentials
     TOKEN = credentials('token_double_agent')
     CLIENT_ID = credentials('client_id')
     GUILD_ID = credentials('guild_id')
