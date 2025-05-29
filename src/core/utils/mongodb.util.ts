@@ -1,7 +1,7 @@
 import {logger} from "@/core/utils/logger.util";
 
 require('dotenv').config();
-const uri = process.env.mongo_uri;
+const uri = process.env.MONGO_URI;
 const dbConnect = (mongoose: any) => {
   try {
     mongoose.set('strictQuery', true);
