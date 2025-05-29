@@ -17,9 +17,7 @@ pipeline {
         sh '''
           eval `ssh-agent -s`
           ssh-add ~/.ssh/id_rsa
-          rm -rf repo
-          git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git repo
-          cp -r repo/* .
+          git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git .
         '''
       }
     }
