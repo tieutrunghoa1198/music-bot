@@ -3,6 +3,7 @@ pipeline {
 
   environment {
     APP_NAME = 'music-bot'
+    CONTAINER_NAME = 'music-bot-image'
     TOKEN = credentials('token_double_agent')
     CLIENT_ID = credentials('client_id')
     GUILD_ID = credentials('guild_id')
