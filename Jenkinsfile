@@ -10,6 +10,13 @@ pipeline {
   }
 
   stages {
+    stage('Debug SSH') {
+        steps {
+          sh 'ssh -T git@github.com || true'
+          sh 'git ls-remote git@github.com:tieutrunghoa1198/music-bot.git || true'
+        }
+    }
+
     stage('Checkout') {
       steps {
         git branch: 'prod', url: 'git@github.com:tieutrunghoa1198/music-bot.git', credentialsId: 'jenkins-ci-music-bot'
