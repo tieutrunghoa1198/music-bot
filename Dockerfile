@@ -24,7 +24,7 @@ RUN apt update && apt install -y \
   libgbm1 \
   libgtk-3-0 \
   libxshmfence1 \
-  libgobject-2.0-0 \
+  libglib2.0-0 \
   wget \
   --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
