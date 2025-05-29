@@ -13,14 +13,13 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        sshagent(['jenkins-ci-music-bot']) {
-          sh '''
-            rm -rf repo
-            git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git repo
-            cp -r repo/. .
-            rm -rf repo
-          '''
-        }
+        sh '''
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_rsa
+          rm -rf repo
+          git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git repo
+          cp -r repo/* .
+        '''
       }
     }
 
