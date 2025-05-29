@@ -6,7 +6,7 @@ pipeline {
     TOKEN = credentials('token_double_agent')
     CLIENT_ID = credentials('client_id')
     GUILD_ID = credentials('guild_id')
-    URI = credentials('mongo_uri')
+    MONGO_URI = credentials('mongo_uri')
   }
 
   stages {
@@ -50,7 +50,7 @@ pipeline {
             -e CLIENT_ID=${CLIENT_ID} \
             -e GUILD_ID=${GUILD_ID} \
             -e NODE_ENV=production \
-            -e URI=${URI} \
+            -e URI=${MONGO_URI} \
             ${APP_NAME}:latest
         """
       }
