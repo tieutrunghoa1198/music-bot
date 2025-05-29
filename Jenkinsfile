@@ -19,7 +19,12 @@ pipeline {
 
     stage('Checkout') {
       steps {
-        git branch: 'prod', url: 'git@github.com:tieutrunghoa1198/music-bot.git', credentialsId: 'jenkins-ci-music-bot'
+        sh '''
+          eval `ssh-agent -s`
+          ssh-add ~/.ssh/id_jenkins_rsa
+          git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git repo
+          cp -r repo/* .
+        '''
       }
     }
 
