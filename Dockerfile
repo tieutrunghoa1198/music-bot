@@ -25,4 +25,5 @@ COPY . .
 # EXPOSE 3000
 
 # Run the app
+CMD ["npm", "run", "build"]
 CMD ["node", "dist/index.js"]
