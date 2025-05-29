@@ -36,6 +36,7 @@ pipeline {
       steps {
         sh """
           docker run -d --name ${APP_NAME} \
+            --add-host=host.docker.internal:host-gateway \
             -e TOKEN=${TOKEN} \
             -e CLIENT_ID=${CLIENT_ID} \
             -e GUILD_ID=${GUILD_ID} \
