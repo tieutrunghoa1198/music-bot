@@ -36,7 +36,7 @@ pipeline {
       steps {
         sh """
           docker run -d --name ${APP_NAME} \
-            --add-host=host.docker.internal:host-gateway music-bot \
+            --add-host=host.docker.internal:host-gateway music-bot-image \
             -e TOKEN=${TOKEN} \
             -e CLIENT_ID=${CLIENT_ID} \
             -e GUILD_ID=${GUILD_ID} \
