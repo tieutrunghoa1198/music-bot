@@ -46,7 +46,7 @@ pipeline {
             -e GUILD_ID=${GUILD_ID} \
             -e NODE_ENV=production \
             -e URI=${MONGO_URI} \
-            ${APP_NAME}:latest
+            ${CONTAINER_NAME}:latest
         """
       }
     }
