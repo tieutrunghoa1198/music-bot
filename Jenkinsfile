@@ -13,7 +13,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git branch: 'main', url: 'git@github.com:tieutrunghoa1198/music-bot.git', credentialsId: 'jenkins-ci-music-bot'
+        git branch: 'prod', url: 'git@github.com:tieutrunghoa1198/music-bot.git', credentialsId: 'jenkins-ci-music-bot'
       }
     }
 
