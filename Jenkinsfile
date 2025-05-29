@@ -21,7 +21,7 @@ pipeline {
       steps {
         sh '''
           eval `ssh-agent -s`
-          ssh-add ~/.ssh/id_jenkins_rsa
+          ssh-add ~/.ssh/id_rsa
           git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git repo
           cp -r repo/* .
         '''
