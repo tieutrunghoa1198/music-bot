@@ -13,7 +13,12 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'git@github.com:tieutrunghoa1198/music-bot.git', branch: 'prod', credentialsId: 'jenkins-ci-music-bot'
+        sshagent (credentials: ['jenkins-ci-music-bot']) {
+          sh '''
+            git clone --branch prod git@github.com:tieutrunghoa1198/music-bot.git repo
+            cp -r repo/* .
+          '''
+        }
       }
     }
 
