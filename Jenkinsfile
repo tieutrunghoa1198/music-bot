@@ -36,12 +36,12 @@ pipeline {
       steps {
         sh """
           docker run -d --name ${APP_NAME} \
-            --add-host=localhost:27017 music-bot-image \
+            --add-host=host.docker.internal:host-gateway \
             -e TOKEN=${TOKEN} \
             -e CLIENT_ID=${CLIENT_ID} \
             -e GUILD_ID=${GUILD_ID} \
             -e NODE_ENV=production \
-            -e MONGO_URI=mongodb://localhost:27017/discord-music-app \
+            -e MONGO_URI=mongodb://host.docker.internal:27017/discord-music-app \
             ${CONTAINER_NAME}:latest
         """
       }
