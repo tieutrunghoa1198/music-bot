@@ -13,7 +13,7 @@ pipeline {
   stages {
     stage('Checkout') {
       steps {
-        git url: 'git@github.com:tieutrunghoa1198/music-bot.git', branch: 'dev', credentialsId: 'your-cred-id'
+        git url: 'git@github.com:tieutrunghoa1198/music-bot.git', branch: 'prod', credentialsId: 'jenkins-ci-music-bot'
       }
     }
 
@@ -48,7 +48,7 @@ pipeline {
   }
 
   post {
-    success {
+    success {g
       echo '✅ Deployed successfully!'
     }
     failure {
