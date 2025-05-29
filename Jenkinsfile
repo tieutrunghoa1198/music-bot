@@ -28,20 +28,9 @@ pipeline {
       }
     }
 
-    stage('Check Docker Image Exists') {
+    stage('Build Docker Image') {
       steps {
-        script {
-          def exists = sh(
-            script: "docker image inspect ${APP_NAME}:latest > /dev/null 2>&1",
-            returnStatus: true
-          ) == 0
-
-          if (!exists) {
-            error "❌ Docker image ${APP_NAME}:latest does not exist. Build it first."
-          } else {
-            echo "✅ Docker image ${APP_NAME}:latest found, proceeding to deploy."
-          }
-        }
+        sh "docker build -t ${CONTAINER_NAME}:latest ."
       }
     }
 
