@@ -36,6 +36,7 @@ pipeline {
       steps {
         sh """
           docker run -d --name ${APP_NAME} \
+            --restart unless-stopped \
             --memory=2g \
             -e TOKEN=${TOKEN} \
             -e CLIENT_ID=${CLIENT_ID} \
