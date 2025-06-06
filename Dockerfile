@@ -31,25 +31,11 @@ RUN apt update && apt install -y \
 # Set working directory (make sure it's an absolute path)
 WORKDIR /usr/src/app
 
-# Copy package files first to leverage Docker cache
+# Only copy production package files
 COPY package*.json ./
+RUN npm ci --only=production
 
-# Install only production dependencies
-RUN npm ci
+# Only copy built code, not the whole source
+COPY dist ./dist
 
-# Define environment variables (use defaults only if needed)
-#ENV clientId=977523393060560967
-#ENV guildId=882155251313037332
-#ENV NODE_ENV=production
-#ENV uri=mongodb://host.docker.internal:27017/discord-music-app
-
-# Copy the rest of the code
-COPY . .
-
-# Optional: Expose the app port if you're using Express
-# EXPOSE 3000
-
-RUN npm run build
-
-# Run the app
 CMD ["node", "dist/index.js"]
