@@ -4,13 +4,13 @@ FROM node:18.14.2-slim AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci  # install with devDependencies
+RUN npm ci
 
-COPY . .    # copy the entire source
+COPY . .
 
-RUN npm run build  # or 'npx tsc' etc
+RUN npm run build
 
-# Optional: minify built js
+# minify built js
 RUN npx terser dist/*.js --compress --mangle --output dist/ --keep-fnames
 
 # Stage 2: Minimal runtime image
