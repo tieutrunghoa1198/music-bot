@@ -1,23 +1,17 @@
-import { Player } from '@/core/models/player.model';
-import {
-  entersState,
-  joinVoiceChannel,
-  VoiceConnection,
-  VoiceConnectionStatus,
-} from '@discordjs/voice';
-import { logger } from '@/core/utils/logger.util';
-import { players } from '@/core/constants/common.constant';
-import { botClient } from '@/bot-client';
+import {Player} from '@/core/services/player.service';
+import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus,} from '@discordjs/voice';
+import {logger} from '@/core/utils/logger.util';
+import {players} from '@/core/constants/common.constant';
 
 export const enterReadyState = async (player: Player) => {
   try {
     await entersState(
-      <VoiceConnection>player?.voiceConnection,
+      <VoiceConnection>player?.voiceConnectionManager.voiceConnection,
       VoiceConnectionStatus.Ready,
       10e3,
     );
   } catch (e) {
-    logger.error(e);
+    logger.error(e + ' | cannot enter ready state');
   }
 };
 
@@ -34,7 +28,6 @@ export const createPlayer = (interactObj: any) => {
       adapterCreator: channel.guild.voiceAdapterCreator,
     }),
     interactObj.guildId as string,
-    botClient,
   );
   players.set(interactObj.guildId as string, player);
 

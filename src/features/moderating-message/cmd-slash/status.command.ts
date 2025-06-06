@@ -16,6 +16,6 @@ export const statusCommand: ISlashCommand = {
       return;
     }
 
-    await interaction.followUp(JSON.stringify(player.toJSON()));
+    await interaction.followUp(JSON.stringify(player.queueManager.toJSON()));
   },
 };

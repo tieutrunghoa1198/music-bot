@@ -1,5 +1,5 @@
 import { EmbedFieldData, MessageEmbed } from 'discord.js';
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 import {
   boldText,
   codeBlockText,
@@ -13,7 +13,7 @@ export const paginationMsg = async (
   currentPage: number,
 ): Promise<any> => {
   const { MAX_PER_PAGE } = Constant.PlayerQueue;
-  const queueLength = player.queue.length;
+  const queueLength = player.queueManager.queue.length;
   const numberOfPages = Math.ceil(queueLength / MAX_PER_PAGE);
   const currentList: QueueItem[] = [];
   const msg = new MessageEmbed();
@@ -24,11 +24,11 @@ export const paginationMsg = async (
   msg.setColor(0x99ff00);
   for (let i = 0; i < MAX_PER_PAGE; i++) {
     const songIndex = MAX_PER_PAGE * (currentPage - 1) + i;
-    if (songIndex >= player.queue.length) {
+    if (songIndex >= player.queueManager.queue.length) {
       break;
     }
-    const song = player.queue[songIndex].song;
-    currentList.push(player.queue[songIndex]);
+    const song = player.queueManager.queue[songIndex].song;
+    currentList.push(player.queueManager.queue[songIndex]);
     const songObj: EmbedFieldData = {
       name: `${codeBlockText((songIndex + 1).toString())} | (${codeBlockText(formatSeconds(song.length))}) ${boldText(song.title)} - khoidaumoi`,
       value: '** **',

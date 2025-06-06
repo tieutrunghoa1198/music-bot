@@ -35,7 +35,7 @@ export const seekCommand: ISlashCommand = {
       return;
     }
 
-    await player.seek(formatTimeInput(interaction.options.getString('input')));
+    await player.queueManager.seek(formatTimeInput(interaction.options.getString('input')));
     await interaction.followUp('cool');
   },
 };

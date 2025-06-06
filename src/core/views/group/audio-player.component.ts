@@ -4,7 +4,7 @@ import {
 } from '@/core/views/select-menu/selectMenu';
 import { PlayerQueue } from '@/core/constants/index.constant';
 import { MessageActionRow } from 'discord.js';
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 import {
   clearQueueComponent,
   nextSongComponent,
@@ -23,7 +23,7 @@ export const AudioPlayerComponent = (
     components: [
       createSelectedTracks(msg.tracks),
       numberOfPageSelectMenu(
-        player.queue.length / PlayerQueue.MAX_PER_PAGE,
+        player.queueManager.queue.length / PlayerQueue.MAX_PER_PAGE,
         currentPage,
       ),
       new MessageActionRow()

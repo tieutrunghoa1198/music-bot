@@ -24,15 +24,15 @@ export const replayCommand: ISlashCommand = {
   async execute(interaction: any) {
     await interaction.deferReply();
 
-    const isReplay = JSON.parse(
-      interaction.options.getString('replay'),
-    ) as boolean;
+    const isReplay = JSON.parse(interaction.options.getString('replay')) as boolean;
     const player = players.get(interaction.guildId as string);
+
     if (!player) {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
-    player.isReplay = isReplay;
+
+    player.queueManager.isReplay = isReplay;
     await interaction.followUp(Messages.replay(isReplay ? 'Bật' : 'Tắt'));
   },
 };

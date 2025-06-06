@@ -15,11 +15,13 @@ export const clearQueueCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string);
-    if (!player?.voiceConnection) {
+
+    if (!player?.voiceConnectionManager.voiceConnection) {
       await interaction.followUp(Messages.playerNotCreated);
-    } else {
-      player.queue = [];
-      await interaction.followUp(Messages.emptyQueue);
+      return;
     }
+
+    player.queueManager.clearQueue();
+    await interaction.followUp(Messages.emptyQueue);
   },
 };

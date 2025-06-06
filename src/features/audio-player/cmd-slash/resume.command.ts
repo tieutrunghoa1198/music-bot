@@ -16,15 +16,18 @@ export const resumeCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string);
+
     if (!player) {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
-    if (player.audioPlayer.state.status === AudioPlayerStatus.Paused) {
-      player.resume();
+
+    if (player.audioManager.player.state.status === AudioPlayerStatus.Paused) {
+      player.audioManager.resume();
       await interaction.followUp(Messages.resumed);
       return;
     }
+
     await interaction.followUp(Messages.notPlaying);
   },
 };

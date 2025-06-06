@@ -1,4 +1,4 @@
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 import { InputType } from '@/core/types/input-type.type';
 import { NotificationFactory } from '../noti/notification-factory';
 import {
@@ -13,7 +13,7 @@ import {
   enterReadyState,
 } from '@/core/utils/player-service.util';
 
-export class PlayerService {
+export class UrlService {
   private readonly player: Player;
   private readonly interactionObj: any;
   private readonly userInputType: InputType;
@@ -54,7 +54,7 @@ export class PlayerService {
   private playSong(listSong: Song[]) {
     if (listSong.length === 0) return;
 
-    this.player.addSong(
+    this.player.queueManager.addSongs(
       listSong.map((song) => ({
         song,
         requester: getRequester(this.interactionObj),

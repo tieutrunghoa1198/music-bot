@@ -5,7 +5,9 @@ const { combine, timestamp, printf } = winston.format;
 export const logger = winston.createLogger({
   level: 'debug',
   format: combine(
-    timestamp(),
+    timestamp({
+      format: () => new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }),
+    }),
     printf(
       (info) =>
         `${info.timestamp} | ${info.level.toUpperCase()} | ${info.message}`,

@@ -1,5 +1,5 @@
 import { createPlayMessage } from '@/core/views/embed-messages/play.embed';
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 import { formatSeconds } from '@/core/utils/format-time.util';
 import { QueueItem } from '@/core/interfaces/player.interface';
 
@@ -8,7 +8,7 @@ export class NotificationService {
     if (interaction === undefined || null) {
       return;
     }
-    const queueItem: QueueItem = player.playing as QueueItem;
+    const queueItem: QueueItem = player.queueManager.currentSong as QueueItem;
     const guildName = interaction.member.guild.name;
     const icon = interaction.member.guild.iconURL();
     const song = queueItem.song;

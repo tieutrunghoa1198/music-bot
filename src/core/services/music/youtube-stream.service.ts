@@ -1,27 +1,36 @@
-import { IStream } from '@/core/interfaces/stream.interface';
+import {IStream} from '@/core/interfaces/stream.interface';
 import ytdl from '@distube/ytdl-core';
-import { AudioResource } from '@discordjs/voice/dist';
-import { createAudioResource } from '@discordjs/voice';
+import {AudioResource} from '@discordjs/voice/dist';
+import {createAudioResource} from '@discordjs/voice';
+import {logger} from "@/core/utils/logger.util";
 
 export class YoutubeStream implements IStream {
-  async getAudioResource(url: string): Promise<AudioResource> {
+  async getAudioResource(url: string): Promise<AudioResource | null> {
     const streamResource = await this.getStream(url);
 
-    return createAudioResource(streamResource);
+    return streamResource
+        ? createAudioResource(streamResource)
+        : null;
   }
 
   async getStream(url: string) {
-    return ytdl(url, {
-      filter: function (format) {
-        return format.audioBitrate && format.audioBitrate > 128
-          ? format.audioQuality === 'AUDIO_QUALITY_MEDIUM' &&
+    try {
+      return ytdl(url, {
+        filter: function (format) {
+          return format.audioBitrate && format.audioBitrate > 128
+              ? format.audioQuality === 'AUDIO_QUALITY_MEDIUM' &&
               format.codecs === 'opus' &&
               format.audioBitrate > 128
-          : format.audioQuality === 'AUDIO_QUALITY_MEDIUM' &&
+              : format.audioQuality === 'AUDIO_QUALITY_MEDIUM' &&
               format.codecs === 'opus';
-      },
-      liveBuffer: 2000,
-      highWaterMark: 1 << 25,
-    });
+        },
+        liveBuffer: 2000,
+        highWaterMark: 1 << 25,
+      });
+    } catch (err) {
+      logger.error(err + ' | cannot get youtube stream');
+    }
+
+    return null;
   }
 }

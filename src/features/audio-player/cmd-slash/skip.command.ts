@@ -17,26 +17,30 @@ export const skipCommand: ISlashCommand = {
 
     try {
       const player = players.get(interaction.guildId as string);
+
       if (!player) {
         await interaction.followUp(Messages.playerNotFound);
         await interaction.followUp(Messages.joinVoiceChannel);
         return;
       }
-      if (player?.queue.length === 0) {
+
+      if (player?.queueManager.queue.length === 0) {
         await interaction.followUp('the queue is empty');
-      } else {
-        if (player?.isReplay === true) player.isReplay = false;
-        player?.skip();
-        await interaction.followUp(
-          Messages.skippedSong({
-            title: player.playing?.song.title,
-            requester: player.playing?.requester,
-          }),
-        );
+        return;
       }
+
+      if (player?.queueManager.isReplay === true) player.queueManager.isReplay = false;
+
+      player?.queueManager.skip();
+      await interaction.followUp(
+          Messages.skippedSong({
+            title: player.queueManager.currentSong?.song.title,
+            requester: player.queueManager.currentSong?.requester,
+          }),
+      );
     } catch (e) {
-      logger.error(e);
-      await interaction.followUp('erro');
+      logger.error(e + ' | error at skip command');
+      await interaction.followUp('error');
     }
   },
 };

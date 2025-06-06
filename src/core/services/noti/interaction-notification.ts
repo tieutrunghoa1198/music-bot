@@ -32,7 +32,7 @@ export class InteractionNotification implements INotification {
     // done check condition
 
     const payload = this.getNowPlayingPayload(
-      player.playing?.song,
+      player.queueManager.currentSong?.song,
       userInteraction.member.guild.name,
       userInteraction.member.guild.iconURL(),
     );
@@ -43,8 +43,8 @@ export class InteractionNotification implements INotification {
     }
 
     if (
-      player?.audioPlayer.state.status === AudioPlayerStatus.Playing &&
-      player.queue.length > 0
+      player?.audioManager.player.state.status === AudioPlayerStatus.Playing &&
+      player.queueManager.queue.length > 0
     ) {
       await userInteraction.followUp(Constant.Messages.addedToQueue(payload));
       return;
@@ -66,7 +66,7 @@ export class InteractionNotification implements INotification {
       embeds: [
         createPlayMessage(
           this.getNowPlayingPayload(
-            player.playing?.song as Song,
+            player.queueManager.currentSong?.song as Song,
             userInteraction.member.guild.name,
             userInteraction.member.guild.iconURL(),
           ),
