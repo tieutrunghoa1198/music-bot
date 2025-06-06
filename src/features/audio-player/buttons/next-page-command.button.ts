@@ -1,4 +1,4 @@
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import {
   createSelectedTracks,
@@ -57,7 +57,7 @@ export const nextPageCommandButton: IButtonCommand = {
         components: [
           createSelectedTracks(msg?.tracks),
           numberOfPageSelectMenu(
-            player.queue.length / PlayerQueue.MAX_PER_PAGE,
+            player.queueManager.queue.length / PlayerQueue.MAX_PER_PAGE,
             nextPage,
           ),
           btn,

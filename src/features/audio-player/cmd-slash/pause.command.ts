@@ -16,15 +16,18 @@ export const pauseCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string);
-    if (!player?.voiceConnection) {
+
+    if (!player?.voiceConnectionManager.voiceConnection) {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
-    if (player.audioPlayer.state.status === AudioPlayerStatus.Playing) {
-      player.pause();
+
+    if (player.audioManager.player.state.status === AudioPlayerStatus.Playing) {
+      player.audioManager.pause();
       await interaction.followUp(Messages.paused);
       return;
     }
+
     await interaction.followUp(Messages.notPlaying);
   },
 };

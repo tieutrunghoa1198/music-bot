@@ -11,9 +11,9 @@ export const repeatCommandButton: IButtonCommand = {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
-    player.isReplay = !player.isReplay;
+    player.queueManager.isReplay = !player.queueManager.isReplay;
     await interaction.followUp(
-      Messages.replay(player.isReplay ? 'Bật' : 'Tắt'),
+      Messages.replay(player.queueManager.isReplay ? 'Bật' : 'Tắt'),
     );
   },
 };

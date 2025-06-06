@@ -14,27 +14,27 @@ export const cleanMessageCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const textChannelId = interaction.channelId;
-    const textChannel: TextChannel = botClient.channels.cache.get(
-      textChannelId,
-    ) as TextChannel;
+    const textChannel: TextChannel = botClient.channels.cache.get(textChannelId) as TextChannel;
     const recentMessages = await textChannel.messages.fetch({ limit: 90 });
+
     if (!recentMessages) {
       logger.info('cannot get recent message');
       return;
     }
+
     recentMessages.forEach((message: any) => {
-      if (message === null || message === undefined) {
-        return;
-      }
-      if (message.author.bot && message.deletable) {
-        const currentDate = Date.now();
-        const twoHoursInMsc = 1000 * 60 * 60 * 2;
-        if (currentDate - twoHoursInMsc < message.createdTimestamp) {
-          message.delete().catch((err: any) => {
-            logger.error('[ERROR] clean unknown msg' + err);
-            return;
-          });
-        }
+      const currentDate = Date.now();
+      const twoHoursInMsc = 1000 * 60 * 60 * 2;
+
+      if (!message) return;
+
+      if (!(message.author.bot && message.deletable)) return;
+
+      if (currentDate - twoHoursInMsc < message.createdTimestamp) {
+        message.delete().catch((err: any) => {
+          logger.error('[ERROR] clean unknown msg' + err);
+          return;
+        });
       }
     });
   },

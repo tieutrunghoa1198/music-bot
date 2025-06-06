@@ -1,5 +1,5 @@
 import { Snowflake } from 'discord-api-types/globals';
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 
 export const GlobalConstants = {
   defaultDeleteTime: 7500,
