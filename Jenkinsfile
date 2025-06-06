@@ -1,10 +1,6 @@
 pipeline {
   agent any
 
-  tools {
-    nodejs 'nodejs18'
-  }
-
   environment {
     APP_NAME = 'music-bot'
     CONTAINER_NAME = 'music-bot-image'
@@ -18,15 +14,6 @@ pipeline {
     stage('Checkout') {
       steps {
         git url: 'git@github.com:tieutrunghoa1198/music-bot.git', branch: 'prod', credentialsId: 'jenkins-ci-music-bot'
-      }
-    }
-
-    stage('Install Dependencies & Build') {
-      steps {
-        sh 'npm run build'               // build, output to ./dist
-        sh '''
-          find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \\;
-        '''
       }
     }
 
