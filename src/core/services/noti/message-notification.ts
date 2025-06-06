@@ -19,6 +19,10 @@ export class MessageNotification implements INotification {
   }
 
   public async showNowPlaying(userInteraction: any) {
+    if (userInteraction === undefined || null) {
+      return;
+    }
+
     const player = players.get(userInteraction.guildId as string);
     if (!player) {
       await userInteraction.followUp(Messages.playerNotCreated);
@@ -26,14 +30,14 @@ export class MessageNotification implements INotification {
     }
 
     const payload = this.getNowPlayingPayload(
-      player.playing?.song,
+      player.queueManager.currentSong?.song,
       userInteraction.member?.guild.name as string,
       userInteraction.member?.guild.iconURL() as string,
     );
 
     if (
-      player?.audioPlayer.state.status === AudioPlayerStatus.Playing &&
-      player.queue.length > 0
+      player?.audioManager.player.state.status === AudioPlayerStatus.Playing &&
+      player.queueManager.queue.length > 0
     ) {
       await userInteraction.channel.send(
         Constant.Messages.addedToQueue(payload),
@@ -57,7 +61,7 @@ export class MessageNotification implements INotification {
       embeds: [
         createPlayMessage(
           this.getNowPlayingPayload(
-            player.playing?.song as Song,
+            player.queueManager.currentSong?.song as Song,
             userInteraction.member?.guild.name as string,
             userInteraction.member?.guild.iconURL() as string,
           ),

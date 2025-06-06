@@ -15,12 +15,13 @@ export const leaveCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string);
+
     if (!player) {
       await interaction.followUp(Messages.playerNotCreated);
       return;
-    } else {
-      player.leave();
-      await interaction.followUp(Messages.leaved);
     }
+
+    player.leave();
+    await interaction.followUp(Messages.leaved);
   },
 };

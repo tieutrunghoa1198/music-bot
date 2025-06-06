@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import { MusicAreas } from '@/core/mongodb/music-area.model';
 import * as Constant from '@/core/constants/index.constant';
-import { PlayerService } from '@/core/services/music/player-service.service';
+import { UrlService } from '@/core/services/music/url.service';
 import {logger} from "@/core/utils/logger.util";
 
 const handleYoutubeLink = async (msg: Message) => {
@@ -12,7 +12,7 @@ const handleYoutubeLink = async (msg: Message) => {
   const input = msg.content;
   const processingMsg = await msg.channel.send(Constant.Messages.processing);
   try {
-    await new PlayerService(msg).startPlay(input);
+    await new UrlService(msg).startPlay(input);
   } catch (e) {
     logger.error(e);
     await msg.channel.send(Constant.Messages.error);
@@ -35,7 +35,7 @@ const voiceCondition = async (
     return false;
   }
   if (musicAreaChannel === null || musicAreaChannel === undefined) {
-    logger.error('not found music area in this guild, at play.msg.ts');
+    logger.warn('not found music area in this guild, at play.msg.ts');
     return false;
   }
 

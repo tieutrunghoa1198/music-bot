@@ -1,4 +1,4 @@
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 import { InteractionNotification } from '@/core/services/noti/interaction-notification';
 import {
   Messages,
@@ -17,14 +17,17 @@ export const showListCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string) as Player;
+
     if (!player) {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
-    if (player.queue.length === 0) {
+
+    if (player.queueManager.queue.length === 0) {
       await interaction.followUp(Messages.emptyQueue);
       return;
     }
+
     await InteractionNotification.getInstance().showQueue(interaction);
     return;
   },

@@ -5,7 +5,7 @@ const uri = process.env.MONGO_URI;
 const dbConnect = (mongoose: any) => {
   try {
     mongoose.set('strictQuery', true);
-    mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    mongoose.connect(uri, {});
     mongoose.connection.on('error', (err: any) => {
       logger.error(err + '| dbConnect at mongodb.util');
     });

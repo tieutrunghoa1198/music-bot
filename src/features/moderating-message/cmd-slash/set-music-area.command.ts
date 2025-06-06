@@ -1,4 +1,4 @@
-import { Player } from '@/core/models/player.model';
+import { Player } from '@/core/services/player.service';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
 import { MusicAreas } from '@/core/mongodb/music-area.model';

@@ -17,18 +17,22 @@ export const nowPlayingCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const player = players.get(interaction.guildId as string);
+
     if (!player) {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
-    if (!player.playing) {
+
+    if (!player.queueManager.currentSong) {
       await interaction.followUp(Messages.notPlaying);
       return;
     }
-    if (player.audioPlayer.state.status === AudioPlayerStatus.Playing) {
+
+    if (player.audioManager.player.state.status === AudioPlayerStatus.Playing) {
       await NotificationService.nowPlaying(player, interaction);
       return;
     }
+
     await interaction.followUp(Messages.notPlaying);
   },
 };

@@ -12,13 +12,13 @@ export const pauseResumeCommandButton: IButtonCommand = {
       await interaction.followUp(Messages.joinVoiceChannel);
       return;
     }
-    if (player.audioPlayer.state.status === AudioPlayerStatus.Playing) {
-      player.pause();
+    if (player.audioManager.player.state.status === AudioPlayerStatus.Playing) {
+      player.audioManager.pause();
       await interaction.followUp(Messages.paused);
       return;
     }
-    if (player.audioPlayer.state.status === AudioPlayerStatus.Paused) {
-      player.resume();
+    if (player.audioManager.player.state.status === AudioPlayerStatus.Paused) {
+      player.audioManager.resume();
       await interaction.followUp(Messages.resumed);
       return;
     }

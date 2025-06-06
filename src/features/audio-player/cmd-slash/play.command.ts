@@ -1,7 +1,7 @@
 import { YoutubeService } from '@/core/services/music/youtube.service';
 import { YouTubeVideo } from 'play-dl';
 import { limitString } from '@/core/utils/common.util';
-import { PlayerService } from '@/core/services/music/player-service.service';
+import { UrlService } from '@/core/services/music/url.service';
 import { Messages, MusicCommands } from '@/core/constants/index.constant';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
@@ -24,15 +24,16 @@ export const playCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const input = interaction.options.getString('input');
+
     if (input === null) {
       await interaction.followUp(Messages.error);
       return;
     }
 
     try {
-      await new PlayerService(interaction).startPlay(input);
+      await new UrlService(interaction).startPlay(input);
     } catch (e) {
-      logger.error(e);
+      logger.error(e + ' | play.command');
       await interaction.followUp(Messages.error);
     } finally {
       interaction.deletable && (await interaction.deleteReply());
