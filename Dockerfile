@@ -7,7 +7,6 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
 
 # Optional: minify built JS if you want
 RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
