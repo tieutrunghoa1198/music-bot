@@ -9,8 +9,8 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Minify js files
-RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
+# Optional: minify js files
+# RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
 # Stage 2: Runtime image (with Puppeteer & Chrome deps)
 FROM node:18.14.2-slim
