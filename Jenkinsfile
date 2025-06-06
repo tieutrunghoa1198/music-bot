@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    docker { image 'node:18.14.2-slim' }
+  }
 
   environment {
     APP_NAME = 'music-bot'
