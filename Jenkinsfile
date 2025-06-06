@@ -23,7 +23,6 @@ pipeline {
 
     stage('Install Dependencies & Build') {
       steps {
-        sh 'npm ci'                      // install with devDependencies
         sh 'npm run build'               // build, output to ./dist
         sh '''
           find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \\;
