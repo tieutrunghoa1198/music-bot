@@ -1,4 +1,4 @@
-# Stage 1: Build (dev dependencies, no Chrome deps needed)
+# Stage 1: Build
 FROM node:18.14.2-slim AS builder
 
 WORKDIR /app
@@ -8,7 +8,7 @@ RUN npm ci
 
 COPY . .
 
-# Optional: minify built JS if you want
+# Minify js files
 RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
 # Stage 2: Runtime image (with Puppeteer & Chrome deps)
