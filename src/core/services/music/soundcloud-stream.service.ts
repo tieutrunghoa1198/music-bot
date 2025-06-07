@@ -1,6 +1,7 @@
 import { IStream } from '@/core/interfaces/stream.interface';
 import play from 'play-dl';
 import { createAudioResource } from '@discordjs/voice';
+import {demuxProbe} from '@discordjs/voice';
 import PuppeteerIntercept from "@/core/services/others/puppeteer-intercept";
 
 export class SoundcloudStream implements IStream {
@@ -10,12 +11,17 @@ export class SoundcloudStream implements IStream {
 
     try {
       streamResource = await this.getStream(url);
+
     } catch (error) {
       await PuppeteerIntercept.setSoundCloudToken();
       streamResource = await this.getStream(url);
     }
 
-    return streamResource ? createAudioResource(streamResource) : null;
+    if (!streamResource) return null;
+
+    const { stream, type } = await demuxProbe(streamResource);
+
+    return createAudioResource(stream, { inputType: type });
   }
 
   async getStream(url: string) {
