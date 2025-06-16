@@ -7,13 +7,11 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build
-
-# Optional: minify js files
-RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
+RUN npm run build && \
+    find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
 # Stage 2: Runtime image (with Puppeteer & Chrome deps)
-FROM node:18.14.2-slim
+FROM node:18.14.2-alpine
 
 # Install only Puppeteer/Chrome dependencies for runtime
 RUN apt update && apt install -y \
