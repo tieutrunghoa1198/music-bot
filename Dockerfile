@@ -7,56 +7,38 @@ COPY package*.json ./
 RUN npm ci
 
 COPY . .
-RUN npm run build && \
-    find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
+RUN npm run build
+
+# Optional: minify js files
+RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
 # Stage 2: Runtime image (with Puppeteer & Chrome deps)
-FROM node:18.14.2-alpine
+FROM node:18.14.2
 
-# Install only Puppeteer/Chrome dependencies for runtime (FOR SLIM VERSION)
-#RUN apt update && apt install -y \
-#  ca-certificates \
-#  fonts-liberation \
-#  libappindicator3-1 \
-#  libasound2 \
-#  libatk-bridge2.0-0 \
-#  libatk1.0-0 \
-#  libcups2 \
-#  libdbus-1-3 \
-#  libgdk-pixbuf2.0-0 \
-#  libnspr4 \
-#  libnss3 \
-#  libx11-xcb1 \
-#  libxcomposite1 \
-#  libxdamage1 \
-#  libxrandr2 \
-#  xdg-utils \
-#  libgbm1 \
-#  libgtk-3-0 \
-#  libxshmfence1 \
-#  libglib2.0-0 \
-#  wget \
-#  --no-install-recommends && rm -rf /var/lib/apt/lists/*
-
-# Install only Puppeteer/Chrome dependencies for runtime (FOR ALPINE VERSION)
-RUN apk add --no-cache \
+# Install only Puppeteer/Chrome dependencies for runtime
+RUN apt update && apt install -y \
   ca-certificates \
-  nss \
-  alsa-lib \
-  atk \
-  cups-libs \
-  dbus-libs \
-  gdk-pixbuf \
-  gtk+3.0 \
-  libxcomposite \
-  libxdamage \
-  libxrandr \
-  libxshmfence \
-  libx11 \
-  libx11-utils \
-  chromium \
-  wget
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+  fonts-liberation \
+  libappindicator3-1 \
+  libasound2 \
+  libatk-bridge2.0-0 \
+  libatk1.0-0 \
+  libcups2 \
+  libdbus-1-3 \
+  libgdk-pixbuf2.0-0 \
+  libnspr4 \
+  libnss3 \
+  libx11-xcb1 \
+  libxcomposite1 \
+  libxdamage1 \
+  libxrandr2 \
+  xdg-utils \
+  libgbm1 \
+  libgtk-3-0 \
+  libxshmfence1 \
+  libglib2.0-0 \
+  wget \
+  --no-install-recommends && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
