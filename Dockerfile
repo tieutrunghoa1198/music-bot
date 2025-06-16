@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:18.14.2-slim AS builder
+FROM node:20.18.1-slim AS builder
 
 WORKDIR /app
 
@@ -9,14 +9,11 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-# Prune devs & regenerate prod-only lockfile
-RUN npm prune --production && npm install --package-lock-only --omit=dev
-
 # Optional: minify js files
 RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
 # Stage 2: Runtime image (with Puppeteer & Chrome deps)
-FROM node:18.14.2-slim
+FROM node:20.18.1-slim
 
 # Install only Puppeteer/Chrome dependencies for runtime
 RUN apt update && apt install -y \
