@@ -9,6 +9,9 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+# Prune devs & regenerate prod-only lockfile
+RUN npm prune --production && npm install --package-lock-only --omit=dev
+
 # Optional: minify js files
 RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
