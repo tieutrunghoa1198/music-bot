@@ -5,7 +5,7 @@ import {QueueItem} from "@/core/models/abstract-player.model";
 
 export class NotificationService {
     public static async nowPlaying(player: Player, interaction: any) {
-        if (interaction === undefined || null) {
+        if (interaction === undefined || interaction === null) {
             console.log('wrong here =========')
             return;
         }

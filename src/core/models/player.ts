@@ -209,10 +209,11 @@ export class Player implements AbstractPlayer{
     }
 
     public async jump(position: number): Promise<QueueItem> {
-        const target = this.queue[position - 1];
-        this.queue = this.queue
-            .splice(0, position - 1)
-            .concat(this.queue.splice(position, this.queue.length - 1));
+        const index = position - 1;
+        if (index < 0 || index >= this.queue.length) {
+            throw new Error('Invalid position');
+        }
+        const [target] = this.queue.splice(index, 1);
         this.queue.unshift(target);
         await this.play();
         return target;
