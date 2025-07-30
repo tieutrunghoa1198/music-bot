@@ -22,7 +22,7 @@ export class InteractionNotification implements INotification
     }
 
     public async showNowPlaying(player: Player, userInteraction: any, queueItem: QueueItem) {
-        if (userInteraction === undefined || null) {
+        if (userInteraction === undefined || userInteraction === null) {
             console.log('wrong here =========')
             return;
         }
