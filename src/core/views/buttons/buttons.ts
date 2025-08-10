@@ -4,8 +4,8 @@ import {
   MessageButtonStyleResolvable,
 } from 'discord.js';
 import { MessageButtonStyles } from 'discord.js/typings/enums';
-import { previousPageCommandButton } from '@/features/audio-player/buttons/previous-page-command.button';
-import { nextPageCommandButton } from '@/features/audio-player/buttons/next-page-command.button';
+import { previousPageCommandButton } from '@/features/audio-player/views/buttons/previous-page-command.button';
+import { nextPageCommandButton } from '@/features/audio-player/views/buttons/next-page-command.button';
 
 export const generateButton = (
   currentPage: number,

@@ -1,7 +1,12 @@
-import {Player} from '@/core/services/player.service';
-import {entersState, joinVoiceChannel, VoiceConnection, VoiceConnectionStatus,} from '@discordjs/voice';
-import {logger} from '@/core/utils/logger.util';
-import {players} from '@/core/constants/common.constant';
+import { Player } from '@/core/services/player.service';
+import {
+  entersState,
+  joinVoiceChannel,
+  VoiceConnection,
+  VoiceConnectionStatus,
+} from '@discordjs/voice';
+import { logger } from '@/core/utils/logger.util';
+import { players } from '@/core/constants/common.constant';
 
 export const enterReadyState = async (player: Player) => {
   try {

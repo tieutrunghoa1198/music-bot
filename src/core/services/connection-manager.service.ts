@@ -1,9 +1,9 @@
-import {VoiceConnection} from "@discordjs/voice";
+import { VoiceConnection } from '@discordjs/voice';
 
 export class VoiceConnectionManager {
-    constructor(private connection: VoiceConnection) {}
+  constructor(private connection: VoiceConnection) {}
 
-    get voiceConnection() {
-        return this.connection;
-    }
+  get voiceConnection() {
+    return this.connection;
+  }
 }

@@ -24,7 +24,9 @@ export const replayCommand: ISlashCommand = {
   async execute(interaction: any) {
     await interaction.deferReply();
 
-    const isReplay = JSON.parse(interaction.options.getString('replay')) as boolean;
+    const isReplay = JSON.parse(
+      interaction.options.getString('replay'),
+    ) as boolean;
     const player = players.get(interaction.guildId as string);
 
     if (!player) {
