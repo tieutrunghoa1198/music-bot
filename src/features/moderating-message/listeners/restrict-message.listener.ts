@@ -1,10 +1,12 @@
 import {Message} from 'discord.js';
 import {eventBus} from '@/core/utils/event-bus.util';
-import {RestrictChannel} from '@/core/mongodb/restrict.model';
+import {RestrictChannelRepository} from '@/core/repositories/restrict-channel.repository';
+
+const restrictChannelRepository = new RestrictChannelRepository();
 
 const restrict = async (msg: Message) => {
-  const query = RestrictChannel.where({ guildId: msg.guildId });
-  const guild = await query.findOne();
+  if (!msg.guildId) return;
+  const guild = await restrictChannelRepository.findByGuildId(msg.guildId);
   if (!guild) return;
   let selectedChannel: any;
   guild.restrictChannels.forEach((element: any) => {

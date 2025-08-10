@@ -1,5 +1,5 @@
 import * as Constant from '@/core/constants/index.constant';
-import { RestrictChannel } from '@/core/mongodb/restrict.model';
+import { RestrictChannelRepository } from '@/core/repositories/restrict-channel.repository';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChannelType } from 'discord-api-types/v9';
@@ -23,11 +23,12 @@ export const restrictCommand: ISlashCommand = {
     // await interaction.deferReply();
     // const selectedChannel = interaction.options;
     //
-    // const foundChannel = await RestrictChannel.findOne({
-    //   guildId: interaction.guildId,
-    // });
+    // const repository = new RestrictChannelRepository();
+    // const foundChannel = await repository.findByGuildId(
+    //   interaction.guildId,
+    // );
     // if (foundChannel === null || foundChannel === undefined) {
-    //   await RestrictChannel.collection.insertOne({
+    //   await repository.insert({
     //     guildId: interaction.guildId,
     //     guildName: interaction.member?.guild.name,
     //     restrictChannels: [],
