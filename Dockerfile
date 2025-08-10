@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:18.14.2-slim AS builder
+FROM node:20-bookworm-slim AS builder
 
 WORKDIR /app
 
