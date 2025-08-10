@@ -13,7 +13,7 @@ RUN npm run build
 RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
 # Stage 2: Runtime image (with Puppeteer & Chrome deps)
-FROM node:18.14.2-slim
+FROM node:20-bookworm-slim
 
 # Install only Puppeteer/Chrome dependencies for runtime
 RUN apt update && apt install -y \
