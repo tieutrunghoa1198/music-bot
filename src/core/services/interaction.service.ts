@@ -4,10 +4,27 @@ import {ephemeralResponse} from "@/core/utils/common.util";
 import * as Constant from "@/core/constants/index.constant";
 import {BUTTON_AUDIO_PLAYER_MAP, SELECT_MENU_AUDIO_PLAYER_MAP} from "@/features/audio-player/constants/map.constant";
 import {MODERATING_MESSAGE_COMMAND_MAP} from "@/core/commands/moderating-message.command";
+import {eventBus} from '@/core/utils/event-bus.util';
 
 export class InteractionHandler {
 
     constructor() {
+        eventBus.on('interaction:received', async (interaction: any) => {
+            const handlers = [
+                { check: interaction.isCommand, handle: interactionCreateStream.emitInteractionSlashCommand },
+                { check: interaction.isSelectMenu, handle: interactionCreateStream.emitInteractionSelectMenu },
+                { check: interaction.isButton, handle: interactionCreateStream.emitInteractionButton },
+                { check: interaction.isAutocomplete, handle: interactionCreateStream.emitInteractionAutoComplete },
+            ];
+
+            for (const { check, handle } of handlers) {
+                if (check.call(interaction)) {
+                    handle.call(interactionCreateStream, interaction);
+                    break;
+                }
+            }
+        });
+
         this.executeButtonCommand();
         this.executeSlashCommand();
         this.executeSelectMenu();

@@ -7,7 +7,8 @@ import {botClient} from '@/bot-client';
 import {EventsRouter} from '@/features/audio-player/events.router';
 import {InteractionHandler} from "@/core/services/interaction.service";
 import {logger} from "@/core/utils/logger.util";
-import {players} from "@/core/constants/common.constant";
+import {initAudioPlayer} from '@/features/audio-player';
+import {initModeratingMessage} from '@/features/moderating-message';
 
 config();
 export class Bot {
@@ -38,6 +39,8 @@ export class Bot {
 
   private bootstrap() {
     EventsRouter();
+    initAudioPlayer();
+    initModeratingMessage();
     new InteractionHandler();
   }
 }
