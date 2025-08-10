@@ -1,42 +1,19 @@
 import {botClient} from '@/bot-client';
 import {Message} from 'discord.js';
-import MessageMusicController from '@/features/audio-player/cmd-message/play.msg';
-import {interactionCreateStream} from "@/core/services/others/interaction-create.service";
-import MessageRestrictController from "@/features/moderating-message/cmd-message/restrict.msg";
-import {players} from "@/core/constants/common.constant";
-import {logger} from "@/core/utils/logger.util";
+import {eventBus} from '@/core/utils/event-bus.util';
 
 export const EventsRouter = () => {
 
   botClient.on('messageCreate', (message: Message) => {
-    MessageMusicController.handleLink(message);
-    MessageRestrictController.restrict(message);
+    eventBus.emit('message:created', message);
   });
 
   botClient.on('voiceStateUpdate', (oldState, newState) => {
-    if (oldState.member?.id !== botClient.user?.id) return;
-
-    if (oldState.channelId && !newState.channelId) {
-      logger.info(`Bot was disconnected from voice channel | GuildId: ${oldState.guild.id}!`);
-      const player = players.get(oldState.guild.id);
-      if (player) player.leave();
-    }
+    eventBus.emit('voice:updated', oldState, newState);
   });
 
   botClient.on('interactionCreate', async (interaction: any) => {
-    const handlers = [
-      { check: interaction.isCommand, handle: interactionCreateStream.emitInteractionSlashCommand },
-      { check: interaction.isSelectMenu, handle: interactionCreateStream.emitInteractionSelectMenu },
-      { check: interaction.isButton, handle: interactionCreateStream.emitInteractionButton },
-      { check: interaction.isAutocomplete, handle: interactionCreateStream.emitInteractionAutoComplete },
-    ];
-
-    for (const { check, handle } of handlers) {
-      if (check.call(interaction)) {
-        handle.call(interactionCreateStream, interaction);
-        break;
-      }
-    }
+    eventBus.emit('interaction:received', interaction);
   });
 
 };

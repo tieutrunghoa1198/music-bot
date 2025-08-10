@@ -1,5 +1,6 @@
-import { Message } from 'discord.js';
-import { RestrictChannel } from '@/core/mongodb/restrict.model';
+import {Message} from 'discord.js';
+import {eventBus} from '@/core/utils/event-bus.util';
+import {RestrictChannel} from '@/core/mongodb/restrict.model';
 
 const restrict = async (msg: Message) => {
   const query = RestrictChannel.where({ guildId: msg.guildId });
@@ -25,26 +26,7 @@ const restrict = async (msg: Message) => {
     });
   }
 };
-export default {
-  restrict,
-};
 
-/**
- * test DB
- * "guildId": "325650252386271238",
- *   "guildName": "AKG",
- *   "restrictChannels": [
- *     {
- *       "channelId": "325650252386271238",
- *       "channelName": "xam-loz",
- *       "roleId": "1010780985245311028",
- *       "roleName": "Kenh Chat"
- *     },
- *     {
- *       "channelId": "878130330068996097",
- *       "channelName": "mu-sic-que",
- *       "roleId": "682233159215349773",
- *       "roleName": "Bot"
- *     }
- *   ]
- */
+export const registerMessageRestrictListener = () => {
+  eventBus.on('message:created', restrict);
+};
