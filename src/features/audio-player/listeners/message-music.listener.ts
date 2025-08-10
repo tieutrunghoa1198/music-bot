@@ -1,13 +1,16 @@
 import {Message} from 'discord.js';
 import {eventBus} from '@/core/utils/event-bus.util';
-import {MusicAreas} from '@/core/mongodb/music-area.model';
+import {MusicAreaRepository} from '@/core/repositories/music-area.repository';
 import * as Constant from '@/core/constants/index.constant';
 import {UrlService} from '@/core/services/music/url.service';
 import {logger} from '@/core/utils/logger.util';
 
+const musicAreaRepository = new MusicAreaRepository();
+
 const handleYoutubeLink = async (msg: Message) => {
-  const query = MusicAreas.where({ textChannelId: msg.channel.id });
-  const musicAreaChannel = await query.findOne();
+  const musicAreaChannel = await musicAreaRepository.findByTextChannelId(
+    msg.channel.id,
+  );
 
   if (!(await voiceCondition(msg, musicAreaChannel))) return;
   const input = msg.content;

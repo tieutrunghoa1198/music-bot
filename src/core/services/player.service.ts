@@ -2,7 +2,7 @@ import {VoiceConnection, VoiceConnectionStatus,} from '@discordjs/voice';
 import {TextChannel} from 'discord.js';
 import {players} from '@/core/constants/common.constant';
 import {logger} from '@/core/utils/logger.util';
-import {MusicAreas} from '@/core/mongodb/music-area.model';
+import {MusicAreaRepository} from '@/core/repositories/music-area.repository';
 import {Messages} from '@/core/constants/messages.constant';
 import {botClient} from "@/bot-client";
 import {VoiceConnectionManager} from "@/core/services/connection-manager.service";
@@ -20,6 +20,7 @@ export class Player {
   constructor(
     voiceConnection: VoiceConnection,
     private guildId: string,
+    private readonly musicAreaRepository: MusicAreaRepository = new MusicAreaRepository(),
   ) {
     this.voiceConnectionManager = new VoiceConnectionManager(voiceConnection);
     this.audioManager = new AudioManager();
@@ -41,8 +42,7 @@ export class Player {
     if (!payload.nextSong?.song) return;
 
     try {
-      const query = MusicAreas.where({ guildId: guildId });
-      const musicAreaChannel = await query.findOne();
+      const musicAreaChannel = await this.musicAreaRepository.findByGuildId(guildId);
 
       if (musicAreaChannel === null || musicAreaChannel === undefined) {
         logger.warn('not found music area in this guild, at player.service.ts');
