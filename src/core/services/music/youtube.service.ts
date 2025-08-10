@@ -1,6 +1,6 @@
-import {Platform, Song} from '@/core/types/song.type';
+import { Platform, Song } from '@/core/types/song.type';
 import play from 'play-dl';
-import {SongDAO} from "@/core/dao/song.dao";
+import { SongDAO } from '@/core/dao/song.dao';
 
 export class YoutubeService {
   private static mixPlaylist = require('yt-mix-playlist');

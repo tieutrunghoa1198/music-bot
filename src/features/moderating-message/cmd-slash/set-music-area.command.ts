@@ -1,7 +1,7 @@
 import { Player } from '@/core/services/player.service';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
-import { MusicAreas } from '@/core/mongodb/music-area.model';
+import { MusicAreaRepository } from '@/core/database/repositories/music-area.repository';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 
@@ -18,12 +18,12 @@ export const setMusicAreaCommand: ISlashCommand = {
       await interaction.followUp(Constant.Messages.joinVoiceChannel);
       return;
     }
-
-    const musicAreaChannel = await MusicAreas.findOne({
-      guildId: interaction.guildId,
-    });
+    const repository = new MusicAreaRepository();
+    const musicAreaChannel = await repository.findByGuildId(
+      interaction.guildId,
+    );
     if (musicAreaChannel === null || musicAreaChannel === undefined) {
-      await MusicAreas.collection.insertOne({
+      await repository.insert({
         guildId: interaction.guildId,
         guildName: interaction.member?.guild.name,
         textChannelId: interaction.channelId,
@@ -32,9 +32,9 @@ export const setMusicAreaCommand: ISlashCommand = {
         Constant.Messages.settingUpPaP(interaction.channelId),
       );
     } else {
-      await MusicAreas.collection.updateOne(
-        { guildId: interaction.guildId },
-        { $set: { textChannelId: interaction.channelId } },
+      await repository.updateTextChannelId(
+        interaction.guildId,
+        interaction.channelId,
       );
       await interaction.followUp(
         Constant.Messages.settingUpPaP(interaction.channelId),

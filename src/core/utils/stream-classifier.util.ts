@@ -3,7 +3,7 @@ import { Link } from '@/core/constants/link.constant';
 import { SoundcloudStream } from '@/core/services/music/soundcloud-stream.service';
 import { YoutubeStream } from '@/core/services/music/youtube-stream.service';
 
-export class StreamFactory {
+export class StreamClassifier {
   public stream: IStream;
 
   constructor(url: string) {

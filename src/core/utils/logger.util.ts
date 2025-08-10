@@ -6,7 +6,8 @@ export const logger = winston.createLogger({
   level: 'debug',
   format: combine(
     timestamp({
-      format: () => new Date().toLocaleString("sv-SE", { timeZone: "Asia/Ho_Chi_Minh" }),
+      format: () =>
+        new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Ho_Chi_Minh' }),
     }),
     printf(
       (info) =>
