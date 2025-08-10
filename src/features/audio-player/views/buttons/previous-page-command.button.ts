@@ -11,7 +11,7 @@ import {
   players,
 } from '@/core/constants/index.constant';
 import { IButtonCommand } from '@/core/interfaces/command.interface';
-import {logger} from "@/core/utils/logger.util";
+import { logger } from '@/core/utils/logger.util';
 
 export const previousPageCommandButton: IButtonCommand = {
   customId: 'prev',
@@ -52,7 +52,9 @@ export const previousPageCommandButton: IButtonCommand = {
       message.delete().catch((error: any) => {
         // Only log the error if it is not an Unknown Message error
         if (error) {
-          logger.error('Failed to delete the message at previous-page-command.button');
+          logger.error(
+            'Failed to delete the message at previous-page-command.button',
+          );
           return;
         }
       });
@@ -61,8 +63,8 @@ export const previousPageCommandButton: IButtonCommand = {
         components: [
           createSelectedTracks(msg.tracks),
           numberOfPageSelectMenu(
-              player.queueManager.queue.length / PlayerQueue.MAX_PER_PAGE,
-              prevPage
+            player.queueManager.queue.length / PlayerQueue.MAX_PER_PAGE,
+            prevPage,
           ),
           btn,
         ],

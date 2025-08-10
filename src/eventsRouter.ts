@@ -1,9 +1,8 @@
-import {botClient} from '@/bot-client';
-import {Message} from 'discord.js';
-import {eventBus} from '@/core/utils/event-bus.util';
+import { botClient } from '@/bot-client';
+import { Message } from 'discord.js';
+import { eventBus } from '@/core/utils/event-bus.util';
 
-export const EventsRouter = () => {
-
+export const eventsRouter = () => {
   botClient.on('messageCreate', (message: Message) => {
     eventBus.emit('message:created', message);
   });
@@ -15,5 +14,4 @@ export const EventsRouter = () => {
   botClient.on('interactionCreate', async (interaction: any) => {
     eventBus.emit('interaction:received', interaction);
   });
-
 };

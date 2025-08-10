@@ -5,7 +5,7 @@ import { UrlService } from '@/core/services/music/url.service';
 import { Messages, MusicCommands } from '@/core/constants/index.constant';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import {logger} from "@/core/utils/logger.util";
+import { logger } from '@/core/utils/logger.util';
 
 export const playCommand: ISlashCommand = {
   hasAutoComplete: true,

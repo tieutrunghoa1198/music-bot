@@ -1,14 +1,16 @@
-import {Song} from '@/core/types/song.type';
-import {soundCloudPlaylistRegex, soundCloudTrackRegex,} from '@/core/constants/index.constant';
-import {SoundCloud} from 'scdl-core';
-import {Playlist} from '@/core/types/playlist.type';
-import {SongDAO} from "@/core/dao/song.dao";
+import { Song } from '@/core/types/song.type';
+import {
+  soundCloudPlaylistRegex,
+  soundCloudTrackRegex,
+} from '@/core/constants/index.constant';
+import { SoundCloud } from 'scdl-core';
+import { Playlist } from '@/core/types/playlist.type';
+import { SongDAO } from '@/core/dao/song.dao';
 
 export class SoundCloudService {
-
   public static async getTrackDetail(content: string): Promise<Song> {
     const paths = content.match(soundCloudTrackRegex);
-    const songUrl = paths?.[0] || await this.searchTrack(content);
+    const songUrl = paths?.[0] || (await this.searchTrack(content));
 
     if (!songUrl) {
       throw new Error('No valid SoundCloud track URL found.');
@@ -31,13 +33,14 @@ export class SoundCloudService {
     }
 
     const songs: Song[] = playlist.tracks.map((track) =>
-        SongDAO.getDetailSC(track, track.permalink_url)
+      SongDAO.getDetailSC(track, track.permalink_url),
     );
 
     return {
       title: `SoundCloud set ${playlist.id}`,
       thumbnail: playlist.artwork_url ?? '',
-      author: `${playlist.user?.first_name || ''} ${playlist.user?.last_name || ''}`.trim(),
+      author:
+        `${playlist.user?.first_name || ''} ${playlist.user?.last_name || ''}`.trim(),
       songs,
     };
   }

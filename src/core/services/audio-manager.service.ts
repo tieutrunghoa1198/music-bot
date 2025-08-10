@@ -1,59 +1,66 @@
-import {AudioPlayer, AudioPlayerStatus, createAudioPlayer} from "@discordjs/voice";
-import {IAudioManager} from "@/core/types/audio-manager.type";
-import {AudioResource} from "@discordjs/voice/dist";
-import {logger} from "@/core/utils/logger.util";
-import {Subject} from "rxjs";
+import {
+  AudioPlayer,
+  AudioPlayerStatus,
+  createAudioPlayer,
+} from '@discordjs/voice';
+import { IAudioManager } from '@/core/types/audio-manager.type';
+import { AudioResource } from '@discordjs/voice/dist';
+import { logger } from '@/core/utils/logger.util';
+import { Subject } from 'rxjs';
 
 export class AudioManager implements IAudioManager {
-    private readonly _audioPlayer: AudioPlayer;
-    private readonly _audioPlayerError: Subject<boolean> = new Subject<boolean>();
+  private readonly _audioPlayer: AudioPlayer;
+  private readonly _audioPlayerError: Subject<boolean> = new Subject<boolean>();
 
-    get audioPlayerError(): Subject<boolean> {
-        return this._audioPlayerError;
+  get audioPlayerError(): Subject<boolean> {
+    return this._audioPlayerError;
+  }
+
+  get player() {
+    return this._audioPlayer;
+  }
+
+  constructor() {
+    this._audioPlayer = createAudioPlayer();
+  }
+
+  play(resource: AudioResource) {
+    if (!resource) {
+      logger.warn(
+        'Tried to play a null or undefined AudioResource | play(resource: AudioResource)',
+      );
+      return;
     }
 
-    get player() {
-        return this._audioPlayer;
+    try {
+      this._audioPlayer.play(resource);
+    } catch (error) {
+      this._audioPlayerError.next(true);
+      logger.error(
+        `Failed to play resource | ${error instanceof Error ? error.message : error}`,
+      );
     }
+  }
 
-    constructor() {
-        this._audioPlayer = createAudioPlayer();
-    }
+  pause() {
+    this._audioPlayer.pause();
+  }
 
-    play(resource: AudioResource) {
-        if (!resource) {
-            logger.warn('Tried to play a null or undefined AudioResource | play(resource: AudioResource)');
-            return;
-        }
+  resume() {
+    this._audioPlayer.unpause();
+  }
 
-        try {
-            this._audioPlayer.play(resource);
-        } catch (error) {
-            this._audioPlayerError.next(true);
-            logger.error(`Failed to play resource | ${error instanceof Error ? error.message : error}`);
-        }
-    }
+  stop() {
+    this._audioPlayer.stop();
+  }
 
-    pause() {
-        this._audioPlayer.pause();
-    }
+  onIdle(callback: () => void) {
+    this._audioPlayer.on('stateChange', (oldState, newState) => {
+      const isIdle =
+        newState.status === AudioPlayerStatus.Idle &&
+        oldState.status !== AudioPlayerStatus.Idle;
 
-    resume() {
-        this._audioPlayer.unpause();
-    }
-
-    stop() {
-        this._audioPlayer.stop();
-    }
-
-    onIdle(callback: () => void) {
-        this._audioPlayer.on('stateChange', (oldState, newState) => {
-            const isIdle =
-                newState.status === AudioPlayerStatus.Idle &&
-                oldState.status !== AudioPlayerStatus.Idle;
-
-            if (isIdle) callback();
-        });
-    }
-
+      if (isIdle) callback();
+    });
+  }
 }

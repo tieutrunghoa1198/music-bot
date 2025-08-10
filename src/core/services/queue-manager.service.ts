@@ -1,128 +1,141 @@
-import {AudioManager} from "@/core/services/audio-manager.service";
-import {QueueItem} from "../interfaces/player.interface";
-import {AudioResource} from "@discordjs/voice/dist";
-import {classifyUrl} from "@/core/utils/common.util";
-import {StreamFactory} from "@/core/models/stream-factory.model";
-import {AudioPlayerStatus, createAudioResource} from "@discordjs/voice";
-import {Platform} from "@/core/types/song.type";
-import {createFFmpegStream} from "@/core/utils/prism-media.util";
+import { AudioManager } from '@/core/services/audio-manager.service';
+import { QueueItem } from '../interfaces/player.interface';
+import { AudioResource } from '@discordjs/voice/dist';
+import { classifyUrl } from '@/core/utils/common.util';
+import { StreamClassifier } from '@/core/utils/stream-classifier.util';
+import { AudioPlayerStatus, createAudioResource } from '@discordjs/voice';
+import { Platform } from '@/core/types/song.type';
+import { createFFmpegStream } from '@/core/utils/prism-media.util';
 
 export class QueueManager {
-    public guildId: string;
-    private _queue: QueueItem[] = [];
-    private _currentSong: QueueItem | undefined;
-    private _isReplay: boolean = false;
-    private audioManager: AudioManager;
+  public guildId: string;
+  private _queue: QueueItem[] = [];
+  private _currentSong: QueueItem | undefined;
+  private _isReplay: boolean = false;
+  private audioManager: AudioManager;
 
-    get queue(): QueueItem[] {
-        return this._queue;
+  get queue(): QueueItem[] {
+    return this._queue;
+  }
+
+  get currentSong(): QueueItem | undefined {
+    return this._currentSong;
+  }
+
+  get isReplay(): boolean {
+    return this._isReplay;
+  }
+
+  set isReplay(value: boolean) {
+    this._isReplay = value;
+  }
+
+  constructor(guildId: string, audioManager: AudioManager) {
+    this.guildId = guildId;
+    this.audioManager = audioManager;
+    this.listenAudioPlayerError();
+  }
+
+  async play() {
+    if (this._isReplay) {
+      const audioResource = await this.getAudioResource(
+        this._currentSong?.song.url as string,
+      );
+      if (!audioResource) return;
+      this.audioManager.play(audioResource);
+      return;
     }
 
-    get currentSong(): QueueItem | undefined {
-        return this._currentSong;
+    if (this._queue.length > 0) {
+      this._currentSong = this._queue.shift() as QueueItem;
+      const audioResource = await this.getAudioResource(
+        this._currentSong.song.url as string,
+      );
+      if (!audioResource) return;
+      this.audioManager.play(audioResource);
+      return;
     }
 
-    get isReplay(): boolean {
-        return this._isReplay;
+    if (this._queue.length === 0) {
+      this._currentSong = undefined;
+      this.audioManager.stop();
+      return;
     }
+  }
 
-    set isReplay(value: boolean) {
-        this._isReplay = value;
-    }
+  skip(): void {
+    this.play();
+  }
 
-    constructor(guildId: string, audioManager: AudioManager) {
-        this.guildId = guildId;
-        this.audioManager = audioManager;
-        this.listenAudioPlayerError();
-    }
+  skipByTitle(title: string): QueueItem | null {
+    this._currentSong = this.queue.filter((e) =>
+      e.song.title.includes(title),
+    )[0];
 
-    async play() {
-        if (this._isReplay) {
-            const audioResource = await this.getAudioResource(this._currentSong?.song.url as string);
-            if (!audioResource) return;
-            this.audioManager.play(audioResource);
-            return;
-        }
+    if (this._currentSong === undefined) return null;
 
-        if (this._queue.length > 0) {
-            this._currentSong = this._queue.shift() as QueueItem;
-            const audioResource = await this.getAudioResource(this._currentSong.song.url as string);
-            if (!audioResource) return;
-            this.audioManager.play(audioResource);
-            return;
-        }
+    return this._currentSong;
+  }
 
-        if (this._queue.length === 0) {
-            this._currentSong = undefined;
-            this.audioManager.stop();
-            return;
-        }
-    }
+  clearQueue(): void {
+    this._queue = [];
+  }
 
-    skip(): void {
-        this.play();
-    }
+  stop(): void {
+    this._currentSong = undefined;
+    this._queue = [];
+    this.audioManager.stop();
+  }
 
-    skipByTitle(title: string): QueueItem | null {
-        this._currentSong = this.queue.filter((e) => e.song.title.includes(title))[0];
+  async seek(second: number | null) {
+    const songLength = this._currentSong?.song.length ?? 0;
 
-        if (this._currentSong === undefined) return null;
+    if (!this._currentSong) return;
+    if (!second) return;
+    if (isNaN(Number(second))) return;
+    if (songLength < second) return;
+    if (
+      this._currentSong.song.platform === Platform.SOUND_CLOUD ||
+      this._currentSong.song.platform === Platform.SPOTIFY
+    )
+      return;
 
-        return this._currentSong;
-    }
+    const songType = classifyUrl(this._currentSong.song.url);
+    const sourceStream = new StreamClassifier(songType);
+    const audioResource = await sourceStream.stream.getStream(
+      this._currentSong.song.url,
+    );
+    const seekedStream = createFFmpegStream(audioResource, second);
 
-    clearQueue(): void {
-        this._queue = [];
-    }
+    this.audioManager.play(createAudioResource(seekedStream));
+  }
 
-    stop(): void {
-        this._currentSong = undefined;
-        this._queue = [];
-        this.audioManager.stop();
-    }
+  addSongs(queueItems: QueueItem[]) {
+    const isPause =
+      this.audioManager.player.state.status === AudioPlayerStatus.Paused;
 
-    async seek(second: number | null) {
-        const songLength = this._currentSong?.song.length ?? 0;
+    this._queue = this._queue.concat(queueItems);
 
-        if (!this._currentSong) return;
-        if (!second) return;
-        if (isNaN(Number(second))) return;
-        if (songLength < second) return;
-        if (this._currentSong.song.platform === Platform.SOUND_CLOUD || this._currentSong.song.platform === Platform.SPOTIFY) return;
+    if (!this._currentSong) this.play();
+    if (isPause) this.audioManager.resume();
+  }
 
-        const songType = classifyUrl(this._currentSong.song.url);
-        const sourceStream = new StreamFactory(songType);
-        const audioResource = await sourceStream.stream.getStream(this._currentSong.song.url);
-        const seekedStream = createFFmpegStream(audioResource, second);
+  async getAudioResource(url: string): Promise<AudioResource | null> {
+    const songType = classifyUrl(url);
+    const sourceStream = new StreamClassifier(songType);
 
-        this.audioManager.play(createAudioResource(seekedStream));
-    }
+    return sourceStream.stream.getAudioResource(url);
+  }
 
-    addSongs(queueItems: QueueItem[]) {
-        const isPause = this.audioManager.player.state.status === AudioPlayerStatus.Paused;
+  listenAudioPlayerError() {
+    this.audioManager.audioPlayerError.subscribe(() => {
+      this.play();
+    });
+  }
 
-        this._queue = this._queue.concat(queueItems);
-
-        if (!this._currentSong) this.play();
-        if (isPause) this.audioManager.resume();
-    }
-
-    async getAudioResource(url: string): Promise<AudioResource | null> {
-        const songType = classifyUrl(url);
-        const sourceStream = new StreamFactory(songType);
-
-        return sourceStream.stream.getAudioResource(url);
-    }
-
-    listenAudioPlayerError() {
-        this.audioManager.audioPlayerError.subscribe(() => {
-            this.play();
-        });
-    }
-
-    toJSON = () => ({
-        guildId: this.guildId,
-        playing: this._currentSong,
-        isReplay: this._isReplay,
-    })
+  toJSON = () => ({
+    guildId: this.guildId,
+    playing: this._currentSong,
+    isReplay: this._isReplay,
+  });
 }

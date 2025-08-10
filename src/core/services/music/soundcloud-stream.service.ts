@@ -1,10 +1,9 @@
 import { IStream } from '@/core/interfaces/stream.interface';
 import play from 'play-dl';
 import { createAudioResource } from '@discordjs/voice';
-import PuppeteerIntercept from "@/core/services/others/puppeteer-intercept";
+import PuppeteerIntercept from '@/core/services/others/puppeteer-intercept';
 
 export class SoundcloudStream implements IStream {
-
   async getAudioResource(url: string) {
     let streamResource;
 
@@ -24,7 +23,7 @@ export class SoundcloudStream implements IStream {
 
       return stream.stream;
     } catch (e) {
-      throw new Error("SC 401 Error");
+      throw new Error('SC 401 Error');
     }
   }
 }

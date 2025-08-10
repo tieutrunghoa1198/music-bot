@@ -5,7 +5,7 @@ import {
 } from '@/core/constants/index.constant';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
-import {logger} from "@/core/utils/logger.util";
+import { logger } from '@/core/utils/logger.util';
 
 export const skipCommand: ISlashCommand = {
   data: new SlashCommandBuilder()
@@ -29,14 +29,15 @@ export const skipCommand: ISlashCommand = {
         return;
       }
 
-      if (player?.queueManager.isReplay === true) player.queueManager.isReplay = false;
+      if (player?.queueManager.isReplay === true)
+        player.queueManager.isReplay = false;
 
       player?.queueManager.skip();
       await interaction.followUp(
-          Messages.skippedSong({
-            title: player.queueManager.currentSong?.song.title,
-            requester: player.queueManager.currentSong?.requester,
-          }),
+        Messages.skippedSong({
+          title: player.queueManager.currentSong?.song.title,
+          requester: player.queueManager.currentSong?.requester,
+        }),
       );
     } catch (e) {
       logger.error(e + ' | error at skip command');

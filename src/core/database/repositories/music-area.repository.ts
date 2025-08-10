@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { MusicAreas } from '@/core/mongodb/music-area.model';
+import { MusicAreas } from '@/core/database/schema/music-area.model';
 
 export interface MusicAreaDocument {
   guildId: string;
@@ -23,7 +23,10 @@ export class MusicAreaRepository {
     try {
       return await this.model.findOne({ textChannelId }).exec();
     } catch (error) {
-      console.error('Cannot find at MusicAreaRepository.findByTextChannelId', error);
+      console.error(
+        'Cannot find at MusicAreaRepository.findByTextChannelId',
+        error,
+      );
       return null;
     }
   }
@@ -44,7 +47,10 @@ export class MusicAreaRepository {
         { $set: { textChannelId } },
       );
     } catch (error) {
-      console.error('Cannot update at MusicAreaRepository.updateTextChannelId', error);
+      console.error(
+        'Cannot update at MusicAreaRepository.updateTextChannelId',
+        error,
+      );
       return null;
     }
   }

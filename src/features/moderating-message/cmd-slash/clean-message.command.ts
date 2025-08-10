@@ -14,7 +14,9 @@ export const cleanMessageCommand: ISlashCommand = {
     await interaction.deferReply();
 
     const textChannelId = interaction.channelId;
-    const textChannel: TextChannel = botClient.channels.cache.get(textChannelId) as TextChannel;
+    const textChannel: TextChannel = botClient.channels.cache.get(
+      textChannelId,
+    ) as TextChannel;
     const recentMessages = await textChannel.messages.fetch({ limit: 90 });
 
     if (!recentMessages) {

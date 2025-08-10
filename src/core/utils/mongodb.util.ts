@@ -1,4 +1,4 @@
-import {logger} from "@/core/utils/logger.util";
+import { logger } from '@/core/utils/logger.util';
 
 require('dotenv').config();
 const uri = process.env.MONGO_URI;
@@ -7,10 +7,10 @@ const dbConnect = (mongoose: any) => {
     mongoose.set('strictQuery', true);
     mongoose.connect(uri, {});
     mongoose.connection.on('error', (err: any) => {
-      logger.error(err + '| dbConnect at mongodb.util');
+      logger.error(err + '| dbConnect at schema.util');
     });
   } catch (e) {
-    logger.error(e + '| dbConnect at mongodb.util');
+    logger.error(e + '| dbConnect at schema.util');
   }
 };
 

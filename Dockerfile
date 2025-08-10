@@ -41,7 +41,7 @@ RUN npm ci
 #ENV clientId=977523393060560967
 #ENV guildId=882155251313037332
 #ENV NODE_ENV=production
-#ENV uri=mongodb://host.docker.internal:27017/discord-music-app
+#ENV uri=schema://host.docker.internal:27017/discord-music-app
 
 # Copy the rest of the code
 COPY . .

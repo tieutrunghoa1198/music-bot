@@ -1,6 +1,6 @@
-import {Message} from 'discord.js';
-import {eventBus} from '@/core/utils/event-bus.util';
-import {RestrictChannelRepository} from '@/core/repositories/restrict-channel.repository';
+import { Message } from 'discord.js';
+import { eventBus } from '@/core/utils/event-bus.util';
+import { RestrictChannelRepository } from '@/core/database/repositories/restrict-channel.repository';
 
 const restrictChannelRepository = new RestrictChannelRepository();
 

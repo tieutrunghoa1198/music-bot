@@ -1,9 +1,9 @@
-import {Message} from 'discord.js';
-import {eventBus} from '@/core/utils/event-bus.util';
-import {MusicAreaRepository} from '@/core/repositories/music-area.repository';
+import { Message } from 'discord.js';
+import { eventBus } from '@/core/utils/event-bus.util';
+import { MusicAreaRepository } from '@/core/database/repositories/music-area.repository';
 import * as Constant from '@/core/constants/index.constant';
-import {UrlService} from '@/core/services/music/url.service';
-import {logger} from '@/core/utils/logger.util';
+import { UrlService } from '@/core/services/music/url.service';
+import { logger } from '@/core/utils/logger.util';
 
 const musicAreaRepository = new MusicAreaRepository();
 

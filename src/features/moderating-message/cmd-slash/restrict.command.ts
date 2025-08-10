@@ -1,5 +1,4 @@
 import * as Constant from '@/core/constants/index.constant';
-import { RestrictChannelRepository } from '@/core/repositories/restrict-channel.repository';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 import { ChannelType } from 'discord-api-types/v9';

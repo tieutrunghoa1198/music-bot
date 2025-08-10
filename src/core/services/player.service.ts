@@ -1,14 +1,14 @@
-import {VoiceConnection, VoiceConnectionStatus,} from '@discordjs/voice';
-import {TextChannel} from 'discord.js';
-import {players} from '@/core/constants/common.constant';
-import {logger} from '@/core/utils/logger.util';
-import {MusicAreaRepository} from '@/core/repositories/music-area.repository';
-import {Messages} from '@/core/constants/messages.constant';
-import {botClient} from "@/bot-client";
-import {VoiceConnectionManager} from "@/core/services/connection-manager.service";
-import {AudioManager} from "@/core/services/audio-manager.service";
-import {QueueManager} from "@/core/services/queue-manager.service";
-import {QueueItem} from "@/core/interfaces/player.interface";
+import { VoiceConnection, VoiceConnectionStatus } from '@discordjs/voice';
+import { TextChannel } from 'discord.js';
+import { players } from '@/core/constants/common.constant';
+import { logger } from '@/core/utils/logger.util';
+import { MusicAreaRepository } from '@/core/database/repositories/music-area.repository';
+import { Messages } from '@/core/constants/messages.constant';
+import { botClient } from '@/bot-client';
+import { VoiceConnectionManager } from '@/core/services/connection-manager.service';
+import { AudioManager } from '@/core/services/audio-manager.service';
+import { QueueManager } from '@/core/services/queue-manager.service';
+import { QueueItem } from '@/core/interfaces/player.interface';
 
 export class Player {
   public readonly voiceConnectionManager: VoiceConnectionManager;
@@ -26,8 +26,10 @@ export class Player {
     this.audioManager = new AudioManager();
     this.queueManager = new QueueManager(guildId, this.audioManager);
 
-    this.voiceConnectionManager.voiceConnection.subscribe(this.audioManager.player);
-    this.audioManager.onIdle(async() => {
+    this.voiceConnectionManager.voiceConnection.subscribe(
+      this.audioManager.player,
+    );
+    this.audioManager.onIdle(async () => {
       await this.queueManager.play(); // if stay here means play next song
       await this.onNextSong({
         nextSong: this.queueManager.currentSong as QueueItem,
@@ -42,7 +44,8 @@ export class Player {
     if (!payload.nextSong?.song) return;
 
     try {
-      const musicAreaChannel = await this.musicAreaRepository.findByGuildId(guildId);
+      const musicAreaChannel =
+        await this.musicAreaRepository.findByGuildId(guildId);
 
       if (musicAreaChannel === null || musicAreaChannel === undefined) {
         logger.warn('not found music area in this guild, at player.service.ts');
@@ -53,11 +56,13 @@ export class Player {
       const messagePayload = {
         title: payload.nextSong.song.title,
         requester: payload.nextSong.requester,
-      }
+      };
 
       if (!textChannelId || textChannelId === '') return;
 
-      const textChannel = botClient.channels.cache.get(textChannelId) as TextChannel;
+      const textChannel = botClient.channels.cache.get(
+        textChannelId,
+      ) as TextChannel;
 
       await textChannel.send(Messages.skippedSong(messagePayload));
     } catch (e) {
@@ -66,12 +71,14 @@ export class Player {
   }
 
   public leave(): void {
-    if (this.voiceConnectionManager.voiceConnection.state.status !== VoiceConnectionStatus.Destroyed) {
+    if (
+      this.voiceConnectionManager.voiceConnection.state.status !==
+      VoiceConnectionStatus.Destroyed
+    ) {
       this.voiceConnectionManager.voiceConnection.destroy();
     }
 
     this.queueManager.stop();
     players.delete(this.guildId);
   }
-
 }

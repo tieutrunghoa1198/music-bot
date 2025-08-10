@@ -1,7 +1,7 @@
 import { Player } from '@/core/services/player.service';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
-import { MusicAreaRepository } from '@/core/repositories/music-area.repository';
+import { MusicAreaRepository } from '@/core/database/repositories/music-area.repository';
 import { ISlashCommand } from '@/core/interfaces/command.interface';
 import { SlashCommandBuilder } from '@discordjs/builders';
 

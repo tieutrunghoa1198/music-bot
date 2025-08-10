@@ -4,7 +4,7 @@ import { Player } from '@/core/services/player.service';
 import { paginationMsg } from '@/core/views/embed-messages/queue.embed';
 import { AudioPlayerComponent } from '@/core/views/group/audio-player.component';
 import { ISelectButtonCommand } from '@/core/interfaces/command.interface';
-import {logger} from "@/core/utils/logger.util";
+import { logger } from '@/core/utils/logger.util';
 
 export const recordSelectMenu: ISelectButtonCommand = {
   customId: Constant.BuilderID.pageSelectMenu,

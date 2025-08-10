@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { RestrictChannel } from '@/core/mongodb/restrict.model';
+import { RestrictChannel } from '@/core/database/schema/restrict.model';
 
 export interface RestrictChannelDocument {
   guildId: string;
@@ -19,7 +19,10 @@ export class RestrictChannelRepository {
     try {
       return await this.model.findOne({ guildId }).exec();
     } catch (error) {
-      console.error('Cannot find at RestrictChannelRepository.findByGuildId', error);
+      console.error(
+        'Cannot find at RestrictChannelRepository.findByGuildId',
+        error,
+      );
       return null;
     }
   }
