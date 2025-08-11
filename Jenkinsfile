@@ -20,18 +20,10 @@ pipeline {
 
     stage('Install & Test') {
       steps {
-        sh '''
-          docker run --rm \
-            -v "$PWD":/app -w /app \
-            -e CI=true \
-            node:20-bullseye \
-            bash -lc "
-              apt-get update &&
-              apt-get install -y --no-install-recommends build-essential python3 pkg-config libopus-dev &&
-              npm ci &&
-              npm test
-            "
-        '''
+        sh """
+          npm ci
+          npm test
+        """
       }
     }
 
