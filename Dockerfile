@@ -1,6 +1,23 @@
-# Stage 1: Build
-FROM node:18.14.2-slim AS builder
+# =============== Stage 0: Test (fails fast if tests fail) ===============
+FROM node:18.14.2-slim AS test
+WORKDIR /app
 
+# toolchain for node-gyp / opus (no browsers here)
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential python3 pkg-config libopus-dev ffmpeg \
+ && rm -rf /var/lib/apt/lists/*
+
+# install deps (cache on package-lock)
+COPY package*.json ./
+RUN npm ci
+
+# copy source & run tests
+COPY . .
+RUN npm test
+
+
+# ================== Stage 1: Build (your original) ======================
+FROM node:18.14.2-slim AS builder
 WORKDIR /app
 
 COPY package*.json ./
@@ -12,10 +29,11 @@ RUN npm run build
 # Optional: minify js files
 RUN find dist -name "*.js" -exec npx terser --compress --mangle -o {} -- {} \;
 
-# Stage 2: Runtime image (with Puppeteer & Chrome deps)
+
+# ============== Stage 2: Runtime image (your original) ==================
 FROM node:18.14.2-slim
 
-# Install only Puppeteer/Chrome dependencies for runtime
+# Puppeteer/Chrome runtime deps only
 RUN apt update && apt install -y \
   ca-certificates \
   fonts-liberation \

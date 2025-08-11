@@ -1,6 +1,5 @@
 pipeline {
   agent any
-  tools { nodejs 'nodejs18' } // puts node & npm on PATH
 
   environment {
     APP_NAME = 'music-bot'
@@ -15,15 +14,6 @@ pipeline {
     stage('Checkout') {
       steps {
         git url: 'git@github.com:tieutrunghoa1198/music-bot.git', branch: 'prod', credentialsId: 'jenkins-ci-music-bot'
-      }
-    }
-
-    stage('Install & Test') {
-      steps {
-        sh """
-          npm ci
-          npm test
-        """
       }
     }
 
