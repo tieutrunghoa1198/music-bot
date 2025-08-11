@@ -5,9 +5,9 @@ import { logger } from '@/core/utils/logger.util';
 import { MusicAreaRepository } from '@/core/database/repositories/music-area.repository';
 import { Messages } from '@/core/constants/messages.constant';
 import { botClient } from '@/bot-client';
-import { VoiceConnectionManager } from '@/core/services/connection-manager.service';
-import { AudioManager } from '@/core/services/audio-manager.service';
-import { QueueManager } from '@/core/services/queue-manager.service';
+import { VoiceConnectionManager } from '@/core/services/audio-player/connection-manager.service';
+import { AudioManager } from '@/core/services/audio-player/audio-manager.service';
+import { QueueManager } from '@/core/services/audio-player/queue-manager.service';
 import { QueueItem } from '@/core/interfaces/player.interface';
 
 export class Player {

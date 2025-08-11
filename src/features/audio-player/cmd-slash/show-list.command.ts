@@ -1,5 +1,5 @@
-import { Player } from '@/core/services/player.service';
-import { InteractionNotification } from '@/core/services/noti/interaction-notification';
+import { Player } from '@/core/services/audio-player/player.service';
+import { InteractionNotification } from '@/core/services/notification/interaction-notification';
 import {
   Messages,
   MusicCommands,

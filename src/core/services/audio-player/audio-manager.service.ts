@@ -11,6 +11,7 @@ import { Subject } from 'rxjs';
 export class AudioManager implements IAudioManager {
   private readonly _audioPlayer: AudioPlayer;
   private readonly _audioPlayerError: Subject<boolean> = new Subject<boolean>();
+  private _currentResource: AudioResource | null = null;
 
   get audioPlayerError(): Subject<boolean> {
     return this._audioPlayerError;
@@ -33,6 +34,8 @@ export class AudioManager implements IAudioManager {
     }
 
     try {
+      this._currentResource?.playStream.destroy();
+      this._currentResource = resource;
       this._audioPlayer.play(resource);
     } catch (error) {
       this._audioPlayerError.next(true);

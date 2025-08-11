@@ -1,6 +1,6 @@
-import { Player } from '@/core/services/player.service';
+import { Player } from '@/core/services/audio-player/player.service';
 import { InputType } from '@/core/types/input-type.type';
-import { NotificationFactory } from '../noti/notification-factory';
+import { NotificationFactory } from '@/core/services/notification/notification-factory';
 import {
   classifyInteraction,
   classifyUrl,

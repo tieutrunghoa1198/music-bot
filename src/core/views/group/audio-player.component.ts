@@ -4,7 +4,7 @@ import {
 } from '@/core/views/select-menu/selectMenu';
 import { PlayerQueue } from '@/core/constants/index.constant';
 import { MessageActionRow } from 'discord.js';
-import { Player } from '@/core/services/player.service';
+import { Player } from '@/core/services/audio-player/player.service';
 import {
   clearQueueComponent,
   nextSongComponent,

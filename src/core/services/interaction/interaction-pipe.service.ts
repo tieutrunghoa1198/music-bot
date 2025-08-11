@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 
-export class InteractionCreateService {
+export class InteractionPipeService {
   private readonly slashCommand: Subject<any>;
 
   private readonly selectMenu: Subject<any>;
@@ -53,4 +53,4 @@ export class InteractionCreateService {
   }
 }
 
-export const interactionCreateStream = new InteractionCreateService();
+export const interactionCreateStream = new InteractionPipeService();

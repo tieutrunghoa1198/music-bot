@@ -5,7 +5,7 @@ import {
 } from '@/core/constants/index.constant';
 import { SoundCloud } from 'scdl-core';
 import { Playlist } from '@/core/types/playlist.type';
-import { SongDAO } from '@/core/dao/song.dao';
+import { SongUtil } from '@/core/utils/song.util';
 
 export class SoundCloudService {
   public static async getTrackDetail(content: string): Promise<Song> {
@@ -22,7 +22,7 @@ export class SoundCloudService {
       throw new Error('Track not found on SoundCloud.');
     }
 
-    return SongDAO.getDetailSC(track, songUrl);
+    return SongUtil.getDetailSC(track, songUrl);
   }
 
   public static async getPlaylist(url: string): Promise<Playlist> {
@@ -33,7 +33,7 @@ export class SoundCloudService {
     }
 
     const songs: Song[] = playlist.tracks.map((track) =>
-      SongDAO.getDetailSC(track, track.permalink_url),
+      SongUtil.getDetailSC(track, track.permalink_url),
     );
 
     return {

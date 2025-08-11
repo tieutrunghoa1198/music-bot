@@ -1,4 +1,4 @@
-import { Player } from '@/core/services/player.service';
+import { Player } from '@/core/services/audio-player/player.service';
 import * as Constant from '@/core/constants/index.constant';
 import { players } from '@/core/constants/index.constant';
 import { MusicAreaRepository } from '@/core/database/repositories/music-area.repository';

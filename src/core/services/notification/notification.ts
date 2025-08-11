@@ -1,5 +1,5 @@
 import { createPlayMessage } from '@/core/views/embed-messages/play.embed';
-import { Player } from '@/core/services/player.service';
+import { Player } from '@/core/services/audio-player/player.service';
 import { formatSeconds } from '@/core/utils/format-time.util';
 import { QueueItem } from '@/core/interfaces/player.interface';
 

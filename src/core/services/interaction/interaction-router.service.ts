@@ -1,4 +1,4 @@
-import { interactionCreateStream } from '@/core/services/others/interaction-create.service';
+import { interactionCreateStream } from '@/core/services/interaction/interaction-pipe.service';
 import { MUSIC_COMMAND_MAP } from '@/core/commands/music.command';
 import { ephemeralResponse } from '@/core/utils/common.util';
 import * as Constant from '@/core/constants/index.constant';

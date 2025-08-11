@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 import { deployCommandUtil } from '@/core/utils/deploy-command.util';
 import { botClient } from '@/bot-client';
 import { eventsRouter } from '@/eventsRouter';
-import { InteractionHandler } from '@/core/services/interaction.service';
+import { InteractionHandler } from '@/core/services/interaction/interaction-router.service';
 import { logger } from '@/core/utils/logger.util';
 import { initAudioPlayer } from '@/features/audio-player/audio-player.module';
 import { initModeratingMessage } from '@/features/moderating-message/moderating-message.module';

@@ -1,5 +1,5 @@
-import { AudioManager } from '@/core/services/audio-manager.service';
-import { QueueItem } from '../interfaces/player.interface';
+import { AudioManager } from '@/core/services/audio-player/audio-manager.service';
+import { QueueItem } from '../../interfaces/player.interface';
 import { AudioResource } from '@discordjs/voice/dist';
 import { classifyUrl } from '@/core/utils/common.util';
 import { StreamClassifier } from '@/core/utils/stream-classifier.util';
@@ -95,7 +95,7 @@ export class QueueManager {
     if (isNaN(Number(second))) return;
     if (songLength < second) return;
     if (
-      this._currentSong.song.platform === Platform.SOUND_CLOUD ||
+      // this._currentSong.song.platform === Platform.SOUND_CLOUD ||
       this._currentSong.song.platform === Platform.SPOTIFY
     )
       return;

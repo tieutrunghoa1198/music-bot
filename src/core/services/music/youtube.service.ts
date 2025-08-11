@@ -1,6 +1,6 @@
 import { Platform, Song } from '@/core/types/song.type';
 import play from 'play-dl';
-import { SongDAO } from '@/core/dao/song.dao';
+import { SongUtil } from '@/core/utils/song.util';
 
 export class YoutubeService {
   private static mixPlaylist = require('yt-mix-playlist');
@@ -17,7 +17,7 @@ export class YoutubeService {
   public static async getVideoDetail(content: string): Promise<Song> {
     const video = await play.video_info(content);
     const vid_info = video.video_details;
-    return SongDAO.getDetailYT(vid_info);
+    return SongUtil.getDetailYT(vid_info);
   }
 
   public static async getRandomList(url: string) {

@@ -32,6 +32,12 @@ export const createFFmpegStream = (stream: any, seekTime: number) => {
   });
   const s16le = stream.pipe(transcoder);
 
+  const cleanup = () => transcoder.destroy();
+  stream.once('end', cleanup);
+  stream.once('close', cleanup);
+  transcoder.once('end', cleanup);
+  transcoder.once('close', cleanup);
+
   return s16le.pipe(
     new Prism.opus.Encoder({ rate: 48000, channels: 2, frameSize: 960 }),
   ); // Return seeked stream

@@ -1,5 +1,5 @@
 import { AudioPlayerStatus } from '@discordjs/voice';
-import { NotificationService } from '@/core/services/noti/notification';
+import { NotificationService } from '@/core/services/notification/notification';
 import {
   Messages,
   MusicCommands,

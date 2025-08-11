@@ -1,17 +1,15 @@
 import { IStream } from '@/core/interfaces/stream.interface';
 import play from 'play-dl';
 import { createAudioResource } from '@discordjs/voice';
-import {demuxProbe} from '@discordjs/voice';
-import PuppeteerIntercept from "@/core/services/others/puppeteer-intercept";
+import { demuxProbe } from '@discordjs/voice';
+import PuppeteerIntercept from '@/core/services/puppeteer/puppeteer-intercept';
 
 export class SoundcloudStream implements IStream {
-
   async getAudioResource(url: string) {
     let streamResource;
 
     try {
       streamResource = await this.getStream(url);
-
     } catch (error) {
       await PuppeteerIntercept.setSoundCloudToken();
       streamResource = await this.getStream(url);
@@ -30,7 +28,7 @@ export class SoundcloudStream implements IStream {
 
       return stream.stream;
     } catch (e) {
-      throw new Error("SC 401 Error");
+      throw new Error('SC 401 Error');
     }
   }
 }

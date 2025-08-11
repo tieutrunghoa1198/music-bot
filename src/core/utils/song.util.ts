@@ -2,7 +2,7 @@ import { Platform, Song } from '@/core/types/song.type';
 import { Track } from 'scdl-core';
 import { YouTubeVideo } from 'play-dl';
 
-export class SongDAO {
+export class SongUtil {
   static getDetailSC = (track: Track, songUrl: string): Song => ({
     title: track.title,
     length: track.duration / 1000,
