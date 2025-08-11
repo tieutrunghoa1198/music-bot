@@ -3,23 +3,20 @@ import { QueueManager } from '../queue-manager.service';
 import { Platform } from '../../../types/song.type';
 import { QueueItem } from '../../../interfaces/player.interface';
 import { AudioPlayerStatus } from '@discordjs/voice';
+import {createFFmpegStream} from "../../../utils/prism-media.util";
 
-const classifyUrlMock = jest.fn().mockReturnValue('youtube');
 jest.mock('../../../utils/common.util', () => ({
-  classifyUrl: classifyUrlMock,
+  classifyUrl: jest.fn().mockReturnValue('youtube'),
 }));
 
 const stream = { getStream: jest.fn(), getAudioResource: jest.fn() };
-const StreamClassifierMock = jest
-  .fn()
-  .mockImplementation(() => ({ stream }));
 jest.mock('../../../utils/stream-classifier.util', () => ({
-  StreamClassifier: StreamClassifierMock,
+  StreamClassifier: jest.fn().mockImplementation(() => ({ stream })),
 }));
 
-const createFFmpegStreamMock = jest.fn();
+const createFFmpegStreamMock = createFFmpegStream as jest.Mock;
 jest.mock('../../../utils/prism-media.util', () => ({
-  createFFmpegStream: createFFmpegStreamMock,
+  createFFmpegStream: jest.fn(),
 }));
 
 jest.mock('@discordjs/voice', () => ({
@@ -85,7 +82,7 @@ describe('QueueManager', () => {
     };
 
     stream.getStream.mockResolvedValue('audio');
-    createFFmpegStreamMock.mockReturnValue('ffmpeg');
+    createFFmpegStreamMock.mockReturnValue({ once: () => {} });
 
     await manager.seek(10);
 
