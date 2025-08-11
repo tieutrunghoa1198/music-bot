@@ -88,6 +88,7 @@ export class QueueManager {
     this.audioManager.stop();
     if (this._currentSeekedStream) {
       this._currentSeekedStream.emit('close');
+      this._currentSeekedStream = null;
     }
   }
 
@@ -103,7 +104,10 @@ export class QueueManager {
       this._currentSong.song.platform === Platform.SPOTIFY
     )
       return;
-    if (this._currentSeekedStream) this._currentSeekedStream.emit('close');
+    if (this._currentSeekedStream) {
+      this._currentSeekedStream.emit('close');
+      this._currentSeekedStream = null;
+    }
 
     const songType = classifyUrl(this._currentSong.song.url);
     const sourceStream = new StreamClassifier(songType);
@@ -112,6 +116,9 @@ export class QueueManager {
     );
     const seekedStream = createFFmpegStream(audioResource, second);
     this._currentSeekedStream = seekedStream;
+    seekedStream.once('close', () => {
+      this._currentSeekedStream = null;
+    });
 
     this.audioManager.play(createAudioResource(seekedStream));
   }
