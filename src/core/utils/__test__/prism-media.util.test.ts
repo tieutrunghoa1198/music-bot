@@ -1,5 +1,4 @@
-import test from 'node:test';
-import assert from 'node:assert';
+/* eslint-env jest */
 import { PassThrough } from 'node:stream';
 
 class MockFFmpeg extends PassThrough {
@@ -53,8 +52,8 @@ test('cleanup on encoder close', () => {
   const encoder = createFFmpegStream(source, 0) as MockEncoder;
   encoder.emit('close');
   encoder.destroy();
-  assert.strictEqual(MockFFmpeg.lastInstance?.destroyed, true);
-  assert.strictEqual(source.destroyed, true);
+  expect(MockFFmpeg.lastInstance?.destroyed).toBe(true);
+  expect(source.destroyed).toBe(true);
 });
 
 test('cleanup on encoder end', () => {
@@ -63,8 +62,8 @@ test('cleanup on encoder end', () => {
   const encoder = createFFmpegStream(source, 0) as MockEncoder;
   encoder.emit('end');
   encoder.destroy();
-  assert.strictEqual(MockFFmpeg.lastInstance?.destroyed, true);
-  assert.strictEqual(source.destroyed, true);
+  expect(MockFFmpeg.lastInstance?.destroyed).toBe(true);
+  expect(source.destroyed).toBe(true);
 });
 
 test('only one ffmpeg active at a time', () => {
@@ -78,5 +77,5 @@ test('only one ffmpeg active at a time', () => {
   const secondEncoder = createFFmpegStream(secondSource, 0) as MockEncoder;
   secondEncoder.emit('close');
   secondEncoder.destroy();
-  assert.ok(MockFFmpeg.maxActive <= 1);
+  expect(MockFFmpeg.maxActive).toBeLessThanOrEqual(1);
 });

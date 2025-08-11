@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import { VoiceConnectionManager } from '../connection-manager.service';
 
 describe('VoiceConnectionManager', () => {

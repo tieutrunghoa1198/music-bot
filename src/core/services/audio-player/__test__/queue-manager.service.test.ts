@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import { QueueManager } from '../queue-manager.service';
 import { Platform } from '../../../types/song.type';
 import { QueueItem } from '../../../interfaces/player.interface';
