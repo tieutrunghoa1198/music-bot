@@ -17,6 +17,12 @@ pipeline {
       }
     }
 
+    stage('Docker Build & Test') {
+      steps {
+        sh "docker build --progress=plain --no-cache --target test -t ${CONTAINER_NAME}:test ."
+      }
+    }
+
     stage('Build Docker Image') {
       steps {
         sh "docker build --no-cache -t ${CONTAINER_NAME}:latest ."
