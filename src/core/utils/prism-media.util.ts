@@ -39,12 +39,17 @@ export const createFFmpegStream = (stream: any, seekTime: number) => {
   });
 
   const cleanup = () => {
+    s16le.unpipe(encoder);
+    s16le.destroy();
+    transcoder.process?.kill();
     transcoder.destroy();
     stream.destroy?.();
   };
 
   encoder.once('close', cleanup);
   encoder.once('end', cleanup);
+  encoder.once('error', cleanup);
+  transcoder.once('close', cleanup);
 
   s16le.pipe(encoder);
   return encoder; // Return seeked stream
