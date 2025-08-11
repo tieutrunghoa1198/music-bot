@@ -64,7 +64,7 @@ describe('Player service', () => {
     const player = new Player(voiceConnectionMock as any, 'guild', musicAreaRepo as any);
     player.leave();
     expect(voiceConnectionMock.destroy).toHaveBeenCalled();
-    expect(queueManagerMock.stop).not.toHaveBeenCalled();
+    expect(queueManagerMock.stop).toHaveBeenCalled();
     expect(deleteMock).toHaveBeenCalledWith('guild');
   });
 });
