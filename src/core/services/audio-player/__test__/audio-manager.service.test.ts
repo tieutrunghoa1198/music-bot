@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import { AudioManager } from '../audio-manager.service';
 import { createAudioPlayer } from '@discordjs/voice';
 

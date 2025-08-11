@@ -1,3 +1,4 @@
+/* eslint-env jest */
 const audioManagerMock = { player: {}, onIdle: jest.fn() };
 const queueManagerMock = { play: jest.fn(), stop: jest.fn(), currentSong: null };
 const deleteMock = jest.fn();
