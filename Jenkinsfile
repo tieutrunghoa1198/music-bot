@@ -1,5 +1,6 @@
 pipeline {
   agent any
+  tools { nodejs 'node20' } // puts node & npm on PATH
 
   environment {
     APP_NAME = 'music-bot'
