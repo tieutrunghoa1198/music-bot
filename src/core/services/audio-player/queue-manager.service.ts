@@ -13,6 +13,7 @@ export class QueueManager {
   private _currentSong: QueueItem | undefined;
   private _isReplay: boolean = false;
   private audioManager: AudioManager;
+  private _currentSeekedStream: any;
 
   get queue(): QueueItem[] {
     return this._queue;
@@ -85,6 +86,9 @@ export class QueueManager {
     this._currentSong = undefined;
     this._queue = [];
     this.audioManager.stop();
+    if (this._currentSeekedStream) {
+      this._currentSeekedStream.emit('close');
+    }
   }
 
   async seek(second: number | null) {
@@ -95,10 +99,11 @@ export class QueueManager {
     if (isNaN(Number(second))) return;
     if (songLength < second) return;
     if (
-      // this._currentSong.song.platform === Platform.SOUND_CLOUD ||
+      this._currentSong.song.platform === Platform.SOUND_CLOUD ||
       this._currentSong.song.platform === Platform.SPOTIFY
     )
       return;
+    if (this._currentSeekedStream) this._currentSeekedStream.emit('close');
 
     const songType = classifyUrl(this._currentSong.song.url);
     const sourceStream = new StreamClassifier(songType);
@@ -106,6 +111,7 @@ export class QueueManager {
       this._currentSong.song.url,
     );
     const seekedStream = createFFmpegStream(audioResource, second);
+    this._currentSeekedStream = seekedStream;
 
     this.audioManager.play(createAudioResource(seekedStream));
   }
