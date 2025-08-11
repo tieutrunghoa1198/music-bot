@@ -10,7 +10,8 @@
     "prettier:check": "prettier --list-different 'src/**/*.{js,ts,tsx,scss}'",
     "eslint": "eslint src",
     "go": "npm run build && npm run start",
-    "test": "node --test -r ts-node/register"
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "license": "MIT",
   "dependencies": {
@@ -52,7 +53,10 @@
     "prettier": "^3.2.5",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^4.1.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "vitest": "^1.5.0",
+    "@vitest/coverage-v8": "^1.5.0",
+    "vite-tsconfig-paths": "^4.2.1"
   },
   "_moduleAliases": {
     "@": "dist"
