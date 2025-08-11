@@ -54,6 +54,8 @@ export class AudioManager implements IAudioManager {
   }
 
   stop() {
+    this._currentResource?.playStream.destroy();
+    this._currentResource = null;
     this._audioPlayer.stop();
   }
 
