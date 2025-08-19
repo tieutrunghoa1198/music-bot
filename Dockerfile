@@ -63,13 +63,14 @@ WORKDIR /app
 ENV LOG_PATH=/var/log/music-bot/app.log
 ENV LOG_DIR=/var/log/music-bot
 
-RUN mkdir -p ${LOG_DIR} \
- && chown -R node:node ${LOG_DIR}
+RUN mkdir -p ${LOG_DIR}
 
 COPY package*.json ./
 RUN npm ci --only=production
 
 COPY --from=builder /app/dist ./dist
+
+RUN chown -R node:node ${LOG_DIR}
 
 USER node
 
