@@ -60,9 +60,17 @@ RUN apt update && apt install -y \
 
 WORKDIR /app
 
+ENV LOG_PATH=/var/log/music-bot/app.log
+ENV LOG_DIR=/var/log/music-bot
+
+RUN mkdir -p ${LOG_DIR} \
+ && chown -R node:node ${LOG_DIR}
+
 COPY package*.json ./
 RUN npm ci --only=production
 
 COPY --from=builder /app/dist ./dist
+
+USER node
 
 CMD ["node", "dist/index.js"]

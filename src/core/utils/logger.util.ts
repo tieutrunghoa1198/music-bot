@@ -2,6 +2,8 @@ import winston from 'winston';
 
 const { combine, timestamp, printf } = winston.format;
 
+const LOG_PATH = process.env.LOG_PATH || 'app.log';
+
 export const logger = winston.createLogger({
   level: 'debug',
   format: combine(
@@ -16,6 +18,6 @@ export const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: 'app.log' }),
+    new winston.transports.File({ filename: LOG_PATH }),
   ],
 });

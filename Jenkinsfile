@@ -8,6 +8,8 @@ pipeline {
     CLIENT_ID = credentials('client_id')
     GUILD_ID = credentials('guild_id')
     MONGO_URI = credentials('mongo_uri')
+    LOG_PATH = '/var/log/music-bot/app.log'
+    LOG_DIR = '/var/log/music-bot'
   }
 
   stages {
@@ -49,6 +51,8 @@ pipeline {
             -e GUILD_ID=${GUILD_ID} \
             -e NODE_ENV=production \
             -e MONGO_URI=${MONGO_URI} \
+            -e LOG_PATH=${LOG_PATH} \
+            -v musicbot_logs:${LOG_DIR} \
             ${CONTAINER_NAME}:latest
         """
       }
